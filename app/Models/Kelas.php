@@ -12,6 +12,7 @@ class Kelas extends Model
     protected $guarded = [];
     protected $connection = 'second_db';
     protected $table = 'classrooms';
+    protected $primaryKey = 'class_id';
     /**
      * Get all of the siswa for the Kelas
      *

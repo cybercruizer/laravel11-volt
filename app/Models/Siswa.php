@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -12,6 +13,7 @@ class Siswa extends Model
     protected $connection = 'second_db';
     protected $table = 'students';
     protected $guarded=[];
+    protected $primaryKey='student_id';
 
     /**
      * Get the kelas that owns the Siswa
@@ -21,5 +23,14 @@ class Siswa extends Model
     public function kelas(): BelongsTo
     {
         return $this->belongsTo(Kelas::class, 'class_id', 'class_id');
+    }
+    /**
+     * Get all of the presensis for the Siswa
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function presensis(): HasMany
+    {
+        return $this->hasMany(Presensi::class, 'student_id', 'student_id');
     }
 }

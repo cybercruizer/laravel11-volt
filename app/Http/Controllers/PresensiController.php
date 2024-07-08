@@ -1,0 +1,163 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Carbon\Carbon;
+use App\Models\Kelas;
+use App\Models\Siswa;
+use App\Models\Presensi;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+
+class PresensiController extends Controller
+{
+    function __construct()
+    {
+         $this->middleware('permission:presensi-list|presensi-create|presensi-edit|presensi-delete', ['only' => ['index','show','presensiList','laporan']]);
+         $this->middleware('permission:presensi-create', ['only' => ['create','store']]);
+         $this->middleware('permission:presensi-edit', ['only' => ['edit','update']]);
+         $this->middleware('permission:presensi-delete', ['only' => ['destroy']]);
+    }
+
+    public function index(Request $request)
+    {
+        
+        if (Auth::user()->hasRole('WaliKelas')) {
+            $kelas = Auth::user()->kelas;
+            $siswas=Siswa::select('student_id','student_name','student_number')->where('class_id',$kelas->class_id)->get();
+            //dd($siswas);
+        } else {
+            $kelas=Kelas::get();
+            $siswas=Siswa::get();
+            
+        }
+        return view('presensi.index',[
+            'students'=>$siswas,
+            'title'=>'Input Presensi Siswa',
+            'kelas' =>$kelas,
+        ]);
+    }
+
+    /**
+     * Show the form for creating a new resource.
+     */
+    public function create(Request $request)
+    {
+        if (Auth::user()->hasRole('WaliKelas')) {
+            $kelas = Auth::user()->kelas;
+            $siswas=$kelas->siswa();
+            //dd($kelas);
+        } else {
+            $kel=$request->input('kelas');
+            $kelas=Kelas::where('classroom_id',$kel)->get();
+            $siswas=$kelas->siswa();
+            
+        }
+        $tanggal=$request->input('tanggal');
+        return view('presensi.index',[
+            'students'=>$siswas,
+            'title'=>'Input Presensi Siswa',
+            'kelas' =>$kelas,
+            'tanggal' =>$tanggal,
+        ]);
+    }
+
+    /**
+     * Store a newly created resource in storage.
+     */
+    public function store(Request $request)
+    {
+        $request->validate([
+            'student_id' => 'required',
+            'status' => 'required',
+            'tanggal' => 'required|date_format:Y-m-d',
+        ]);
+        $student_ids = $request->student_id;
+        $statuses = $request->status;
+        $tanggal = Carbon::parse($request->tanggal);
+        //dd($tanggal);
+
+        if (is_array($student_ids)) {
+            foreach ($student_ids as $index => $student_id) {
+                //cek duplikasi data presensi
+                $cek = Presensi::where('student_id', $student_id)->where('tanggal', $tanggal)->first();
+                if ($cek) {
+                    return redirect()->route('presensi.index')->with('error', 'Data kehadiran tanggal '.$tanggal->format('Y-m-d').' sudah ada.');
+                }
+                $status = $statuses[$index];
+                Presensi::create([
+                    'student_id' => $student_id,
+                    'keterangan' => $status,
+                    'user_id' => Auth::user()->id,
+                    'tanggal' => $tanggal->format('Y-m-d'),
+                ]);
+            }
+        }
+        return redirect()->route('presensi.index')->with('success', 'Data kehadiran tanggal '.$tanggal->format('Y-m-d').' berhasil disimpan.');
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        //
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(string $id)
+    {
+        //
+    }
+
+    /**
+     * Update the specified resource in storage.
+     */
+    public function update(Request $request, string $id)
+    {
+        //
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+    }
+    public function laporan(Request $request)
+    {
+        $bulan = $request->input('bulan');
+        $tahun = $request->input('tahun') ?? now()->format('Y');
+        $kelas = Auth::user()->kelas;
+        $students = Siswa::where('class_id',$kelas->class_id)->get();
+        $jumlahHari = Carbon::create($tahun,$bulan)->daysInMonth;
+        //dd($students);
+        $presensiData = [];
+
+        foreach ($students as $student) {
+            $presensiData[$student->student_id] = [];
+            foreach (range(1, $jumlahHari) as $day) {
+                $date = Carbon::create($tahun, $bulan, $day);
+                $presensiStatus = Presensi::with('siswa')->where('student_id', $student->student_id)
+                    ->where('tanggal', $date->format('Y-m-d'))
+                    ->value('keterangan');
+                $presensiData[$student->student_id][$day] = $presensiStatus ?? '-';
+            }
+        }
+        //dd($presensiData);
+
+        return view('presensi.laporan', [
+            'students' => $students,
+            'jumlahHari' => $jumlahHari,
+            'kelas' => $kelas,
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+            'presensiData' => $presensiData,
+            'title' => 'Laporan Presensi Siswa',
+        ]);
+    }
+}
+

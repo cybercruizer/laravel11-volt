@@ -1,32 +1,60 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="main py-4">
-        <div class="card card-body border-0 shadow table-wrapper table-responsive">
-            <h2 class="mb-4 h5">{{ __('Users') }}</h2>
-
-            <p class="text-info mb-0">Sample table page</p>
-
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th class="border-gray-200">{{ __('Name') }}</th>
-                        <th class="border-gray-200">{{ __('Email') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($users as $user)
-                        <tr>
-                            <td><span class="fw-normal">{{ $user->name }}</span></td>
-                            <td><span class="fw-normal">{{ $user->email }}</span></td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <div
-                class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
-                {{ $users->links() }}
+    <div class="card-header">
+        <div class="col-lg-12 margin-tb">
+            <div class="pull-left">
+                <h5>Manajemen User</h5>
             </div>
         </div>
+    </div>
+
+    @session('success')
+        <div class="alert alert-success" role="alert">
+            {{ $value }}
+        </div>
+    @endsession
+    <div class="card-body">
+        <div class="pull-right">
+            <a class="btn btn-success mb-2" href="{{ route('users.create') }}"><i class="fa fa-plus"></i> Buat User </a>
+        </div>
+        <table class="table table-bordered">
+            <tr>
+                <th>No</th>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Roles</th>
+                <th width="280px">Action</th>
+            </tr>
+            @foreach ($data as $key => $user)
+                <tr>
+                    <td>{{ ++$i }}</td>
+                    <td>{{ $user->name }}</td>
+                    <td>{{ $user->email }}</td>
+                    <td>
+                        @if (!empty($user->getRoleNames()))
+                            @foreach ($user->getRoleNames() as $v)
+                                <label class="badge bg-success">{{ $v }}</label>
+                            @endforeach
+                        @endif
+                    </td>
+                    <td>
+                        <a class="btn btn-info btn-sm" href="{{ route('users.show', $user->id) }}"><i
+                                class="fa fa-solid fa-eye"></i></a>
+                        <a class="btn btn-primary btn-sm" href="{{ route('users.edit', $user->id) }}"><i
+                                class="fa fa-edit"></i></a>
+                        <form method="POST" action="{{ route('users.destroy', $user->id) }}" style="display:inline">
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Apakah Anda yakin ingin menghapus user ini?');"><i class="fas fa-trash-alt"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            @endforeach
+        </table>
+    </div>
+    <div class="card-footer">
+        {!! $data->links('pagination::bootstrap-5') !!}
     </div>
 @endsection

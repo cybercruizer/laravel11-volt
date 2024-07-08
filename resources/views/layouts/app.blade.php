@@ -13,6 +13,13 @@
 
     <!-- Scripts -->
     @vite('resources/js/app.js')
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
+    <link href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css" rel="stylesheet">
+    
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> -->
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
 </head>
 
 <body>
@@ -21,7 +28,11 @@
     <main class="content">
         {{-- TopBar --}}
         @include('layouts.topbar')
-        @yield('content')
+        <div class="main py-4">
+            <div class="card">
+                @yield('content')
+            </div>
+        </div>
         {{-- Footer --}}
         @include('layouts.footer')
     </main>

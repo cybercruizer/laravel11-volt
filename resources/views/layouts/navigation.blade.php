@@ -5,7 +5,7 @@
                 <img src="{{ asset('images/brand/light.svg') }}" height="20" width="20" alt="Volt Logo">
             </span>
             <span class="mt-1 ms-1 sidebar-text">
-                Volt Laravel
+                {{ env('APP_NAME') }}
             </span>
         </a>
     </li>
@@ -23,24 +23,24 @@
         </a>
     </li>
 
-    <li class="nav-item {{ request()->routeIs('users.index') ? 'active' : '' }}">
-        <a href="{{ route('users.index') }}" class="nav-link">
-            <span class="sidebar-icon me-3">
-                <i class="fas fa-user-alt fa-fw"></i>
-            </span>
-            <span class="sidebar-text">{{ __('Users') }}</span>
-        </a>
-    </li>
-
     <li class="nav-item {{ request()->routeIs('siswas.index') ? 'active' : '' }}">
         <a href="{{ route('siswas.index') }}" class="nav-link">
             <span class="sidebar-icon me-3">
-                <i class="fas fa-user-alt fa-fw"></i>
+                <i class="fas fa-users fa-fw"></i>
             </span>
-            <span class="sidebar-text">{{ __('Siswas') }}</span>
+            <span class="sidebar-text">{{ __('Daftar Siswa') }}</span>
         </a>
     </li>
-
+    @can('walikelas-list')
+    <li class="nav-item {{ request()->routeIs('walikelas.index') ? 'active' : '' }}">
+        <a href="{{ route('walikelas.index') }}" class="nav-link">
+            <span class="sidebar-icon me-3">
+                <i class="fas fa-users fa-fw"></i>
+            </span>
+            <span class="sidebar-text">{{ __('Wali Kelas') }}</span>
+        </a>
+    </li>
+    @endcan
     <li class="nav-item {{ request()->routeIs('about') ? 'active' : '' }}">
         <a href="{{ route('about') }}" class="nav-link">
             <span class="sidebar-icon">
@@ -53,33 +53,112 @@
             <span class="sidebar-text">{{ __('About us') }}</span>
         </a>
     </li>
+    @can('woroworo-list')
+    {{-- Pengumuman --}}
+    <li class="nav-item {{ request()->routeIs('woroworo.index') ? 'active' : '' }}">
+        <a href="{{ route('woroworo.index') }}" class="nav-link">
+            <span class="sidebar-icon me-3">
+                <i class="fas fa-satellite-dish"></i>
+            </span>
+            <span class="sidebar-text">Pengumuman</span>
+        </a>
+    </li>
+    @endcan
+ <!-- Presensi -->
+    <li class="nav-item">
+        <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+            data-bs-target="#presensi-sub">
+            <span>
+                <span class="sidebar-icon me-3">
+                    <i class="fas fa-cogs"></i>
+                </span>
+                <span class="sidebar-text">Presensi</span>
+            </span>
+            <span class="link-arrow">
+                <i class="fas fa-arrow-right"></i>
+            </span>
+        </span>
+        <div class="multi-level collapse" role="list" id="presensi-sub" aria-expanded="false">
+            <ul class="flex-column nav">
+                @can('presensi-list')
+                <li class="nav-item {{ request()->routeIs('presensi.index') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('presensi.index') }}">
+                        <span class="sidebar-icon">
+                            <i class="fa fa-users"></i>
+                        </span>
+                        <span class="sidebar-text">Isi Presensi</span>
+                    </a>
+                </li>
+                
 
+                <li class="nav-item {{ request()->routeIs('presensi.laporan') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('presensi.laporan') }}">
+                        <span class="sidebar-icon">
+                            <i class="fa fa-user-tag"></i>
+                        </span>
+                        <span class="sidebar-text">Laporan</span>
+                    </a>
+                </li>
+                @endcan
+                
+                @can('presensi-create')
+                <li class="nav-item {{ request()->routeIs('presensi.edit') ? 'active' : '' }}">
+                    <a class="nav-link" href="/presensi/edit">
+                        <span class="sidebar-icon">
+                            <i class="fa fa-user-tag"></i>
+                        </span>
+                        <span class="sidebar-text">Edit</span>
+                    </a>
+                </li>
+                @endcan
+            </ul>
+        </div>
+    </li>
+    
+ <!-- Seting -->
     <li class="nav-item">
         <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
             data-bs-target="#submenu-app">
             <span>
                 <span class="sidebar-icon me-3">
-                    <i class="fas fa-circle fa-fw"></i>
+                    <i class="fas fa-cogs"></i>
                 </span>
-                <span class="sidebar-text">Two-level menu</span>
+                <span class="sidebar-text">Seting</span>
             </span>
             <span class="link-arrow">
-                <svg class="icon icon-sm" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
-                    <path fill-rule="evenodd"
-                        d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
-                        clip-rule="evenodd">
-                    </path>
-                </svg>
+                <i class="fas fa-arrow-right"></i>
             </span>
         </span>
         <div class="multi-level collapse" role="list" id="submenu-app" aria-expanded="false">
             <ul class="flex-column nav">
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
+                @can('user-list')
+                <li class="nav-item {{ request()->routeIs('users.index') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('users.index') }}">
                         <span class="sidebar-icon">
-                            <i class="fas fa-circle"></i>
+                            <i class="fa fa-users"></i>
                         </span>
-                        <span class="sidebar-text">Child menu</span>
+                        <span class="sidebar-text">User</span>
+                    </a>
+                </li>
+                @endcan
+
+                @can('role-list')
+                <li class="nav-item {{ request()->routeIs('roles.index') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('roles.index') }}">
+                        <span class="sidebar-icon">
+                            <i class="fa fa-user-tag"></i>
+                        </span>
+                        <span class="sidebar-text">Roles</span>
+                    </a>
+                </li>
+                @endcan
+
+                <li class="nav-item {{ request()->routeIs('profile.show') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('profile.show') }}">
+                        <span class="sidebar-icon">
+                            <i class="fa fa-user-tag"></i>
+                        </span>
+                        <span class="sidebar-text">Ubah Profil</span>
                     </a>
                 </li>
             </ul>

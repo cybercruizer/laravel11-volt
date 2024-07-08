@@ -1,36 +1,43 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="main py-4">
-        <div class="card card-body border-0 shadow table-wrapper table-responsive">
-            <h2 class="mb-4 h5">{{ __('Daftar Siswa') }}</h2>
+        <div class="card-header">
+            @role('Admin|Bk')
+                <h2 class="mb-4 h5">{{ __('Daftar Siswa') }}</h2>
+            @endrole
+            @role('WaliKelas')
+                <h2 class="mb-4 h5">{{ __('Daftar Siswa kelas :'.Auth::user()->kelas->class_name) }}</h2>
+            @endrole
 
-            <p class="text-info mb-0">Daftar siswa aktif</p>
-
-            <table class="table table-hover">
-                <thead>
-                    <tr>
-                        <th class="border-gray-200">{{ __('NIS') }}</th>
-                        <th class="border-gray-200">{{ __('Nama') }}</th>
-                        <th class="border-gray-200">{{ __('Kelas') }}</th>
-                        <th class="border-gray-200">{{ __('email') }}</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach ($siswas as $siswa)
-                        <tr>
-                            <td><span class="fw-normal">{{ $siswa->student_number }}</span></td>
-                            <td><span class="fw-normal">{{ $siswa->student_name }}</span></td>
-                            <td><span class="fw-normal">{{ $siswa->kelas->class_name}}</span></td>
-                            <td><span class="fw-normal">{{ $siswa->student_email }}</span></td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-            <div
-                class="card-footer px-3 border-0 d-flex flex-column flex-lg-row align-items-center justify-content-between">
-                {{ $siswas->links() }}
-            </div>
         </div>
-    </div>
+        <div class="card card-body border-0 shadow table-wrapper table-responsive">
+            <a href="" class="btn btn-primary">Tambah Siswa</a>
+            <table class="table table-bordered" id="siswaDataTables">
+                <thead>
+                   <tr>
+                      <th>NIS</th>
+                      <th>Nama</th>
+                      <th>Kelas</th>
+                      <th>Email</th>
+                   </tr>
+                </thead>
+             </table>
+        </div>
 @endsection
+@push('scripts')
+    <script>
+        $(document).ready( function () {
+            $('#siswaDataTables').DataTable({
+                   processing: true,
+                   serverSide: true,
+                   ajax: "{{ url('siswas') }}",
+                   columns: [
+                        { data: 'student_number', name: 'student_number' },
+                        { data: 'student_name', name: 'student_name' },
+                        { data: 'nama_kelas', name: 'nama_kelas' },
+                        { data: 'student_email', name: 'student_email' }
+                 ]
+        });
+     });
+    </script>
+@endpush
