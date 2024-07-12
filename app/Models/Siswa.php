@@ -33,4 +33,13 @@ class Siswa extends Model
     {
         return $this->hasMany(Presensi::class, 'student_id', 'student_id');
     }
+    /**
+     * Get all of the pelanggarans for the Siswa
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function pelanggarans(): HasMany
+    {
+        return $this->hasMany(Pelanggaran::class);
+    }
 }

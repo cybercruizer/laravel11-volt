@@ -2,8 +2,6 @@
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\WoroworoController;
-
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,11 +18,15 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/presensi/laporan', [\App\Http\Controllers\PresensiController::class, 'laporan'])->name('presensi.laporan');
     Route::resource('presensi', \App\Http\Controllers\PresensiController::class);
     Route::resource('walikelas', \App\Http\Controllers\WalikelasController::class);
-    Route::resource('woroworo', WoroworoController::class);
+    Route::resource('woroworo', \App\Http\Controllers\WoroworoController::class);
+    Route::get('pelanggaran/create', [\App\Http\Controllers\BkController::class,'create'])->name('pelanggaran.create');
+    Route::post('pelanggaran', [\App\Http\Controllers\BkController::class,'store'])->name('pelanggaran.store');
+    Route::get('pelanggaran/search', [\App\Http\Controllers\BkController::class,'search'])->name('siswa.search');
+
 });
 
 Route::middleware('auth')->group(function () {
-    Route::view('about', 'about')->name('about');
+    Route::view('about', 'about')->name('about');   
 
     Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
     Route::get('siswas', [\App\Http\Controllers\SiswaController::class, 'index'])->name('siswas.index');

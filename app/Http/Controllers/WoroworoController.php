@@ -29,7 +29,7 @@ class WoroworoController extends Controller
      */
     public function create()
     {
-        //
+        return view('pengumuman.create');
     }
 
     /**
@@ -37,7 +37,31 @@ class WoroworoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $request->validate([
+            'judul' => 'required',
+            'konten' => 'required',
+            'status' => 'required',
+            'gambar' => 'nullable|image|max:2048',
+            'kategori' => 'required',
+        ]);
+        //dd($request->input('gambar'));
+        $filename = NULL;
+        $path = NULL;
+        if($request->hasFile('gambar')){
+            $filename = time().'.'.$request->file('gambar')->getClientOriginalExtension();
+            $path = 'images/woroworo/';
+            $request->file('gambar')->move($path, $filename);
+        }
+
+        $woro2=new Woroworo();
+        $woro2->judul=$request->input('judul');
+        $woro2->konten=$request->input('konten');
+        $woro2->status=$request->input('status');
+        $woro2->kategori=$request->input('kategori');
+        $woro2->gambar=$path.$filename;
+        $woro2->user_id=auth()->user()->id;
+        $woro2->save();
+        return redirect()->route('woroworo.index')->with('success','Pengumuman Berhasil ditambahkan');
     }
 
     /**
@@ -66,12 +90,19 @@ class WoroworoController extends Controller
         $request->validate([
             'judul' => 'required',
             'konten' => 'required',
+            'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'status' => 'required',
         ]);
+        if($request->hasFile('gambar')){
+            $filename = time().'.'.$request->file('gambar')->getClientOriginalExtension();
+            $path = $request->file('gambar')->storeAs('images/woroworo', $filename);
+        }
         $woro2=Woroworo::find($id);
         $woro2->judul=$request->input('judul');
         $woro2->konten=$request->input('konten');
+        $woro2->gambar=$path.$filename;
         $woro2->status=$request->input('status');
+        
         $woro2->save();
         return redirect()->route('woroworo.index')->with('success','Pengumuman Berhasil diubah');
     }
@@ -83,6 +114,9 @@ class WoroworoController extends Controller
     {
         //dd($id);
         $woro2=Woroworo::findOrFail($id);
+        if(File::exists($woro2->gambar)){
+            File::delete($woro2->gambar);
+        }
         $woro2->delete();
         return redirect()->route('woroworo.index')->with('success','Pengumuman Berhasil dihapus');
     }

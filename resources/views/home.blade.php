@@ -197,28 +197,16 @@
                         <div class="row">
                             <div class="col-1"></div>
                             <div class="col-11">
-                                {{$item->created_at->format('Y-m-d')}} | Kategori : <span class="badge bg-success text-white">{{$item->kategori}}</span>
+                                <u>{{$item->created_at->format('Y-m-d')}} | Kategori : <span class="badge bg-success text-white">{{$item->kategori}}</span> | dibuat oleh : {{$item->user->name}}</u>
                             </div>
                         </div>
                         <div class="row">
                             <div class="col-1">
-                                1
+                                {{ $loop->iteration }}
                             </div>
                             <div class="col-11">
-                                {{ $item->judul }}
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col-12 text-end">
-                                <a
-                                    name=""
-                                    id=""
-                                    class="btn btn-primary btn-sm"
-                                    href="{{ route('woroworo.show', $item->id) }}"
-                                    role="button"
-                                    >Baca</a
-                                >
-                                
+                                <strong>{{ $item->judul }}</strong> <br>
+                                <span class="badge bg-warning text-primary"><a href="{{ route('woroworo.show', $item->id) }}" role="button">Baca Lengkap ...</a></span>
                             </div>
                         </div>
                         <hr>

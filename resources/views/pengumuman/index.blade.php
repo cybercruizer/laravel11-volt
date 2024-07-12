@@ -3,8 +3,11 @@
 @section('content')
     <div class="card-header">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-12 col-md-9">
                 <h2 class="mb-4 h5 ml-3">Pengumuman</h2>
+            </div>
+            <div class="col-6 col-md-3 text-end">
+                <a href="{{ route('woroworo.create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Buat Pengumuman</a>
             </div>
         </div>
     </div>
@@ -40,16 +43,20 @@
                         </td>
                         <td width="85%">
                             <h5 class="h5"><strong>Judul: {{ $item->judul }}</strong></h5><hr>
-                            {!! $item->konten !!}
+                            {!! Str::limit($item->konten, 100) !!}
                         </td>
-                        <td width="10%">
-                            <form action="{{ route('woroworo.destroy', $item->id) }}" method="post">
-                                @method('DELETE')
-                                @csrf
-                                <input type="hidden" name="id" value="{{ $item->id }}">
-                                <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin menghapus pengumuman dengan judul: {{$item->judul}} ?')" type="submit"><i class="fas fa-trash"></i></button>
-                            </form>
-                            <a href="{{ route('woroworo.edit', $item->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>                            
+                        <td width="10%" class="align-middle">
+                                <form action="{{ route('woroworo.destroy', $item->id) }}" method="post">
+                                    @method('DELETE')
+                                    @csrf
+                                    <input type="hidden" name="id" value="{{ $item->id }}">
+                                    <div class="btn-group">
+                                        <a href="{{ route('woroworo.show', $item->id) }}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                                        <a href="{{ route('woroworo.edit', $item->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
+                                        <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin menghapus pengumuman dengan judul: {{$item->judul}} ?')" type="submit"><i class="fas fa-trash"></i></button>
+                                    </div>
+                                </form>
+                                                    
                         </td>
                     </tr>
                 @endforeach

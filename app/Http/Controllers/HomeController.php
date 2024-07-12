@@ -54,7 +54,7 @@ class HomeController extends Controller
             'name'  => 'Alpha',
         ];
         $set3 = [
-            'chart_title' => 'Grafik Siswa Tidak Masuk',
+            'chart_title' => 'Grafik Kehadiran Siswa',
             'report_type' => 'group_by_date',
             'model' => 'App\Models\Presensi',
             'group_by_field' => 'tanggal',
@@ -81,7 +81,7 @@ class HomeController extends Controller
         ->groupBy('student_id')
         ->orderBy('total', 'desc')
         ->limit(10)->get();
-        $woro2 = Woroworo::where('status','aktif')->latest()->paginate(10);
+        $woro2 = Woroworo::where('status','aktif')->latest()->take(5)->get();
         //dd($woro2);
         return view('home',[
             'chart1' => $chart1,

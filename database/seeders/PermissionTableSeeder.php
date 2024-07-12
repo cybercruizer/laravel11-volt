@@ -42,6 +42,10 @@ class PermissionTableSeeder extends Seeder
            'pengumuman-create',
            'pengumuman-edit',
            'pengumuman-delete',
+           'pelanggaran-list',
+           'pelanggaran-create',
+           'pelanggaran-edit',
+           'pelanggaran-delete',
         ];
 
         foreach ($permissions as $permission) {

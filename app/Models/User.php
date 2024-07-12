@@ -65,4 +65,13 @@ class User extends Authenticatable
     {
         return $this->hasMany(Woroworo::class);
     }
+    /**
+     * Get all of the pelanggarans for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function pelanggarans(): HasMany
+    {
+        return $this->hasMany(Pelanggaran::class);
+    }
 }
