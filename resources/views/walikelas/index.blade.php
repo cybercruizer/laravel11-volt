@@ -4,6 +4,11 @@
         <div class="card-header">
             <h2 class="mb-4 h5">{{ __('Daftar Wali Kelas') }}</h2>
         </div>
+        <div class="row mt-3">
+            <div class="col-6 text-end">
+                <a href="{{ route('walikelas.create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Buat Wali Kelas</a>
+            </div>
+        </div>
         <div class="card card-body border-0 shadow table-wrapper table-responsive">
             <table class="table table-bordered table-striped mb-0">
                 <thead>

@@ -29,7 +29,7 @@
             </div>
         @endif
 
-        <form action="{{ route('woroworo.update', $woro2->id) }}" method="post">
+        <form action="{{ route('bworoworo.update', $woro2->id) }}" method="post" enctype="multipart/form-data">
             @method('PUT')
             @csrf
             <div class="form-group mb-3">
@@ -57,12 +57,25 @@
                 </div>
             </div>
 
-
             <div class="form-group mb-3">
                 <label for="konten">Konten</label>
                 <textarea class="form-control" name="konten" id="konten" rows="3">{{ $woro2->konten }}</textarea>
             </div>
-
+            <div class="row">
+                <div class="col-6 form-group mb-3">
+                    <label for="gambar" class="form-label">Pilih file lampiran</label>
+                    <input
+                        type="file"
+                        class="form-control"
+                        name="gambar"
+                        id="gambar"
+                        placeholder="{{ $woro2->gambar ?? 'Pilih gambar lampiran' }}"
+                        aria-describedby="fileHelpId"
+                        value="{{ $woro2->gambar }}"
+                    />
+                    <div id="fileHelpId" class="form-text">ekstensi: png,jpg,jpeg,webp | max : 2 MB</div>
+                </div>
+            </div>
             <div class="text-center mt-3"><button type="submit" class="btn btn-success btn-lg">Simpan</button></div>
         </form>
     </div>

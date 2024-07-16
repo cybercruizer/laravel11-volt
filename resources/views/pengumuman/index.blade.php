@@ -43,7 +43,7 @@
                         </td>
                         <td width="85%">
                             <h5 class="h5"><strong>Judul: {{ $item->judul }}</strong></h5><hr>
-                            {!! Str::limit($item->konten, 100) !!}
+                            {{ Str::limit(htmlspecialchars(trim(strip_tags($item->konten))),100) }}
                         </td>
                         <td width="10%" class="align-middle">
                                 <form action="{{ route('woroworo.destroy', $item->id) }}" method="post">

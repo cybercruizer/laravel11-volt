@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
+use App\Models\Tahunajaran;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Kelas extends Model
 {
@@ -21,5 +23,14 @@ class Kelas extends Model
     public function siswa(): HasMany
     {
         return $this->hasMany(Siswa::class, 'class_id','class_id');
+    }
+    /**
+     * Get the tahunajaran that owns the Kelas
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function tahunajaran(): BelongsTo
+    {
+        return $this->belongsTo(Tahunajaran::class, 'year_id', 'year_id');
     }
 }

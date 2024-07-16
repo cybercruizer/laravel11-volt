@@ -29,7 +29,8 @@ class WalikelasController extends Controller
      */
     public function create()
     {
-        $kelas = Kelas::all();
+        $tahunaktif= Tahunajaran::where('is_active',1)->first();
+        $kelas = Kelas::where('class_year',$tahunaktif)->get();
         $guru = User::guru()->get();
         return view('walikelas.create',compact('kelas','guru'));
     }

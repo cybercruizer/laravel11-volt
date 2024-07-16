@@ -197,7 +197,7 @@
                         <div class="row">
                             <div class="col-1"></div>
                             <div class="col-11">
-                                <u>{{$item->created_at->format('Y-m-d')}} | Kategori : <span class="badge bg-success text-white">{{$item->kategori}}</span> | dibuat oleh : {{$item->user->name}}</u>
+                                {{$item->created_at->format('Y-m-d')}} | Kategori : <span class="badge bg-success text-white">{{$item->kategori}}</span> | dibuat oleh : {{$item->user->name}}
                             </div>
                         </div>
                         <div class="row">
@@ -212,6 +212,9 @@
                         <hr>
                     @endforeach
                     
+                </div>
+                <div class="card-footer py-4">
+                    <a href="{{ route('woroworo.index') }}" class="btn btn-primary btn-sm">Lihat Semua Pengumuman</a>
                 </div>
             </div>
         </div>
