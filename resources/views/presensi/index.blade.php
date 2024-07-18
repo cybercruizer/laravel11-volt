@@ -60,6 +60,7 @@
                         <th class="col-3">Nama Siswa</th>
                         <th class="col-1">NIS</th>
                         <th class="col-2">Keterangan</th>
+                        <th class="col-2">Alasan</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -70,7 +71,7 @@
                             <td>{{ $student->student_number }}</td>
                             <input type="hidden" name="student_id[]" value="{{ $student->student_id }}">
                             <td>
-                                <select name="status[]" id="student_id" class="form-select">
+                                <select name="keterangan[]" id="student_id" class="form-select">
                                     <option value="H">Hadir</option>
                                     <option value="A">Alpha</option>
                                     <option value="S">Sakit</option>
@@ -78,6 +79,7 @@
                                     <option value="T">Terlambat</option>
                                 </select>
                             </td>
+                            <td><input type="text" class="form-control" name="alasan[]"></td>
                         </tr>
                     @endforeach
                 </tbody>

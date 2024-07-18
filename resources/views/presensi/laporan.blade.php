@@ -67,7 +67,7 @@
                                 //$day = $day->format('d');
                                 //$isSunday $day->dayOfWeek === Carbon::SUNDAY;
                             @endphp
-                            @if ($hr->dayOfWeek===\Carbon\Carbon::SUNDAY)
+                            @if ($hr->dayOfWeek===\Carbon\Carbon::SUNDAY || $hr->dayOfWeek===\Carbon\Carbon::SATURDAY)
                                 <th class="bg-danger text-white" data-bs-toggle="tooltip" data-bs-placement="top" title="Ahad">{{ $hr->format('d') }}</th>
                             @else
                                 <th class="bg-light">{{ $hr->format('d') }}</th>

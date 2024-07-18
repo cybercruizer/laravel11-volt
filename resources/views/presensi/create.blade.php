@@ -40,6 +40,7 @@
                         <th>Nama Siswa</th>
                         <th>NIS</th>
                         <th>Keterangan</th>
+                        <th>alasan</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -56,6 +57,7 @@
                                     <option value="T">Terlambat</option>
                                 </select>
                             </td>
+                            <td><input type="text" class="form-control" name="alasan[]"></td>
                         </tr>
                     @endforeach
                 </tbody>

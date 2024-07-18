@@ -16,6 +16,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('users', \App\Http\Controllers\UserController::class);
     Route::resource('products', \App\Http\Controllers\ProductController::class);
     Route::get('/presensi/laporan', [\App\Http\Controllers\PresensiController::class, 'laporan'])->name('presensi.laporan');
+    Route::get('/presensi/edit', [\App\Http\Controllers\PresensiController::class, 'edit'])->name('presensi.edit');
     Route::resource('presensi', \App\Http\Controllers\PresensiController::class);
     Route::resource('walikelas', \App\Http\Controllers\WalikelasController::class);
     Route::resource('woroworo', \App\Http\Controllers\WoroworoController::class);

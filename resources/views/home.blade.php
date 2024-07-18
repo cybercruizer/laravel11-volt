@@ -7,7 +7,7 @@
             <p class="mb-0">Tanggal 2/7/2024</p>
         </div>
     </div>
-    <div class="row p-2 m-2">
+    <div class="row m-2">
         <div class="col-12 col-lg-8 mb-4">
             <div class="card bg-yellow-100 border-0 shadow">
                 <div class="card-body p-2">
@@ -103,10 +103,10 @@
     </div>
 
 
-    <div class="row">
+    <div class="row m-2">
         {{-- Nominasi --}}
         <div class="col-12 col-md-6 mt-1">
-            <div class="card border-0 shadow">
+            <div class="card border-0 shadow mb-2">
                 <div class="card-header">
                     <div class="row align-items-center">
                         <div class="col">
@@ -195,21 +195,20 @@
                 <div class="card-body">
                     @foreach ($woro2 as $item)
                         <div class="row">
-                            <div class="col-1"></div>
-                            <div class="col-11">
-                                {{$item->created_at->format('Y-m-d')}} | Kategori : <span class="badge bg-success text-white">{{$item->kategori}}</span> | dibuat oleh : {{$item->user->name}}
-                            </div>
-                        </div>
-                        <div class="row">
                             <div class="col-1">
                                 {{ $loop->iteration }}
                             </div>
                             <div class="col-11">
-                                <strong>{{ $item->judul }}</strong> <br>
+                                <strong class="text-uppercase">{{ $item->judul }}</strong> <br>
                                 <span class="badge bg-warning text-primary"><a href="{{ route('woroworo.show', $item->id) }}" role="button">Baca Lengkap ...</a></span>
                             </div>
                         </div>
-                        <hr>
+                        <div class="row">
+                            <div class="col-1"></div>
+                            <div class="col-11">
+                               <p class="text-muted" style="font-size: 0.8em">{{$item->created_at->format('Y-m-d')}} oleh : {{$item->user->name}} | Kategori : <span class="badge bg-success text-white">{{$item->kategori}}</span></p>
+                            </div>
+                        </div>
                     @endforeach
                     
                 </div>

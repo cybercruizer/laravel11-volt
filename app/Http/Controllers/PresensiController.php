@@ -69,12 +69,13 @@ class PresensiController extends Controller
     {
         $request->validate([
             'student_id' => 'required',
-            'status' => 'required',
+            'keterangan' => 'required',
             'tanggal' => 'required|date_format:Y-m-d',
         ]);
         $student_ids = $request->student_id;
-        $statuses = $request->status;
+        $keterangans = $request->keterangan;
         $tanggal = Carbon::parse($request->tanggal);
+        $alasans = $request->alasan;
         //dd($tanggal);
 
         if (is_array($student_ids)) {
@@ -84,12 +85,15 @@ class PresensiController extends Controller
                 if ($cek) {
                     return redirect()->route('presensi.index')->with('error', 'Data kehadiran tanggal '.$tanggal->format('Y-m-d').' sudah ada.');
                 }
-                $status = $statuses[$index];
+                $keterangan = $keterangans[$index];
+                $alasan = $alasans[$index];
                 Presensi::create([
                     'student_id' => $student_id,
-                    'keterangan' => $status,
+                    'keterangan' => $keterangan,
+                    'kelas_id' => Auth::user()->kelas->class_id,
                     'user_id' => Auth::user()->id,
                     'tanggal' => $tanggal->format('Y-m-d'),
+                    'alasan' => $alasan,
                 ]);
             }
         }
@@ -107,9 +111,32 @@ class PresensiController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Request $request)
     {
-        //
+        //$tanggal= $request->get('tanggal');
+        if (Auth::user()->hasRole('WaliKelas')) {
+            //dd('wali kelas');
+            //dd(Carbon::parse($request->tanggal)->format('Y-m-d'));
+            $kelas = Auth::user()->kelas;
+            if($request->has('tanggal')){
+                $tanggal= Carbon::parse($request->tanggal)->format('Y-m-d');
+            } else {
+                $tanggal = date("Y-m-d");
+            }
+            $presensis = Presensi::where([
+                ['kelas_id', '=', $kelas->class_id],
+                ['tanggal','=',$tanggal ]
+            ])->get();
+            //dd($presensis);
+
+            return view('presensi.edit',[
+                'tanggal'=>$tanggal,
+                'kelas' => $kelas,
+                'presensis'=>$presensis,
+                'title'=>'Edit Presensi Siswa',
+            ]);
+        }
+        //dd('bukan wali');
     }
 
     /**
@@ -156,7 +183,7 @@ class PresensiController extends Controller
             'bulan' => $bulan,
             'tahun' => $tahun,
             'presensiData' => $presensiData,
-            'title' => 'Laporan Presensi Siswa',
+            'title' => 'Laporan Presensi Siswa bulan '.$bulan .' Tahun '.$tahun ,
         ]);
     }
 }

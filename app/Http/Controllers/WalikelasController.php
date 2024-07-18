@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Kelas;
+use App\Models\Tahunajaran;
 use Illuminate\Http\Request;
 
 class WalikelasController extends Controller
@@ -29,9 +30,10 @@ class WalikelasController extends Controller
      */
     public function create()
     {
-        $tahunaktif= Tahunajaran::where('is_active',1)->first();
-        $kelas = Kelas::where('class_year',$tahunaktif)->get();
+        $tahunaktif= Tahunajaran::select('year_id')->where('is_active',1);
+        $kelas = Kelas::where('year_id',$tahunaktif)->get();
         $guru = User::guru()->get();
+        //dd($kelas);
         return view('walikelas.create',compact('kelas','guru'));
     }
 

@@ -33,4 +33,13 @@ class Kelas extends Model
     {
         return $this->belongsTo(Tahunajaran::class, 'year_id', 'year_id');
     }
+    /**
+     * Get the user that owns the Kelas
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user(): BelongsTo
+    {
+        return $this->belongsTo(User::class, 'id', 'walikelas_id');
+    }
 }
