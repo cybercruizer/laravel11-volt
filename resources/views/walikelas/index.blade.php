@@ -10,24 +10,32 @@
             </div>
         </div>
         <div class="card card-body border-0 shadow table-wrapper table-responsive">
+            @if (session()->has('success'))
+                <div class="alert alert-success">
+                    {{ session()->get('success') }}
+                </div>
+            @endif
+            @if (session()->has('error'))
+                <div class="alert alert-danger">
+                    {{ session()->get('error') }}
+                </div>
+            @endif
             <table class="table table-bordered table-striped mb-0">
                 <thead>
                     <tr>
-                        <th>Nama Guru</th>
-                        <th>Email</th>
                         <th>Kelas</th>
+                        <th>Wali Kelas</th>
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach ($walikelas as $data)
+                    @foreach ($kelas as $data)
                         <tr>
-                            <td>{{ $data->name }}</td>
-                            <td>{{ $data->email }}</td>
-                            <td>{{ $data->kelas->class_name ?? '-' }}</td>
+                            <td>{{ $data->class_name }}</td>
+                            <td>{{ $guru->where('id', $data->user_id)->first()->name ?? '' }} </td>
                             <td>
-                                <a href="{{ route('walikelas.edit', $data->id) }}" class="btn btn-warning"><i class="fas fa-edit"></i></a>
-                                <a href="{{ route('walikelas.destroy', $data->id) }}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
+                                <a href="{{ route('walikelas.edit', $data->class_id) }}" class="btn btn-warning"><i class="fas fa-edit"></i></a>
+                                <a href="{{ route('walikelas.destroy', $data->class_id) }}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
                             </td>
                         </tr>
                     @endforeach

@@ -21,8 +21,11 @@ class WalikelasController extends Controller
      */
     public function index()
     {
-        $walikelas = User::with('kelas')->walikelas()->get();
-        return view('walikelas.index', compact('walikelas'));
+        $tahunaktif= Tahunajaran::select('year_id')->where('is_active',1);
+        $kelas = Kelas::with('user')->where('year_id',$tahunaktif)->get();
+        $guru = User::all();
+        //dd($kelas);
+        return view('walikelas.index', compact('kelas','guru'));
     }
 
     /**
@@ -32,7 +35,7 @@ class WalikelasController extends Controller
     {
         $tahunaktif= Tahunajaran::select('year_id')->where('is_active',1);
         $kelas = Kelas::where('year_id',$tahunaktif)->get();
-        $guru = User::guru()->get();
+        $guru = User::guru()->select('id','name')->get();
         //dd($kelas);
         return view('walikelas.create',compact('kelas','guru'));
     }
@@ -40,9 +43,22 @@ class WalikelasController extends Controller
     /**
      * Store a newly created resource in storage.
      */
+    
     public function store(Request $request)
     {
-        //
+        //update record walikelas_id on table classrrooms with user_id
+        $request->validate([
+            'kelas_id' => 'required',
+        ]);
+        $kelas_ids= $request->input('kelas_id');
+        $user_ids= $request->input('user_id'); 
+        //dd($user_ids, $kelas_ids);
+        foreach ($kelas_ids as $key => $kelas_id) {
+            $user_id= $user_ids[$key];
+            Kelas::where('class_id', $kelas_id)->update(['user_id' => $user_id]);
+            User::find($user_id)->assignRole('WaliKelas');
+        }
+        return redirect()->route('walikelas.index')->with('success','Wali Kelas Berhasil ditambahkan');
     }
 
     /**
@@ -64,7 +80,7 @@ class WalikelasController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, string $kelas)
     {
         //
     }

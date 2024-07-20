@@ -33,12 +33,14 @@
             <table class="table table-bordered table-striped table-responsive mb-0">
                 @foreach ($kelas as $kel)
                     <tr>
-                        <td>{{ $kel->class_name }}</td>
+                        <td>{{ $kel->class_name }}
+                            <input type="hidden" name="kelas_id[]" value="{{ $kel->class_id }}">
+                        </td>
                         <td>
-                            <select name="class_id[]" class="form-select" id="">
+                            <select name="user_id[]" class="form-select" id="{{ $kel->class_id }}">
                                 @foreach ($guru as $g)
                                     <option value="{{ $g->id }}"
-                                        {{ $g->id == $g->id ? 'selected' : '' }}>{{ $g->name }}</option>
+                                        {{ $g->id == $kel->user_id ? 'selected' : '' }}>{{ $g->name }}</option>
                                 @endforeach
                             </select>
                         </td>

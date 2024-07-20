@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\User;
+use App\Models\Siswa;
 use App\Models\Tahunajaran;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -15,6 +17,11 @@ class Kelas extends Model
     protected $connection = 'second_db';
     protected $table = 'classrooms';
     protected $primaryKey = 'class_id';
+    //public function __construct(array $attributes = [])
+    //{
+    //    $this->table = env('SECOND_DB_DATABASE').'.'.$this->table;
+    //    parent::__construct($attributes);
+    //}
     /**
      * Get all of the siswa for the Kelas
      *
@@ -40,6 +47,6 @@ class Kelas extends Model
      */
     public function user(): BelongsTo
     {
-        return $this->belongsTo(User::class, 'id', 'walikelas_id');
+        return $this->belongsTo(User::class,'id','user_id');
     }
 }

@@ -50,7 +50,7 @@
                             <td>{{ $student->student_class }}</td>
                             <input type="hidden" name="student_id[]" value="{{ $student->student_id }}">
                             <td>
-                                <select name="status[]" id="student_id" class="form-control">
+                                <select name="keterangan[]" id="student_id" class="form-control">
                                     <option value="H">Hadir</option>
                                     <option value="A">Alpha</option>
                                     <option value="S">Sakit</option>

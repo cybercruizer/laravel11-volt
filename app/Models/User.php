@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Kelas;
 use App\Models\Woroworo;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -12,6 +13,7 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 class User extends Authenticatable
 {
     use HasFactory, Notifiable, HasRoles;
+    protected $connection = 'mysql';
 
     /**
      * The attributes that are mass assignable.
@@ -54,7 +56,7 @@ class User extends Authenticatable
     }
     public function kelas(): HasOne
     {
-        return $this->hasOne(Kelas::class, 'walikelas_id');
+        return $this->hasOne(Kelas::class, 'user_id', 'id');
     }
     /**
      * Get all of the pengumumans for the User
