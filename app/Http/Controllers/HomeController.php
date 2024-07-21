@@ -3,11 +3,13 @@
 namespace App\Http\Controllers;
 
 use Carbon\Carbon;
+use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\Presensi;
 use App\Models\Woroworo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Auth;
 use LaravelDaily\LaravelCharts\Classes\LaravelChart;
 
 class HomeController extends Controller
@@ -29,6 +31,7 @@ class HomeController extends Controller
      */
     public function index()
     {
+        //dd(Auth::user()->id);
         $set1 = [
             'chart_title' => '.',
             'report_type' => 'group_by_date',
@@ -71,16 +74,35 @@ class HomeController extends Controller
         $sudah = Presensi::where('tanggal', Carbon::today()->format('Y-m-d'))->count();
         $belum = Siswa::count() - $sudah;
         //get 10 data  siwa dengan alpha terbanyak
-        $nom_alphas = Presensi::with('siswa')->select(['student_id', DB::raw('count(*) as total')])
-        ->where('keterangan','A')
-        ->groupBy('student_id')
-        ->orderBy('total', 'desc')
-        ->limit(10)->get();
-        $nom_terlambat = Presensi::with('siswa')->select(['student_id', DB::raw('count(*) as total')])
-        ->where('keterangan','T')
-        ->groupBy('student_id')
-        ->orderBy('total', 'desc')
-        ->limit(10)->get();
+        if(Auth::user()->hasRole('WaliKelas')){
+            $user_id=Auth::user()->id;
+            $kelas= Kelas::where('user_id', $user_id)->first();
+            //dd($kelas->class_id);
+            $nom_alphas = Presensi::with('siswa')->select(['student_id', DB::raw('count(*) as total')])
+            ->where('keterangan','A')
+            ->where('kelas_id', $kelas->class_id)
+            ->groupBy('student_id')
+            ->orderBy('total', 'desc')
+            ->limit(10)->get();
+            $nom_terlambat = Presensi::with('siswa')->select(['student_id', DB::raw('count(*) as total')])
+            ->where('keterangan','T')
+            ->where('kelas_id', $kelas->class_id)
+            ->groupBy('student_id')
+            ->orderBy('total', 'desc')
+            ->limit(10)->get();
+        } else {
+            $nom_alphas = Presensi::with('siswa')->select(['student_id', DB::raw('count(*) as total')])
+            ->where('keterangan','A')
+            ->groupBy('student_id')
+            ->orderBy('total', 'desc')
+            ->limit(10)->get();
+            $nom_terlambat = Presensi::with('siswa')->select(['student_id', DB::raw('count(*) as total')])
+            ->where('keterangan','T')
+            ->groupBy('student_id')
+            ->orderBy('total', 'desc')
+            ->limit(10)->get();
+        }
+        
         $woro2 = Woroworo::where('status','aktif')->latest()->take(5)->get();
         //dd($woro2);
         return view('home',[

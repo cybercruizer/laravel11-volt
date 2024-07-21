@@ -56,7 +56,7 @@ class User extends Authenticatable
     }
     public function kelas(): HasOne
     {
-        return $this->hasOne(Kelas::class, 'user_id', 'id');
+        return $this->hasOne(Kelas::class);
     }
     /**
      * Get all of the pengumumans for the User
