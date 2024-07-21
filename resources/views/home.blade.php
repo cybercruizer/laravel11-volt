@@ -2,12 +2,11 @@
 
 @section('content')
     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center">
-        <div class="row p-2 m-2">
-            <h2 class="h4">Dashboard</h2>
-            <p class="mb-0">Tanggal 2/7/2024</p>
+        <div class="row">
+            <p class="h4">Dashboard <span class="text-muted text-sm"> / {{date('Y-m-d')}}</span></p>
         </div>
     </div>
-    <div class="row m-2">
+    <div class="row mb-2">
         <div class="col-12 col-lg-8 mb-4">
             <div class="card bg-yellow-100 border-0 shadow">
                 <div class="card-body p-2">
@@ -103,7 +102,7 @@
     </div>
 
 
-    <div class="row m-2">
+    <div class="row mb-2">
         {{-- Nominasi --}}
         <div class="col-12 col-md-6 mt-1">
             <div class="card border-0 shadow mb-2">

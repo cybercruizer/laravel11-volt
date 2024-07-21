@@ -29,9 +29,29 @@ class SiswaController extends Controller
                 function($siswa) {
                     return $siswa->kelas->class_name;
                 })
+                ->addColumn('aksi', function ($siswa) {
+                    return $siswa->student_id;
+                })
                 ->make(true);
         }
         return view('siswas.index');
     }
+    public function show($id)
+    {
+        $siswa = Siswa::find($id);
+        return view('siswas.show',compact('siswa'));
+    }
+
+    protected function getActionColumn($siswa)
+    {
+        $showUrl = route('siswas.show', $siswa->student_id);
+
+        return "
+            <a class='waves-effect btn btn-success' data-value='$siswa->student_id' href='$showUrl'>
+                <i class='material-icons'>visibility</i> Details
+            </a>
+        ";
+    }
+
 
 }

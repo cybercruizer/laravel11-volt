@@ -12,19 +12,19 @@
 
                         <div class="row align-items-center">
                             <div class="col-md-6 mb-3">
-                                <label for="name">{{ 'Your Name' }}</label>
+                                <label for="name">{{ 'Nama anda' }}</label>
                                 <div class="input-group">
                                     <span class="input-group-text">
                                         <i class="fas fa-user-alt fa-fw"></i>
                                     </span>
                                     <input id="name" class="form-control" type="text" name="name"
-                                        placeholder="{{ __('Name') }}" value="{{ old('name', auth()->user()->name) }}"
-                                        required>
+                                        placeholder="{{ __('Nama') }}" value="{{ old('name', auth()->user()->name) }}"
+                                        required disabled="disabled">
                                 </div>
                                 @error('name') <div class="invalid-feedback"> {{ $message }} </div> @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="email">{{ __('Your Email') }}</label>
+                                <label for="email">{{ __('Email anda') }}</label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon1">
                                         <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"
@@ -45,7 +45,7 @@
                         </div>
                         <div class="row align-items-center">
                             <div class="col-md-6 mb-3">
-                                <label for="password">{{ __('New Password') }}</label>
+                                <label for="password">{{ __('Password Baru') }}</label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon2">
                                         <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"
@@ -63,7 +63,7 @@
                                 @error('password') <div class="invalid-feedback"> {{ $message }} </div> @enderror
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label for="password_confirmation">{{ __('Confirm Password') }}</label>
+                                <label for="password_confirmation">{{ __('Ulangi Password baru') }}</label>
                                 <div class="input-group">
                                     <span class="input-group-text" id="basic-addon3">
                                         <svg class="icon icon-xs text-gray-600" fill="currentColor" viewBox="0 0 20 20"

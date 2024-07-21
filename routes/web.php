@@ -13,7 +13,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', \App\Http\Controllers\RoleController::class);
-    Route::get('users/cekrole', [\App\Http\Controllers\UserController::class, 'cekrole'])->name('cekrole');
+    //Route::get('users/cekrole', [\App\Http\Controllers\UserController::class, 'cekrole'])->name('cekrole');
     Route::resource('users', \App\Http\Controllers\UserController::class);
     Route::resource('products', \App\Http\Controllers\ProductController::class);
     Route::get('/presensi/laporan', [\App\Http\Controllers\PresensiController::class, 'laporan'])->name('presensi.laporan');
@@ -29,17 +29,14 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('kalender/show', 'show')->name('kalender.show');
         Route::post('kalender-ajax', 'ajax');
     });
-    
-
-});
-
-Route::middleware('auth')->group(function () {
-    Route::view('about', 'about')->name('about');   
-
+    Route::view('about', 'about')->name('about');
     Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
     Route::get('siswas', [\App\Http\Controllers\SiswaController::class, 'index'])->name('siswas.index');
+    Route::get('siswas/{id}', [\App\Http\Controllers\SiswaController::class, 'show'])->name('siswas.show');
     //Route::get('siswas/datatable', [\App\Http\Controllers\SiswaController::class, 'datatable'])->name('siswas.datatable');
 
     Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
     Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    
+
 });

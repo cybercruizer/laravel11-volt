@@ -7,7 +7,9 @@
                 <h2 class="mb-4 h5 ml-3">Pengumuman</h2>
             </div>
             <div class="col-6 col-md-3 text-end">
-                <a href="{{ route('woroworo.create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Buat Pengumuman</a>
+                @can('pengumuman-create')
+                    <a href="{{ route('woroworo.create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Buat Pengumuman</a>
+                @endcan 
             </div>
         </div>
     </div>
@@ -42,7 +44,7 @@
                             {{ $loop->iteration }}
                         </td>
                         <td width="85%">
-                            <h5 class="h5"><strong>Judul: {{ $item->judul }}</strong></h5><hr>
+                            <h5 class="h6"><strong>Judul: {{ $item->judul }}</strong></h5><hr>
                             {{ Str::limit(htmlspecialchars(trim(strip_tags($item->konten))),100) }}
                         </td>
                         <td width="10%" class="align-middle">
@@ -50,11 +52,16 @@
                                     @method('DELETE')
                                     @csrf
                                     <input type="hidden" name="id" value="{{ $item->id }}">
-                                    <div class="btn-group">
-                                        <a href="{{ route('woroworo.show', $item->id) }}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
-                                        <a href="{{ route('woroworo.edit', $item->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
-                                        <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin menghapus pengumuman dengan judul: {{$item->judul}} ?')" type="submit"><i class="fas fa-trash"></i></button>
-                                    </div>
+                                    
+                                        <div class="btn-group">
+                                            <a href="{{ route('woroworo.show', $item->id) }}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
+                                            @can('pengumuman-edit')
+                                            <a href="{{ route('woroworo.edit', $item->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
+                                            <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin menghapus pengumuman dengan judul: {{$item->judul}} ?')" type="submit"><i class="fas fa-trash"></i></button>
+                                            @endcan
+                                        </div>
+                                    
+                                    
                                 </form>
                                                     
                         </td>

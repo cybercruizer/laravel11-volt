@@ -11,14 +11,16 @@
 
         </div>
         <div class="card card-body border-0 shadow table-wrapper table-responsive">
-            <a href="" class="btn btn-primary">Tambah Siswa</a>
+            @can('siswa-create')
+                <a href="" class="btn btn-primary">Tambah Siswa</a>
+            @endcan
             <table class="table table-bordered" id="siswaDataTables">
                 <thead>
                    <tr>
                       <th>NIS</th>
                       <th>Nama</th>
                       <th>Kelas</th>
-                      <th>Email</th>
+                      <th>Aksi</th>
                    </tr>
                 </thead>
              </table>
@@ -35,7 +37,12 @@
                         { data: 'student_number', name: 'student_number' },
                         { data: 'student_name', name: 'student_name' },
                         { data: 'nama_kelas', name: 'nama_kelas' },
-                        { data: 'student_email', name: 'student_email' }
+                        //{ data: 'student_email', name: 'student_email' }
+                        { data: 'aksi', 
+                            render:function(data){
+                                return '<a href="/siswas/'+data+'" class="btn btn-primary btn-sm" target="_blank">Detail</a>';
+                            }
+                        }
                  ]
         });
      });
