@@ -19,7 +19,11 @@
             <div class="row">
                 <div class="col-md-12"></div>
                     <h6 class="h6">File lampiran</h6>
-                    <a href="{{ asset($woro2->gambar) }}" target="_blank"><img src="{{ asset($woro2->gambar) }}" width="200px"></a>
+                    @if($woro2->gambar)
+                        <a href="{{ asset($woro2->gambar) }}" target="_blank"><img src="{{ asset($woro2->gambar) }}" width="200px"></a>
+                    @else
+                        <span class="text-muted">Tidak ada lampiran</span>
+                    @endif
                     <span class="text-muted">*klik gambar untuk memperbesar</span>
                 </div>
             </div>
