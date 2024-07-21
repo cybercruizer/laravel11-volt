@@ -118,6 +118,7 @@ class PresensiController extends Controller
             //dd('wali kelas');
             //dd(Carbon::parse($request->tanggal)->format('Y-m-d'));
             $kelas = Auth::user()->kelas;
+            //dd($kelas);
             if($request->has('tanggal')){
                 $tanggal= Carbon::parse($request->tanggal)->format('Y-m-d');
             } else {
@@ -144,7 +145,30 @@ class PresensiController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $tanggal = $request->input('tanggal');
+        $kelas = $request->input('kelas');
+        $user_id = Auth::user()->id;
+        $attendance=Presensi::where('kelas_id',$kelas)->where('tanggal',$tanggal);
+        $validatedData= $request->validate([
+            'siswa.*.id' => 'required',
+            'siswa.*.keterangan' => 'required|in:H,S,I,A,T',
+            'siswa.*.alasan' => 'nullable',
+        ]);
+        //simpan ke database
+        foreach ($validatedData['siswa'] as $siswaData) {
+            $attendance->updateOrCreate(
+                ['student_id' => $siswaData['id']],
+                [
+                    'keterangan' => $siswaData['keterangan'],
+                    'alasan' => $siswaData['alasan'],
+                    'kelas_id' => $kelas,
+                    'tanggal' => $tanggal,
+                    'user_id' => $user_id,
+                ]
+            );
+        }
+        // Redirect kembali ke halaman presensi
+        return redirect()->route('presensi.edit',$tanggal)->with('success', 'Presensi tanggal '.$tanggal.' berhasil diubah');
     }
 
     /**
