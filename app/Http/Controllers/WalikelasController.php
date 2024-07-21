@@ -22,7 +22,7 @@ class WalikelasController extends Controller
     public function index()
     {
         $tahunaktif= Tahunajaran::select('year_id')->where('is_active',1);
-        $kelas = Kelas::with('user')->where('year_id',$tahunaktif)->get();
+        $kelas = Kelas::select('class_id','class_name','year_id','is_deleted','is_active','user_id')->where('year_id',$tahunaktif)->where('is_deleted',0)->get();
         $guru = User::all();
         //dd($kelas);
         return view('walikelas.index', compact('kelas','guru'));
