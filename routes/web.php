@@ -13,6 +13,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', \App\Http\Controllers\RoleController::class);
+    Route::get('users/cekrole', [\App\Http\Controllers\UserController::class, 'cekrole'])->name('cekrole');
     Route::resource('users', \App\Http\Controllers\UserController::class);
     Route::resource('products', \App\Http\Controllers\ProductController::class);
     Route::get('/presensi/laporan', [\App\Http\Controllers\PresensiController::class, 'laporan'])->name('presensi.laporan');
@@ -28,6 +29,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('kalender/show', 'show')->name('kalender.show');
         Route::post('kalender-ajax', 'ajax');
     });
+    
 
 });
 

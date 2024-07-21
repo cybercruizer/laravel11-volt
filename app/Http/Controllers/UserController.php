@@ -144,4 +144,15 @@ class UserController extends Controller
         return redirect()->route('users.index')
                         ->with('success','User deleted successfully');
     }
+    public function cekrole()
+    {
+        $users=User::whereHas('roles', function ($q) {
+            $q->where('name', 'WaliKelas');
+        })->get();
+
+        foreach ($users as $user) {
+            $user->removeRole('Guru');
+        }
+        return view('users.cekrole',compact('users'));
+    }
 }

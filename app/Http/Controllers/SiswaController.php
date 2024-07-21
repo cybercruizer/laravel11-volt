@@ -20,7 +20,7 @@ class SiswaController extends Controller
         if ($request->ajax()) {
             if (Auth::user()->hasRole(['Admin','Bk','Guru'])) {
                 $siswas = Siswa::get();
-            } elseif (Auth::user()->hasRole(['WaliKelas'])){
+            } elseif (Auth::user()->hasRole('WaliKelas')){
                 $kelas=Auth::user()->kelas->class_id;
                 $siswas = Siswa::where('class_id',$kelas)->get();
             }
