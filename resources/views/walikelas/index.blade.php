@@ -6,7 +6,10 @@
         </div>
         <div class="row mt-3">
             <div class="col-6 text-end">
-                <a href="{{ route('walikelas.create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Buat Wali Kelas</a>
+                @can('walikelas-create')
+                    <a href="{{ route('walikelas.create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Buat Wali Kelas</a>
+                @endcan
+               
             </div>
         </div>
         <div class="card card-body border-0 shadow table-wrapper table-responsive">
@@ -25,7 +28,10 @@
                     <tr>
                         <th>Kelas</th>
                         <th>Wali Kelas</th>
-                        <th>Action</th>
+                        @can('walikelas-create')
+                            <th>Action</th>
+                        @endcan
+                        
                     </tr>
                 </thead>
                 <tbody>
@@ -33,10 +39,13 @@
                         <tr>
                             <td>{{ $data->class_name }}</td>
                             <td>{{ $guru->where('id', $data->user_id)->first()->name ?? '' }} </td>
+                            @can('walikelas-create')
                             <td>
                                 <a href="{{ route('walikelas.edit', $data->class_id) }}" class="btn btn-warning"><i class="fas fa-edit"></i></a>
                                 <a href="{{ route('walikelas.destroy', $data->class_id) }}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
                             </td>
+                            @endcan
+                            
                         </tr>
                     @endforeach
                 </tbody>
