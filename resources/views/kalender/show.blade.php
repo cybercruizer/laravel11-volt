@@ -69,8 +69,16 @@
                         event.allDay = false;
                     }
                 },
+                columnHeaderHtml: function(mom) {
+                    if (mom.weekday() === 5 || mom.weekday() === 6) {
+                        return '<b class="text-danger">'+ mom.format('ddd') +'</b>';
+                    } else {
+                        return '<i class="text-primary">' + mom.format('ddd') + '</i>';
+                    }
+                },
                 selectable: false,
                 selectHelper: false,
+                showNonCurrentDates: false,
             });
 
         });
