@@ -46,6 +46,10 @@ class PermissionTableSeeder extends Seeder
            'pelanggaran-create',
            'pelanggaran-edit',
            'pelanggaran-delete',
+           'event-list',
+           'event-create',
+           'event-edit',
+           'event-delete',
         ];
 
         foreach ($permissions as $permission) {

@@ -2,7 +2,7 @@
     <li class="nav-item">
         <a href="{{ route('home') }}" class="nav-link d-flex align-items-center">
             <span class="sidebar-icon me-3">
-                <img src="{{ asset('images/brand/light.svg') }}" height="20" width="20" alt="Volt Logo">
+                <img src="{{ asset('images/brand/brand-smk.png') }}" height="20" width="20" alt="Volt Logo">
             </span>
             <span class="mt-1 ms-1 sidebar-text">
                 {{ env('APP_NAME') }}
@@ -41,6 +41,45 @@
         </a>
     </li>
     @endcan
+
+    {{-- KALENDER --}}
+    <li class="nav-item">
+        <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+            data-bs-target="#kalender-sub">
+            <span>
+                <span class="sidebar-icon me-3">
+                    <i class="fas fa-calendar"></i>
+                </span>
+                <span class="sidebar-text">Kalender</span>
+            </span>
+            <span class="link-arrow">
+                <i class="fas fa-arrow-right"></i>
+            </span>
+        </span>
+        <div class="multi-level collapse {{ request()->is('*/kalender/*') ? 'show' : '' }}" role="list" id="kalender-sub" aria-expanded="{{ request()->is('*/kalender/*') ? 'true' : 'false' }}">
+            <ul class="flex-column nav">
+                @can('event-create')
+                <li class="nav-item {{ request()->routeIs('kalender.index') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('kalender.index') }}">
+                        <span class="sidebar-icon">
+                            <i class="fa fa-edit"></i>
+                        </span>
+                        <span class="sidebar-text">Edit Kalender</span>
+                    </a>
+                </li>
+                @endcan              
+
+                <li class="nav-item {{ request()->routeIs('kalender.show') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('kalender.show') }}">
+                        <span class="sidebar-icon">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                        <span class="sidebar-text">Lihat Kalender</span>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </li>
    
     @can('woroworo-list')
     {{-- Pengumuman --}}

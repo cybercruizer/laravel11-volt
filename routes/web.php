@@ -23,6 +23,11 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('pelanggaran/create', [\App\Http\Controllers\BkController::class,'create'])->name('pelanggaran.create');
     Route::post('pelanggaran', [\App\Http\Controllers\BkController::class,'store'])->name('pelanggaran.store');
     Route::get('pelanggaran/search', [\App\Http\Controllers\BkController::class,'search'])->name('siswa.search');
+    Route::controller(\App\Http\Controllers\EventController::class)->group(function(){
+        Route::get('kalender', 'index')->name('kalender.index');
+        Route::get('kalender/show', 'show')->name('kalender.show');
+        Route::post('kalender-ajax', 'ajax');
+    });
 
 });
 
