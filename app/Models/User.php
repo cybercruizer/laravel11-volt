@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Kelas;
+use App\Models\Siswa;
 use App\Models\Woroworo;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
@@ -57,6 +58,20 @@ class User extends Authenticatable
     public function kelas(): HasOne
     {
         return $this->hasOne(Kelas::class);
+    }
+    /**
+     * Get all of the siswas for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasManyThrough
+     */
+    public function siswas()
+    {
+        return $this->hasManyThrough(Siswa::class, Kelas::class,
+        'user_id',
+        'class_id',
+        'id',
+        'class_id'
+    );
     }
     /**
      * Get all of the pengumumans for the User

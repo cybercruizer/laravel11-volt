@@ -45,7 +45,6 @@
                                 <a href="{{ route('walikelas.destroy', $data->class_id) }}" class="btn btn-danger"><i class="fas fa-trash"></i></a>
                             </td>
                             @endcan
-                            
                         </tr>
                     @endforeach
                 </tbody>

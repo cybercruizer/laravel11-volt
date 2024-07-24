@@ -49,4 +49,13 @@ class Kelas extends Model
     {
         return $this->belongsTo(User::class,'id','user_id');
     }
+    /**
+     * Get all of the presensis for the Kelas
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function presensis(): HasMany
+    {
+        return $this->hasMany(Presensi::class, 'kelas_id', 'class_id');
+    }
 }

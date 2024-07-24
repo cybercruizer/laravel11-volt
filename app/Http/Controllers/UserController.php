@@ -2,14 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Models\User;
-use Spatie\Permission\Models\Role;
 use DB;
 use Hash;
-use Illuminate\Support\Arr;
+use App\Models\User;
+use App\Models\Kelas;
 use Illuminate\View\View;
+use App\Models\Tahunajaran;
+use Illuminate\Support\Arr;
+use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
 
 class UserController extends Controller
@@ -152,6 +154,14 @@ class UserController extends Controller
 
         foreach ($users as $user) {
             $user->removeRole('Guru');
+        }
+        
+        $ta= Tahunajaran::where('is_active',1)->first();
+        $walikelas = Kelas::where('class_year',$ta)->get();
+        $nonwali = User::whereNotIn('id', $walikelas->pluck('user_id'))->get();
+        foreach ($nonwali as $n) {
+            $n->removeRole('WaliKelas');
+            $n->assignRole('Guru');
         }
         return view('users.cekrole',compact('users'));
     }

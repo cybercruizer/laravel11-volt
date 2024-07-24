@@ -56,7 +56,7 @@ class WalikelasController extends Controller
         foreach ($kelas_ids as $key => $kelas_id) {
             $user_id= $user_ids[$key];
             Kelas::where('class_id', $kelas_id)->update(['user_id' => $user_id]);
-            User::find($user_id)->assignRole('WaliKelas');
+            User::find($user_id)->syncRoles('WaliKelas');
         }
         return redirect()->route('walikelas.index')->with('success','Wali Kelas Berhasil ditambahkan');
     }

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -37,6 +38,14 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
     Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
+    Route::get('alpha/{tanggal}',[\App\Http\Controllers\DetailController::class,'alpha'])->name('detail.alpha');
+    Route::get('terlambat/{tanggal}',[\App\Http\Controllers\DetailController::class,'terlambat'])->name('terlambat.show');
     
-
 });
+/** Route::get('cekkelas/{id}', function($id){
+    $guru=User::find($id);
+    $siswas=$guru->siswas()->get();
+    foreach($siswas as $siswa){
+        dump($siswa->attributesToArray());
+    }})->name('cekkelas');
+**/
