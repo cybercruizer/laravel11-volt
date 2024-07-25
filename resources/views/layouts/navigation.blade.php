@@ -99,7 +99,7 @@
             data-bs-target="#presensi-sub">
             <span>
                 <span class="sidebar-icon me-3">
-                    <i class="fas fa-cogs"></i>
+                    <i class="fas fa-list"></i>
                 </span>
                 <span class="sidebar-text">Presensi</span>
             </span>
@@ -144,6 +144,46 @@
         </div>
     </li>
     @endcan
+
+{{-- Menu BK --}}    
+<li class="nav-item">
+    <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+        data-bs-target="#submenu-bk">
+        <span>
+            <span class="sidebar-icon me-3">
+                <i class="fas fa-gavel"></i>
+            </span>
+            <span class="sidebar-text">BK</span>
+        </span>
+        <span class="link-arrow">
+            <i class="fas fa-arrow-right"></i>
+        </span>
+    </span>
+    <div class="multi-level collapse" role="list" id="submenu-bk" aria-expanded="true">
+        <ul class="flex-column nav">
+            @can('pelanggaran-list')
+            <li class="nav-item {{ request()->routeIs('jenispelanggaran.index') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('jenispelanggaran.index') }}">
+                    <span class="sidebar-icon">
+                        <i class="fas fa-stream"></i>
+                    </span>
+                    <span class="sidebar-text">Jenis Pelanggaran</span>
+                </a>
+            </li>
+
+            <li class="nav-item {{ request()->routeIs('pelanggaran.index') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('pelanggaran.index') }}">
+                    <span class="sidebar-icon">
+                        <i class="fa fa-balance-scale"></i>
+                    </span>
+                    <span class="sidebar-text">Pelanggaran Siswa</span>
+                </a>
+            </li>
+            @endcan
+        </ul>
+    </div>
+</li>
+{{-- End Menu BK --}}
     
  <!-- Seting -->
     <li class="nav-item">

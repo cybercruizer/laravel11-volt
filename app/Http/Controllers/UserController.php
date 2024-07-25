@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\RedirectResponse;
+//use Illuminate\Support\Collection;
 
 class UserController extends Controller
 {
@@ -30,7 +31,7 @@ class UserController extends Controller
      */
     public function index(Request $request): View
     {
-        $data = User::latest()->paginate(20);
+        $data = User::orderBy('name','asc')->paginate(20);
 
         return view('users.index',compact('data'))
             ->with('i', ($request->input('page', 1) - 1) * 20);
@@ -155,7 +156,7 @@ class UserController extends Controller
         foreach ($users as $user) {
             $user->removeRole('Guru');
         }
-        
+
         $ta= Tahunajaran::where('is_active',1)->first();
         $walikelas = Kelas::where('class_year',$ta)->get();
         $nonwali = User::whereNotIn('id', $walikelas->pluck('user_id'))->get();

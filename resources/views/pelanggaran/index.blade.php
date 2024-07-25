@@ -4,7 +4,7 @@
     <div class="card-header">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="mb-4 h5 ml-3">Isi Presensi Siswa</h2>
+                <h2 class="mb-4 h5 ml-3">Input Pelanggaran Siswa</h2>
             </div>
         </div>
     </div>

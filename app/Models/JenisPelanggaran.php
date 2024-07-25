@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class JenisPelanggaran extends Model
 {
     use HasFactory;
+    protected $guarded=[];
 
     /**
      * Get all of the pelanggaran for the JenisPelanggaran

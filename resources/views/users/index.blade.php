@@ -2,9 +2,12 @@
 
 @section('content')
     <div class="card-header">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
+        <div class="row margin-tb">
+            <div class="col-md-6 pull-left">
                 <h5>Manajemen User</h5>
+            </div>
+            <div class="col-md-6 text-end">
+                <a class="btn btn-success btn-sm" href="{{ route('users.create') }}"><i class="fa fa-plus"></i> Buat User </a>
             </div>
         </div>
     </div>
@@ -15,9 +18,6 @@
         </div>
     @endsession
     <div class="card-body">
-        <div class="pull-right">
-            <a class="btn btn-success mb-2" href="{{ route('users.create') }}"><i class="fa fa-plus"></i> Buat User </a>
-        </div>
         <table class="table table-bordered">
             <tr>
                 <th>No</th>

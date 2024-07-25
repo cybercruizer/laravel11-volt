@@ -22,9 +22,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('presensi', \App\Http\Controllers\PresensiController::class);
     Route::resource('walikelas', \App\Http\Controllers\WalikelasController::class);
     Route::resource('woroworo', \App\Http\Controllers\WoroworoController::class);
-    Route::get('pelanggaran/create', [\App\Http\Controllers\BkController::class,'create'])->name('pelanggaran.create');
-    Route::post('pelanggaran', [\App\Http\Controllers\BkController::class,'store'])->name('pelanggaran.store');
-    Route::get('pelanggaran/search', [\App\Http\Controllers\BkController::class,'search'])->name('siswa.search');
+    //Route::get('pelanggaran/create', [\App\Http\Controllers\BkController::class,'create'])->name('pelanggaran.create');
+    //Route::post('pelanggaran', [\App\Http\Controllers\BkController::class,'store'])->name('pelanggaran.store');
+    //Route::get('pelanggaran/search', [\App\Http\Controllers\BkController::class,'search'])->name('siswa.search');
     Route::controller(\App\Http\Controllers\EventController::class)->group(function(){
         Route::get('kalender', 'index')->name('kalender.index');
         Route::get('kalender/show', 'show')->name('kalender.show');
@@ -40,6 +40,18 @@ Route::group(['middleware' => ['auth']], function() {
     Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
     Route::get('alpha/{tanggal}',[\App\Http\Controllers\DetailController::class,'alpha'])->name('detail.alpha');
     Route::get('terlambat/{tanggal}',[\App\Http\Controllers\DetailController::class,'terlambat'])->name('terlambat.show');
+    Route::controller(\App\Http\Controllers\PelanggaranController::class)->group(function(){
+        Route::get('jenispelanggaran', 'jenispelanggaranIndex')->name('jenispelanggaran.index');
+        Route::post('jenispelanggaran/store', 'jenispelanggaranStore')->name('jenispelanggaran.store');
+        Route::get('jenispelanggaran/edit/{id}', 'jenispelanggaranEdit')->name('jenispelanggaran.edit');
+        Route::put('jenispelanggaran/update/{id}', 'jenispelanggaranUpdate')->name('jenispelanggaran.update');
+        Route::delete('jenispelanggaran/destroy/{id}', 'jenispelanggaranDestroy')->name('jenispelanggaran.destroy');
+        Route::get('pelanggaran', 'pelanggaranIndex')->name('pelanggaran.index');
+        Route::post('pelanggaran/store', 'pelanggaranStore')->name('pelanggaran.store');
+        Route::get('pelanggaran/edit/{id}', 'pelanggaranEdit')->name('pelanggaran.edit');
+        Route::put('pelanggaran/update/{id}', 'pelanggaranUpdate')->name('pelanggaran.update');
+        Route::delete('pelanggaran/destroy/{id}', 'pelanggaranDestroy')->name('pelanggaran.destroy');
+    });
     
 });
 /** Route::get('cekkelas/{id}', function($id){
