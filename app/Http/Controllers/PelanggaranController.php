@@ -63,16 +63,11 @@ class PelanggaranController extends Controller
     }
     public function pelanggaranIndex()
     {
-        $pelanggarans=Pelanggaran::orderBy('tanggal')->paginate(30);
-        return view ('pelanggaran.index',$pelanggarans);
-    }
-
-    public function pelanggaranCreate()
-    {
-        $jenispelanggaran=Pelanggaran::get();
+        $jenispelanggaran=JenisPelanggaran::get();
+        //dd($jenispelanggaran);
         $siswas = Siswa::select('student_number','student_name')->get();
         return view('pelanggaran.create',[
-            'jenispelanggaran'=>$jenispelanggaran,
+            'jenis'=>$jenispelanggaran,
             'siswas'=>$siswas
         ]);
     }
@@ -82,20 +77,19 @@ class PelanggaranController extends Controller
         $request->validate([
             'pelanggaran' => 'required',
             'jenis' => 'required',
-            'poin' => 'required|numeric|max:500',
-            'tanggal' => 'required',
+            'tanggal' => 'required|date',
         ]);
-        $pelanggaran = $request->pelanggaran;
-        $jenis = $request->jenis;
-        $poin = $request->poin;
+        $ta = Tahunajaran::where('is_active', 1)->first();
+        $siswa = $request->siswa;
+        $jenis = $request->pelanggaran;
         $tanggal = $request->tanggal;
         $tindaklanjut = $request->tindaklanjut;
         Pelanggaran::create([
-            'pelanggaran' => $pelanggaran,
-            'jenis' => $jenis,
-            'poin' => $poin,
-            'tindaklanjut' => $tindaklanjut,
-            'tanggal' => $tanggal,
+            'tahun_ajaran_id' => $ta->id,
+            'user_id' => auth()->user()->id,
+            'siswa_id' => $siswa,
+            'tgl_pelanggaran' => $tanggal,
+            'jenis_pelanggaran_id' => $pelanggaran,
         ]);
         return redirect()->route('pelanggaran.index')->with('success','Pelanggaran berhasil diinput');
     }

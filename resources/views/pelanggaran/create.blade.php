@@ -32,27 +32,50 @@
             @csrf
             @method('POST')
             <div class="row">
-                <div class="col-md-6">
-                    <div class="form-group">
+                <div class="col-md-6 col-12 mb-2">
+                    <div class="form-group mb-2 col-10">
                         <label for="siswa_id">Nama Siswa</label>
-                        <select name="siswa_id" id="siswa_id" class="form-select select2">
+                        <select name="siswa" id="siswa_id" class="form-select select2">
                             @foreach ($siswas as $s)
                                 <option value="{{ $s->student_number }}">{{$s->student_number}}-{{ $s->student_name }}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="form-group">
-                        <label for="siswa_id">Jenis Pelanggaran</label>
-                        <select name="siswa_id" id="siswa_id" class="form-select select2">
+                    <div class="form-group mb-2 col-10">
+                        <label for="pelanggaran_id">Jenis Pelanggaran</label>
+                        <select name="pelanggaran" id="pelanggaran_id" class="form-select">
                             @foreach ($jenis as $j)
-                                <option value="{{ $j->id }}">{{ $s->student_name }}</option>
+                                <option value="{{ $j->id }}">{{ $j->nama }}</option>
                             @endforeach
                         </select>
                     </div>
+                    <div class="form-group mb-2 col-10">
+                        <label for="tanggal">Tanggal Pelanggaran</label>
+                        <input type="date" name="tanggal" id="tanggal" class="form-control">
+                    </div>
+                </div>
+                <div class="col-12 col-md-6">
+                    <table class="table table-stripped table-bordered">
+                        <h2 class="h6"><i class="fa fa-list"></i>  Daftar Jenis Pelanggaran</h2>
+                        <thead>
+                            <th>No</th>
+                            <th>Jenis Pelanggaran</th>
+                            <th>Poin</th>
+                        </thead>
+                        <tbody>
+                            @foreach ($jenis as $item)
+                            <tr>
+                                <td>{{ $loop->iteration }}</td>
+                                <td>{{ $item->nama }}</td>
+                                <td>{{ $item->poin }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
-            <div class="text-center mt-3"><button type="submit" class="btn btn-success btn-lg">Simpan</button></div>
+            <div class="text-start mt-3 mb-3"><button type="submit" class="btn btn-success">Simpan</button></div>
         </form>
     </div>
 @endsection
@@ -60,5 +83,10 @@
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 @endpush
 @push('scripts')
+    <script>
+        $(document).ready(function() {
+            $('.select2').select2();
+        });
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @endpush
