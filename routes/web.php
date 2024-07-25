@@ -19,7 +19,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('products', \App\Http\Controllers\ProductController::class);
     Route::get('/presensi/laporan', [\App\Http\Controllers\PresensiController::class, 'laporan'])->name('presensi.laporan');
     Route::get('/presensi/edit', [\App\Http\Controllers\PresensiController::class, 'edit'])->name('presensi.edit');
-    Route::resource('presensi', \App\Http\Controllers\PresensiController::class);
+    Route::resource('presensi', \App\Http\Controllers\PresensiController::class)->except('edit');
     Route::resource('walikelas', \App\Http\Controllers\WalikelasController::class);
     Route::resource('woroworo', \App\Http\Controllers\WoroworoController::class);
     //Route::get('pelanggaran/create', [\App\Http\Controllers\BkController::class,'create'])->name('pelanggaran.create');
@@ -47,6 +47,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::put('jenispelanggaran/update/{id}', 'jenispelanggaranUpdate')->name('jenispelanggaran.update');
         Route::delete('jenispelanggaran/destroy/{id}', 'jenispelanggaranDestroy')->name('jenispelanggaran.destroy');
         Route::get('pelanggaran', 'pelanggaranIndex')->name('pelanggaran.index');
+        Route::get('pelanggaran/create', 'pelanggaranCreate')->name('pelanggaran.create');
         Route::post('pelanggaran/store', 'pelanggaranStore')->name('pelanggaran.store');
         Route::get('pelanggaran/edit/{id}', 'pelanggaranEdit')->name('pelanggaran.edit');
         Route::put('pelanggaran/update/{id}', 'pelanggaranUpdate')->name('pelanggaran.update');

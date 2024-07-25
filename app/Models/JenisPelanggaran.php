@@ -18,6 +18,6 @@ class JenisPelanggaran extends Model
      */
     public function pelanggarans(): HasMany
     {
-        return $this->hasMany(Pelanggaran::class, 'jenis_pelanggaran_id', 'id');
+        return $this->hasMany(Pelanggaran::class, 'jenis_pelanggaran_id');
     }
 }

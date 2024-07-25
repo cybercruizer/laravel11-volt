@@ -37,7 +37,7 @@
                         <label for="siswa_id">Nama Siswa</label>
                         <select name="siswa" id="siswa_id" class="form-select select2">
                             @foreach ($siswas as $s)
-                                <option value="{{ $s->student_number }}">{{$s->student_number}}-{{ $s->student_name }}</option>
+                                <option value="{{ $s->student_id }}">{{$s->student_number}}-{{ $s->student_name }}</option>
                             @endforeach
                         </select>
                     </div>
@@ -53,6 +53,17 @@
                         <label for="tanggal">Tanggal Pelanggaran</label>
                         <input type="date" name="tanggal" id="tanggal" class="form-control">
                     </div>
+                    <div class="form-group mb-2 col-10">
+                        <label for="deskripsi">Deskripsi pelanggaran</label>
+                        <textarea name="deskripsi" id="deskripsi" cols="30" rows="5" class="form-control"></textarea>
+                        
+                    </div>
+                    <div class="form-group mb-2 col-10">
+                        <label for="tl">Tindak Lanjut</label>
+                        <textarea name="tindaklanjut" id="tl" cols="30" rows="5" class="form-control"></textarea>
+                        
+                    </div>
+
                 </div>
                 <div class="col-12 col-md-6">
                     <table class="table table-stripped table-bordered">

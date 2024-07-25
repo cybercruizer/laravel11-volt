@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use Carbon\Carbon;
 use App\Models\Siswa;
 use App\Models\Pelanggaran;
+use App\Models\Tahunajaran;
 use Illuminate\Http\Request;
 use App\Models\JenisPelanggaran;
 
@@ -63,9 +65,17 @@ class PelanggaranController extends Controller
     }
     public function pelanggaranIndex()
     {
-        $jenispelanggaran=JenisPelanggaran::get();
+        $pelanggaran=Pelanggaran::with('jenisPelanggaran','siswa')->orderBy('tgl_pelanggaran')->get()->groupBy(function($data) {
+            return Carbon::parse($data->tgl_pelanggaran)->format('Y-m-d');
+        });
         //dd($jenispelanggaran);
-        $siswas = Siswa::select('student_number','student_name')->get();
+        //$siswas = Siswa::select('student_number','student_name')->get();
+        return view('pelanggaran.index',compact('pelanggaran'));
+    }
+    public function pelanggaranCreate()
+    {
+        $jenispelanggaran=JenisPelanggaran::get();
+        $siswas = Siswa::select('student_id','student_number','student_name')->get();
         return view('pelanggaran.create',[
             'jenis'=>$jenispelanggaran,
             'siswas'=>$siswas
@@ -74,22 +84,26 @@ class PelanggaranController extends Controller
 
     public function pelanggaranStore(Request $request)
     {
+        //dd($request->all());
         $request->validate([
+            'siswa' => 'required',
             'pelanggaran' => 'required',
-            'jenis' => 'required',
             'tanggal' => 'required|date',
         ]);
         $ta = Tahunajaran::where('is_active', 1)->first();
-        $siswa = $request->siswa;
-        $jenis = $request->pelanggaran;
+        $siswa_id = $request->siswa;
         $tanggal = $request->tanggal;
+        $pelanggaran = $request->pelanggaran;
+        $deskripsi = $request->deskripsi;
         $tindaklanjut = $request->tindaklanjut;
         Pelanggaran::create([
-            'tahun_ajaran_id' => $ta->id,
+            'tahun_ajaran_id' => $ta->year_id,
             'user_id' => auth()->user()->id,
-            'siswa_id' => $siswa,
+            'siswa_id' => $siswa_id,
             'tgl_pelanggaran' => $tanggal,
             'jenis_pelanggaran_id' => $pelanggaran,
+            'deskripsi' => $deskripsi,
+            'tindaklanjut' => $tindaklanjut
         ]);
         return redirect()->route('pelanggaran.index')->with('success','Pelanggaran berhasil diinput');
     }

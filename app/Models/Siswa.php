@@ -22,7 +22,7 @@ class Siswa extends Model
      */
     public function kelas(): BelongsTo
     {
-        return $this->belongsTo(Kelas::class, 'class_id', 'class_id');
+        return $this->belongsTo(Kelas::class, 'class_id');
     }
     /**
      * Get all of the presensis for the Siswa
@@ -31,7 +31,7 @@ class Siswa extends Model
      */
     public function presensis(): HasMany
     {
-        return $this->hasMany(Presensi::class, 'student_id', 'student_id');
+        return $this->hasMany(Presensi::class, 'student_id');
     }
     /**
      * Get all of the pelanggarans for the Siswa

@@ -29,7 +29,7 @@ class Kelas extends Model
      */
     public function siswa(): HasMany
     {
-        return $this->hasMany(Siswa::class, 'class_id','class_id');
+        return $this->hasMany(Siswa::class, 'class_id');
     }
     /**
      * Get the tahunajaran that owns the Kelas
@@ -38,7 +38,7 @@ class Kelas extends Model
      */
     public function tahunajaran(): BelongsTo
     {
-        return $this->belongsTo(Tahunajaran::class, 'year_id', 'year_id');
+        return $this->belongsTo(Tahunajaran::class,'year_id');
     }
     /**
      * Get the user that owns the Kelas
@@ -56,6 +56,6 @@ class Kelas extends Model
      */
     public function presensis(): HasMany
     {
-        return $this->hasMany(Presensi::class, 'kelas_id', 'class_id');
+        return $this->hasMany(Presensi::class, 'kelas_id');
     }
 }

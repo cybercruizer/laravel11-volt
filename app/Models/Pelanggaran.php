@@ -5,15 +5,17 @@ namespace App\Models;
 use App\Models\Siswa;
 use App\Models\JenisPelanggaran;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Pelanggaran extends Model
 {
     use HasFactory;
+    protected $guarded = [];
 
     public function siswa()
     {
-        return $this->belongsTo(Siswa::class);
+        return $this->belongsTo(Siswa::class,'siswa_id');
     }
     /**
      * Get the jenispelanggaran that owns the Pelanggaran
@@ -22,6 +24,6 @@ class Pelanggaran extends Model
      */
     public function jenisPelanggaran(): BelongsTo
     {
-        return $this->belongsTo(JenisPelanggaran::class, 'id', 'jenis_pelanggaran_id');
+        return $this->belongsTo(JenisPelanggaran::class,'jenis_pelanggaran_id');
     }
 }

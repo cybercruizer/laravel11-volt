@@ -12,7 +12,6 @@ class Presensi extends Model
 {
     use HasFactory;
     protected $guarded=[];
-    protected $connection = 'mysql';
     /**
      * Get the siswa that owns the Presensi
      *
@@ -20,7 +19,7 @@ class Presensi extends Model
      */
     public function siswa(): BelongsTo
     {
-        return $this->belongsTo(Siswa::class, 'student_id','student_id');
+        return $this->belongsTo(Siswa::class, 'student_id');
     }
     /**
      * Get the kelas that owns the Presensi
@@ -29,6 +28,6 @@ class Presensi extends Model
      */
     public function kelas(): BelongsTo
     {
-        return $this->belongsTo(Kelas::class, 'class_id', 'kelas_id');
+        return $this->belongsTo(Kelas::class,'kelas_id');
     }
 }
