@@ -35,10 +35,8 @@
                 <div class="col-md-6 col-12 mb-2">
                     <div class="form-group mb-2 col-10">
                         <label for="siswa_id">Nama Siswa</label>
-                        <select name="siswa" id="siswa_id" class="form-select select2">
-                            @foreach ($siswas as $s)
-                                <option value="{{ $s->student_id }}">{{$s->student_number}}-{{ $s->student_name }}</option>
-                            @endforeach
+                        <select name="siswa" class="form-select" id="siswaSelect">
+                            <option selected>--Pilih Nama Siswa--</option>
                         </select>
                     </div>
                     <div class="form-group mb-2 col-10">
@@ -92,12 +90,42 @@
 @endsection
 @push('styles')
     <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
+
 @endpush
 @push('scripts')
-    <script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript">
+        // CSRF Token
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         $(document).ready(function() {
-            $('.select2').select2();
+
+            $("#siswaSelect").select2({
+                theme: 'bootstrap-5',
+                minimumInputLength: 3,
+                width: '100%',
+                ajax: {
+                    url: "{{ route('siswas.getSiswas') }}",
+                    type: "post",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            _token: CSRF_TOKEN,
+                            cari: params.term // search term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    cache: true
+                }
+
+            });
+
         });
     </script>
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 @endpush

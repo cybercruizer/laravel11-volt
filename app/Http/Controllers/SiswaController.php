@@ -11,7 +11,7 @@ class SiswaController extends Controller
 {
     function __construct()
     {
-         $this->middleware('permission:siswa-list|siswa-create|siswa-edit|siswa-delete', ['only' => ['index','show']]);
+         $this->middleware('permission:siswa-list|siswa-create|siswa-edit|siswa-delete', ['only' => ['index','show','getSiswas']]);
          $this->middleware('permission:siswa-create', ['only' => ['create','store']]);
          $this->middleware('permission:siswa-edit', ['only' => ['edit','update']]);
          $this->middleware('permission:siswa-delete', ['only' => ['destroy']]);
@@ -51,6 +51,24 @@ class SiswaController extends Controller
             </a>
         ";
     }
+    public function getSiswas(Request $request){
+        $search = $request->cari;
+  
+        if($search == ''){
+           $siswas = Siswa::orderby('student_name','asc')->select('student_id','student_name')->limit(5)->get();
+        }else{
+           $siswas = Siswa::orderby('student_name','asc')->select('student_id','student_name')->where('student_name', 'like', '%' .$search . '%')->limit(5)->get();
+        }
+  
+        $response = array();
+        foreach($siswas as $siswa){
+           $response[] = array(
+                "id"=>$siswa->student_id,
+                "text"=>$siswa->student_name
+           );
+        }
+        return response()->json($response); 
+     } 
 
 
 }

@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Presensi extends Model
 {
     use HasFactory;
+    protected $table = 'presensis';
+    protected $connection ='mysql';
+    protected $primaryKey = 'id';
     protected $guarded=[];
     /**
      * Get the siswa that owns the Presensi

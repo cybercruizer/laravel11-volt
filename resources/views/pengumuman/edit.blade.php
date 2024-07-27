@@ -29,7 +29,7 @@
             </div>
         @endif
 
-        <form action="{{ route('bworoworo.update', $woro2->id) }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('woroworo.update', $woro2->id) }}" method="post" enctype="multipart/form-data">
             @method('PUT')
             @csrf
             <div class="form-group mb-3">

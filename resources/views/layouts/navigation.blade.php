@@ -176,7 +176,15 @@
                     <span class="sidebar-icon">
                         <i class="fa fa-balance-scale"></i>
                     </span>
-                    <span class="sidebar-text">Pelanggaran Siswa</span>
+                    <span class="sidebar-text">Bulan ini</span>
+                </a>
+            </li>
+            <li class="nav-item {{ request()->routeIs('pelanggaran.cari') ? 'active' : '' }}">
+                <a class="nav-link" href="{{ route('pelanggaran.cari') }}">
+                    <span class="sidebar-icon">
+                        <i class="fa fa-user"></i>
+                    </span>
+                    <span class="sidebar-text">Cari Siswa</span>
                 </a>
             </li>
             @endcan

@@ -11,6 +11,9 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Pelanggaran extends Model
 {
     use HasFactory;
+    protected $table = 'pelanggarans';
+    protected $connection ='mysql';
+    protected $primaryKey = 'id';
     protected $guarded = [];
 
     public function siswa()

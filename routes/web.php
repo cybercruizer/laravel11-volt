@@ -34,6 +34,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
     Route::get('siswas', [\App\Http\Controllers\SiswaController::class, 'index'])->name('siswas.index');
     Route::get('siswas/{id}', [\App\Http\Controllers\SiswaController::class, 'show'])->name('siswas.show');
+    Route::post('siswas/ajax', [\App\Http\Controllers\SiswaController::class, 'getSiswas'])->name('siswas.getSiswas');
     //Route::get('siswas/datatable', [\App\Http\Controllers\SiswaController::class, 'datatable'])->name('siswas.datatable');
 
     Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
@@ -52,6 +53,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('pelanggaran/edit/{id}', 'pelanggaranEdit')->name('pelanggaran.edit');
         Route::put('pelanggaran/update/{id}', 'pelanggaranUpdate')->name('pelanggaran.update');
         Route::delete('pelanggaran/destroy/{id}', 'pelanggaranDestroy')->name('pelanggaran.destroy');
+        Route::any('pelanggaran/cari', 'pelanggaranCari')->name('pelanggaran.cari');
     });
     
 });

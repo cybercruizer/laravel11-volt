@@ -55,12 +55,12 @@
                                     
                                         <div class="btn-group">
                                             <a href="{{ route('woroworo.show', $item->id) }}" class="btn btn-info btn-sm"><i class="fas fa-eye"></i></a>
-                                            @can('pengumuman-edit')
+                                            @can('woroworo-edit')
                                             <a href="{{ route('woroworo.edit', $item->id) }}" class="btn btn-primary btn-sm"><i class="fas fa-edit"></i></a>
                                             <button class="btn btn-danger btn-sm" onclick="return confirm('Yakin menghapus pengumuman dengan judul: {{$item->judul}} ?')" type="submit"><i class="fas fa-trash"></i></button>
                                             @endcan
                                         </div>
-                                    
+                
                                     
                                 </form>
                                                     

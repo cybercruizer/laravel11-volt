@@ -40,6 +40,6 @@ class Siswa extends Model
      */
     public function pelanggarans(): HasMany
     {
-        return $this->hasMany(Pelanggaran::class);
+        return $this->hasMany(Pelanggaran::class, 'siswa_id');
     }
 }

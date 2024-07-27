@@ -65,12 +65,13 @@ class PelanggaranController extends Controller
     }
     public function pelanggaranIndex()
     {
-        $pelanggaran=Pelanggaran::with('jenisPelanggaran','siswa')->orderBy('tgl_pelanggaran')->get()->groupBy(function($data) {
+        $month = Carbon::now()->format('m');
+        $pelanggaran=Pelanggaran::with('jenisPelanggaran','siswa')->whereMonth('tgl_pelanggaran',$month)->orderBy('tgl_pelanggaran')->get()->groupBy(function($data) {
             return Carbon::parse($data->tgl_pelanggaran)->format('Y-m-d');
         });
         //dd($jenispelanggaran);
         //$siswas = Siswa::select('student_number','student_name')->get();
-        return view('pelanggaran.index',compact('pelanggaran'));
+        return view('pelanggaran.index',compact('pelanggaran','month'));
     }
     public function pelanggaranCreate()
     {
@@ -139,6 +140,22 @@ class PelanggaranController extends Controller
         $data = Pelanggaran::find($id);
         $data->delete();
         return redirect()->route('pelanggaran.index')->with('success','Pelanggaran berhasil dihapus');
+    }
+    public function pelanggaranCari(Request $request)
+    {
+        if($request->has('cari'))
+        {
+            $siswa = Pelanggaran::with('jenisPelanggaran')->where('siswa_id',$request->cari)->orderBy('tgl_pelanggaran')->get()->groupBy(function($data) {
+                return Carbon::parse($data->tgl_pelanggaran)->format('Y-m-d');
+            });
+            $detailsiswa=Siswa::with('pelanggarans')->find($request->cari);
+            //dd($siswa);
+        } else {
+            $siswa=Siswa::select('student_id','student_name','student_number')->limit(5)->get();
+            $status='awal';
+        }
+        //dd($siswa);
+        return view('pelanggaran.cari',['siswas'=>$siswa,'status'=>$status ?? 'hasil','detailSiswa'=>$detailsiswa ?? null]);
     }
 
 
