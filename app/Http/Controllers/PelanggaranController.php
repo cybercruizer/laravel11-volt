@@ -92,6 +92,8 @@ class PelanggaranController extends Controller
             'tanggal' => 'required|date',
         ]);
         $ta = Tahunajaran::where('is_active', 1)->first();
+        $poin = JenisPelanggaran::find($request->pelanggaran)->poin;
+        //dd($poin);
         $siswa_id = $request->siswa;
         $tanggal = $request->tanggal;
         $pelanggaran = $request->pelanggaran;
@@ -104,6 +106,7 @@ class PelanggaranController extends Controller
             'tgl_pelanggaran' => $tanggal,
             'jenis_pelanggaran_id' => $pelanggaran,
             'deskripsi' => $deskripsi,
+            'poin' => $poin,
             'tindaklanjut' => $tindaklanjut
         ]);
         return redirect()->route('pelanggaran.index')->with('success','Pelanggaran berhasil diinput');

@@ -59,7 +59,6 @@
                     <div class="form-group mb-2 col-10">
                         <label for="tl">Tindak Lanjut</label>
                         <textarea name="tindaklanjut" id="tl" cols="30" rows="5" class="form-control"></textarea>
-                        
                     </div>
 
                 </div>

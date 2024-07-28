@@ -51,12 +51,12 @@
         </form>
 
         <div class="row mb-3">
-            <div class="col-6 shadow p-2">
+            <div class="col-md-6 col-12 border-1 shadow mr-2 mt-3">
                 @if ($status == 'awal')
                 <p> </p>
                 @else
                     <h2 class="mb-4 h5 ml-3">Detail Identitas Siswa</h2>
-                    <table class="table table-stripped">
+                    <table class="table table-stripped table-responsive">
                         <tr>
                             <td>NIS</td>
                             <td>{{ $detailSiswa->student_number }}</td>
@@ -80,12 +80,12 @@
                     </table>
                 @endif
             </div>
-            <div class="col-6 shadow p-2">
+            <div class="col-md-6 col-12 border-1 shadow ml-2 mt-3">
                 @if ($status == 'awal')
                 <p> </p>
                 @else
                     <h2 class="mb-4 h5 ml-3">Rekap Pelanggaran</h2>
-                    <table class="table table-stripped">
+                    <table class="table table-stripped table-responsive">
                         <tr>
                             <td>Alpha</td>
                             <td>{{ $detailSiswa->presensis->where('keterangan', 'A')->count() }}</td>
