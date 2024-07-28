@@ -17,7 +17,7 @@
             {{ $value }}
         </div>
     @endsession
-    <div class="card-body">
+    <div class="card-body table-wrapper table-responsive">
         <table class="table table-bordered">
             <tr>
                 <th>No</th>
