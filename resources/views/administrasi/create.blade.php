@@ -44,7 +44,6 @@
                         <option value="kurikulum" {{ old('kategori') == 'kurikulum' ? 'selected' : '' }}>Kurikulum</option>
                         <option value="kesiswaan" {{ old('kategori') == 'kesiswaan' ? 'selected' : '' }}>Kesiswaan</option>
                         <option value="keuangan" {{ old('kategori') == 'keuangan' ? 'selected' : '' }}>Keuangan</option>
-                        <option value="walikelas" {{ old('kategori') == 'walikelas' ? 'selected' : '' }}>Khusus Wali Kelas</option>
                     </select>
                 </div>
                 <div class="form-group col-3 mb-3">

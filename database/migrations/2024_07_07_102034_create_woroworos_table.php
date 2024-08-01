@@ -16,7 +16,7 @@ return new class extends Migration
             $table->integer('user_id');
             $table->string('judul');
             $table->text('konten');
-            $table->enum('kategori', ['kurikulum','kesiswaan', 'keuangan','umum'])->nullable()->default('umum');
+            $table->enum('kategori', ['kurikulum','kesiswaan', 'keuangan','umum','walikelas'])->nullable()->default('umum');
             $table->enum('status',['aktif','nonaktif']);
             $table->timestamps();
         });

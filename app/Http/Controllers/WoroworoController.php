@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Woroworo;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 
 class WoroworoController extends Controller
@@ -20,8 +21,12 @@ class WoroworoController extends Controller
      */
     public function index()
     {
-        $woro2=Woroworo::latest()->paginate(20);
-
+        
+        if(Auth::user()->hasRole(['Admin','WaliKelas','Kurikulum'])) {
+            $woro2=Woroworo::latest()->paginate(20);
+        } else {
+            $woro2=Woroworo::where('kategori','!=','walikelas')->latest()->paginate(20);
+        }
         return view('pengumuman.index',compact('woro2'));
     }
 

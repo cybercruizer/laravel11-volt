@@ -3,6 +3,7 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdministrasiController;
 
 Route::get('/', function () {
     return view('auth.login');
@@ -55,6 +56,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::delete('pelanggaran/destroy/{id}', 'pelanggaranDestroy')->name('pelanggaran.destroy');
         Route::any('pelanggaran/cari', 'pelanggaranCari')->name('pelanggaran.cari');
     });
+    Route::get('administrasi', [AdministrasiController::class, 'index'])->name('administrasi.index');
     
 });
 /** Route::get('cekkelas/{id}', function($id){

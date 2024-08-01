@@ -93,6 +93,16 @@
     </li>
     @endcan
     @can('presensi-list')
+    @role('WaliKelas')
+    <li class="nav-item {{ request()->routeIs('administrasi.index') ? 'active' : '' }}">
+        <a href="{{ route('administrasi.index') }}" class="nav-link">
+            <span class="sidebar-icon me-3">
+                <i class="fas fa-user-cog"></i>
+            </span>
+            <span class="sidebar-text">Administrasi Kelas</span>
+        </a>
+    </li>
+    @endrole
  <!-- Presensi -->
     <li class="nav-item">
         <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"

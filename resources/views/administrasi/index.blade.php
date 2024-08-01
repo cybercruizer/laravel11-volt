@@ -7,7 +7,7 @@
                 <h2 class="mb-4 h5 ml-3">Pengumuman</h2>
             </div>
             <div class="col-6 col-md-3 text-end">
-                @can('woroworo-create')
+                @can('pengumuman-create')
                     <a href="{{ route('woroworo.create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Buat Pengumuman</a>
                 @endcan 
             </div>
