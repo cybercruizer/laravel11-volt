@@ -21,15 +21,18 @@ class PresensiController extends Controller
 
     public function index(Request $request)
     {
-        
+
         if (Auth::user()->hasRole('WaliKelas')) {
             $kelas = Auth::user()->kelas;
-            $siswas=Siswa::select('student_id','student_name','student_number')->where('class_id',$kelas->class_id)->get();
+            $siswas=Siswa::select('student_id','student_name','student_number')->where([
+                ['class_id',$kelas->class_id],
+                ['is_deleted',0]
+                ])->get();
             //dd($siswas);
         } else {
             $kelas=Kelas::get();
             $siswas=Siswa::get();
-            
+
         }
         return view('presensi.index',[
             'students'=>$siswas,
@@ -51,7 +54,7 @@ class PresensiController extends Controller
             $kel=$request->input('kelas');
             $kelas=Kelas::where('classroom_id',$kel)->get();
             $siswas=$kelas->siswa();
-            
+
         }
         $tanggal=$request->input('tanggal');
         return view('presensi.index',[
