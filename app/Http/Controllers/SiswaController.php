@@ -21,7 +21,10 @@ class SiswaController extends Controller
             if (Auth::user()->hasRole(['Admin','Bk','Guru'])) {
                 $siswas = Siswa::get();
             } elseif (Auth::user()->hasRole('WaliKelas')){
-                $siswas = Auth::user()->siswas()->where('is_deleted',0)->get();
+                $siswas = Siswa::where([
+                    ['is_deleted',0],
+                    ['class_id',Auth::user()->kelas->class_id]
+                ])->get();
             }
             return datatables()->of($siswas)
                 ->addColumn('nama_kelas',
