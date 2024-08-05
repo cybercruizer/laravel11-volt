@@ -21,7 +21,7 @@ class SiswaController extends Controller
             if (Auth::user()->hasRole(['Admin','Bk','Guru'])) {
                 $siswas = Siswa::get();
             } elseif (Auth::user()->hasRole('WaliKelas')){
-                $siswas = Auth::user()->siswas()->get();
+                $siswas = Auth::user()->siswas()->where('is_deleted',0)->get();
             }
             return datatables()->of($siswas)
                 ->addColumn('nama_kelas',
@@ -53,13 +53,13 @@ class SiswaController extends Controller
     }
     public function getSiswas(Request $request){
         $search = $request->cari;
-  
+
         if($search == ''){
            $siswas = Siswa::orderby('student_name','asc')->select('student_id','student_name')->limit(5)->get();
         }else{
            $siswas = Siswa::orderby('student_name','asc')->select('student_id','student_name')->where('student_name', 'like', '%' .$search . '%')->limit(5)->get();
         }
-  
+
         $response = array();
         foreach($siswas as $siswa){
            $response[] = array(
@@ -67,8 +67,8 @@ class SiswaController extends Controller
                 "text"=>$siswa->student_name
            );
         }
-        return response()->json($response); 
-     } 
+        return response()->json($response);
+     }
 
 
 }
