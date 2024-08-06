@@ -99,14 +99,14 @@ class WoroworoController extends Controller
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'status' => 'required',
         ]);
+        $woro2=Woroworo::find($id);
         if($request->hasFile('gambar')){
             $filename = time().'.'.$request->file('gambar')->getClientOriginalExtension();
             $path = $request->file('gambar')->storeAs('images/woroworo', $filename);
+            $woro2->gambar=$path.$filename;
         }
-        $woro2=Woroworo::find($id);
         $woro2->judul=$request->input('judul');
         $woro2->konten=$request->input('konten');
-        $woro2->gambar=$path.$filename;
         $woro2->status=$request->input('status');
         
         $woro2->save();
