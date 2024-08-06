@@ -5,7 +5,10 @@
             <h2 class="mb-4 h5">{{ __('Daftar Wali Kelas') }}</h2>
         </div>
         <div class="row mt-3">
-            <div class="col-6 text-end">
+            <div class="col-6">
+
+            </div>
+            <div class="col-6 text-end mr-3">
                 @can('walikelas-create')
                     <a href="{{ route('walikelas.create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Buat Wali Kelas</a>
                 @endcan

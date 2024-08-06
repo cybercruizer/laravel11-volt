@@ -31,16 +31,6 @@
             <span class="sidebar-text">{{ __('Daftar Siswa') }}</span>
         </a>
     </li>
-    @can('walikelas-list')
-    <li class="nav-item {{ request()->routeIs('walikelas.index') ? 'active' : '' }}">
-        <a href="{{ route('walikelas.index') }}" class="nav-link">
-            <span class="sidebar-icon me-3">
-                <i class="fas fa-users fa-fw"></i>
-            </span>
-            <span class="sidebar-text">{{ __('Wali Kelas') }}</span>
-        </a>
-    </li>
-    @endcan
 
     {{-- KALENDER --}}
     <li class="nav-item">
@@ -237,6 +227,17 @@
                             <i class="fa fa-user-tag"></i>
                         </span>
                         <span class="sidebar-text">Roles</span>
+                    </a>
+                </li>
+                @endcan
+
+                @can('walikelas-list')
+                <li class="nav-item {{ request()->routeIs('walikelas.index') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('walikelas.index') }}">
+                        <span class="sidebar-icon">
+                            <i class="fa fa-user-tag"></i>
+                        </span>
+                        <span class="sidebar-text">Set Wali Kelas</span>
                     </a>
                 </li>
                 @endcan
