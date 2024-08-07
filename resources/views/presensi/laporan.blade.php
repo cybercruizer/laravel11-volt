@@ -82,7 +82,7 @@
             </thead>
             <tbody>
 
-                @foreach ($students as $student)
+                @forelse ($students as $student)
                     <tr>
                         <td>{{ $student->student_number }}</td>
                         <td>{{ $student->student_name }}</td>
@@ -136,7 +136,12 @@
                         <td>{{ $a[$student->student_id] }}</td>
                         <td>{{ $t[$student->student_id] }}</td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td>Data tidak ditemukan</td>
+                    </tr>
+                @endforelse
+
             </tbody>
         </table>
     </div>

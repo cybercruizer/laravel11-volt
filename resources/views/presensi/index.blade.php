@@ -7,16 +7,6 @@
                 <h2 class="mb-4 h5 ml-3">Isi Presensi Siswa</h2>
             </div>
         </div>
-        <div class="row">
-            <div class="col">
-
-            </div>
-            <div class="col">
-                @role('Admin|Bk')
-                    {{ html()->select($name = 'kelas', $options = [$kelas->pluck('class_name', 'class_id')], $value = old('kelas'))->class('form-select') }}
-                @endrole
-            </div>
-        </div>
     </div>
 
     <form action="{{ route('presensi.store') }}" method="POST">
@@ -45,12 +35,11 @@
                 <div class="col col-md-6">
                     @role('Admin|Bk|WaliKelas')
                         {{ html()->date($name = 'tanggal', $value = \Carbon\Carbon::now(), $format = 'Y-m-d')->class('form-control')->type('date') }}
+                        <span class="text-danger text-sm"> * Perhatikan tanggal presensi ini</span>
                     @endrole
                 </div>
                 <div class="col col-md-6">
-                    @role('Admin|Bk|WaliKelas')
-                        <span class="fw-bold text-danger"> * Perhatikan tanggal presensi ini</span>
-                    @endrole
+
             </div><br><br>
             
             <table class="table table-bordered table-striped table-responsive mb-0">

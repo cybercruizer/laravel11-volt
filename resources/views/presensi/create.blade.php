@@ -4,56 +4,69 @@
     <div class="card-header">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="mb-4 h5 ml-3">{{ __('Isi Presensi Siswa tanggal ' . $tanggal) }}</h2>
+                <h2 class="mb-4 h5 ml-3">Isi Presensi Siswa</h2>
             </div>
         </div>
-        <form action="{{ route('presensi.create') }}" method="post">
-            @csrf
+    </div>
+
+    <form action="{{ route('presensi.store') }}" method="POST">
+        @csrf
+        <div class="card card-body border-0 shadow table-wrapper table-responsive">
+            @if ($errors->any())
+                <div class="alert alert-danger">
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+            @if (session()->has('success'))
+                <div class="alert alert-success">
+                    {{ session()->get('success') }}
+                </div>
+            @endif
+            @if (session()->has('error'))
+                <div class="alert alert-danger">
+                    {{ session()->get('error') }}
+                </div>
+            @endif
             <div class="row">
-                <div class="col">
+                <div class="col col-md-6">
                     @role('Admin|Bk|WaliKelas')
-                        {{ html()->date($name = 'tanggal', $value = old('tanggal'), $format = 'd-m-Y')->class('form-control')->type('date') }}
-                        @endrole
+                        {{ html()->date($name = 'tanggal', $value = \Carbon\Carbon::now(), $format = 'Y-m-d')->class('form-control')->type('date') }}
+                        <span class="text-danger text-sm"> * Perhatikan tanggal presensi ini</span>
+                    @endrole
                 </div>
-                <div class="col">
-                        @role('Admin|Bk')
-                            {{ html()->select($name = 'kelas', $options = [$kelas->pluck('class_name', 'class_id')], $value = old('kelas'))->class('form-control') }}
-                        @endrole
-                </div>
-                <div class="col">
-                        @role('Admin|Bk')
-                            <button type="submit" class="btn btn-primary">Tampilkan</button>
-                        @endrole
-                </div>
-            </div>
-        </form>
-    </div>
-
-
-    </div>
-    <div class="card card-body border-0 shadow table-wrapper table-responsive">
-        <form action="{{ route('presensi.index') }}" method="POST">
-            @csrf
-            <table class="table table-bordered table-striped mb-0">
+                <div class="col col-md-6">
+                    @role('Admin|Bk')
+                        {{ html()->select($name = 'kelas', $options = [$kelas->pluck('class_name', 'class_id')], $value = old('kelas'))->class('form-select') }}
+                    @endrole
+            </div><br><br>
+            
+            <table class="table table-bordered table-striped table-responsive mb-0">
                 <thead>
                     <tr class="text-center">
-                        <th>Nama Siswa</th>
-                        <th>NIS</th>
-                        <th>Keterangan</th>
-                        <th>alasan</th>
+                        <th class="col-1">No</th>
+                        <th class="col-3">Nama Siswa</th>
+                        <th class="col-1">NIS</th>
+                        <th class="col-2">Keterangan</th>
+                        <th class="col-2">Alasan</th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($students as $student)
                         <tr>
+                            <td>{{ $loop->iteration }}</td>
                             <td>{{ $student->student_name }}</td>
-                            <td>{{ $student->student_class }}</td>
+                            <td>{{ $student->student_number }}</td>
                             <input type="hidden" name="student_id[]" value="{{ $student->student_id }}">
                             <td>
-                                <select name="keterangan[]" id="student_id" class="form-control">
+                                <select name="keterangan[]" id="student_id" class="form-select">
                                     <option value="H">Hadir</option>
                                     <option value="A">Alpha</option>
                                     <option value="S">Sakit</option>
+                                    <option value="I">Ijin</option>
                                     <option value="T">Terlambat</option>
                                 </select>
                             </td>
@@ -62,8 +75,10 @@
                     @endforeach
                 </tbody>
             </table>
+            
             <div class="text-center mt-3"><button type="submit" class="btn btn-success btn-lg">Simpan</button></div>
 
-        </form>
-    </div>
+
+        </div>
+    </form>
 @endsection

@@ -38,6 +38,7 @@
                     <thead>
                         <th>No</th>
                         <th>Nama Siswa</th>
+                        <th>Jenis Pelanggaran</th>
                         <th>Poin</th>
                         <th>Deskripsi</th>
                         <th>Tindak Lanjut</th>
@@ -53,6 +54,7 @@
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->siswa->student_name }}</td>
+                                    <td>{{ $item->jenisPelanggaran->nama }}</td>
                                     <td>{{ $item->jenisPelanggaran->poin }}</td>
                                     <td>{{ $item->deskripsi }}</td>
                                     <td>{{ $item->tindaklanjut }}</td>

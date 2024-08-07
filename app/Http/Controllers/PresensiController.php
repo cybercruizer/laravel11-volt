@@ -46,18 +46,15 @@ class PresensiController extends Controller
      */
     public function create(Request $request)
     {
-        if (Auth::user()->hasRole('WaliKelas')) {
-            $kelas = Auth::user()->kelas;
-            $siswas=$kelas->siswa();
-            //dd($kelas);
+        if ($request->has('kelas')) {
+            $kelas = $request->kelas;
+            $siswas =Siswa::where('kelas_id',$kelas);
         } else {
-            $kel=$request->input('kelas');
-            $kelas=Kelas::where('classroom_id',$kel)->get();
-            $siswas=$kelas->siswa();
-
+            $ta = Tahunajaran::where('is_active',1);
+            $kelas = Kelas::where('year_id',$ta)->get();
+            $siswas =null;
         }
-        $tanggal=$request->input('tanggal');
-        return view('presensi.index',[
+        return view('presensi.create',[
             'students'=>$siswas,
             'title'=>'Input Presensi Siswa',
             'kelas' =>$kelas,
