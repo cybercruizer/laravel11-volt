@@ -19,9 +19,15 @@ class SiswaController extends Controller
     public function index(Request $request) {
         if ($request->ajax()) {
             if (Auth::user()->hasRole(['Admin','Bk','Guru'])) {
-                $siswas = Siswa::where('student_status','A')->get();
+                $siswas = Siswa::where([
+                    ['is_deleted', 0],
+                    ['status','A']
+                    ])->get();
             } elseif (Auth::user()->hasRole('WaliKelas')){
-                $siswas = Auth::user()->siswas()->where('student_status','A')->get();
+                $siswas = Auth::user()->siswas()->where([
+                    ['is_deleted', 0],
+                    ['status','A']
+                    ])->get();
             }
             return datatables()->of($siswas)
                 ->addColumn('nama_kelas',
