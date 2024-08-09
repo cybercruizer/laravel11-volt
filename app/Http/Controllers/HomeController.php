@@ -52,7 +52,7 @@ class HomeController extends Controller
             'group_by_field_format' => 'Y-m-d',
             'group_by_period' => 'day',
             'where_raw' => 'keterangan = "A"',
-            'chart_type' => 'bar',
+            'chart_type' => 'line',
             'chart_color' => '255,29,72',
             'name'  => 'Alpha',
         ];
@@ -64,7 +64,7 @@ class HomeController extends Controller
             'group_by_field_format' => 'Y-m-d',
             'group_by_period' => 'day',
             'where_raw' => 'keterangan = "S" OR keterangan = "I"',
-            'chart_type' => 'bar',
+            'chart_type' => 'line',
             'chart_color' => '31,175,5',
             'name'  => 'Sakit/Ijin',
         ];
