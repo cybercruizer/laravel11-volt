@@ -74,7 +74,7 @@ class HomeController extends Controller
         $sudah = Presensi::where('tanggal', Carbon::today()->format('Y-m-d'))->count();
         $belum = Siswa::where([
             ['is_deleted', 0],
-            ['status','A']
+            ['student_status','A']
             ])->count() - $sudah;
         //get 10 data  siwa dengan alpha terbanyak
         if(Auth::user()->hasRole('WaliKelas')){

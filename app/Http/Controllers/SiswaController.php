@@ -21,12 +21,12 @@ class SiswaController extends Controller
             if (Auth::user()->hasRole(['Admin','Bk','Guru'])) {
                 $siswas = Siswa::where([
                     ['is_deleted', 0],
-                    ['status','A']
+                    ['student_status','A']
                     ])->get();
             } elseif (Auth::user()->hasRole('WaliKelas')){
                 $siswas = Auth::user()->siswas()->where([
                     ['is_deleted', 0],
-                    ['status','A']
+                    ['student_status','A']
                     ])->get();
             }
             return datatables()->of($siswas)
