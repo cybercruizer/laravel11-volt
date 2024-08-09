@@ -19,7 +19,7 @@ class SiswaController extends Controller
     public function index(Request $request) {
         if ($request->ajax()) {
             if (Auth::user()->hasRole(['Admin','Bk','Guru'])) {
-                $siswas = Siswa::get();
+                $siswas = Siswa::where('student_status','A')->get();
             } elseif (Auth::user()->hasRole('WaliKelas')){
                 $siswas = Auth::user()->siswas()->where('student_status','A')->get();
             }
