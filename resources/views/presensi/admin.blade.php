@@ -82,7 +82,6 @@
 
                         @for ($day = 1; $day <= $jumlahHari; $day++)
                             <td>
-                                {{ $kelasdata[$kel->class_id][$day] }}
                                 @if ($kelasdata[$kel->class_id][$day] == "v")
                                     <i class="fa fa-check-circle text-success"></i>
                                 @else
