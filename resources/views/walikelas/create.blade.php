@@ -39,8 +39,10 @@
                         <td>
                             <select name="user_id[]" class="form-select" id="{{ $kel->class_id }}">
                                 @foreach ($guru as $g)
+                                    
                                     <option value="{{ $g->id }}"
-                                        {{ $g->id == $kel->user_id ? 'selected' : '' }}>{{ $g->name }}</option>
+                                        {{ $kel->user_id === $g->id ? ' selected' : '' }}>{{ $g->name }}
+                                    </option>
                                 @endforeach
                             </select>
                         </td>
