@@ -24,7 +24,9 @@ class SiswaController extends Controller
                     ['student_status','A']
                     ])->get();
             } elseif (Auth::user()->hasRole('WaliKelas')){
-                $siswas = Auth::user()->siswas()->where([
+                $kelas=Auth::user()->kelas->class_id;
+                $siswas = Siswa::where([
+                    ['class_id', $kelas],
                     ['is_deleted', 0],
                     ['student_status','A']
                     ])->get();
