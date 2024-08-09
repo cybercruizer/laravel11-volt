@@ -65,7 +65,7 @@
                                     <option value="A">Alpha</option>
                                     <option value="S">Sakit</option>
                                     <option value="I">Ijin</option>
-                                    <option value="T">Terlambat</option>
+<!--                                    <option value="T">Terlambat</option> -->
                                 </select>
                             </td>
                             <td><input type="text" class="form-control" name="alasan[]"></td>
@@ -75,8 +75,6 @@
             </table>
             
             <div class="text-center mt-3"><button type="submit" class="btn btn-success btn-lg">Simpan</button></div>
-
-
         </div>
     </form>
 @endsection

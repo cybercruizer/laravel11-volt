@@ -9,7 +9,7 @@
             <div class="col-6 text-end">
                 <!-- Modal trigger button -->
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambah">
-                    Tambah Jenis Pelanggaran
+                    Tambah Jenis Tagihan
                 </button>
             </div>
         </div>
@@ -37,32 +37,38 @@
 
         <table class="table table-bordered table-striped table-responsive mb-0">
             <thead>
-                <th>No</th>
-                <th>Jenis Pelanggaran</th>
-                <th>Deskripsi</th>
-                <th>Poin</th>
-                <th>Aksi</th>
+                <th class="col-1">No</th>
+                <th class="col-3">Nama Tagihan</th>
+                <th class="col-2">Jenis</th>
+                <th class="col-2">Keterangan</th>
+                <th class="col-2">Nominal</th>
+                <th class="col-2">Aksi</th>
 
             </thead>
-            @foreach ($jenis as $s)
+            @forelse ($jenis as $s)
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td>{{ $s->nama }}</td>
-                    <td>{{ $s->deskripsi }}</td>
-                    <td>{{ $s->poin }}</td>
+                    <td>{{ $s->jenis }}</td>
+                    <td>{{ $s->keterangan }}</td>
+                    <td>@rupiah($s->nominal)</td>
                     <td>
                         <div class="btn-group" role="group">
-                            <form action="{{ route('jenispelanggaran.destroy', $s->id) }}" method="post">
+                            <form action="{{ route('tagihan.destroy', $s->id) }}" method="post">
                                 @method('DELETE')
                                 @csrf
-                                <a href="{{ route('jenispelanggaran.edit', $s->id) }}" class='btn btn-primary btn-sm'><i
+                                <a href="{{ route('tagihan.edit', $s->id) }}" class='btn btn-primary btn-sm'><i
                                         class="fa fa-edit"></i></a>
                                 <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                             </form>
                         </div>
                     </td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td colspan="6" style="text-align: center"><strong>~ Tidak ada data ~</strong></td>
+                </tr>
+            @endforelse
         </table>
     </div>
     <!-- Modal Body -->
@@ -70,7 +76,7 @@
     <div class="modal fade" id="tambah" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog"
         aria-labelledby="modalTitleId" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable" role="document">
-            <form action="{{ route('jenispelanggaran.store') }}" method="post">
+            <form action="{{ route('tagihan.store') }}" method="post">
                 @csrf
                 @method('POST');
                 <div class="modal-content">
@@ -83,15 +89,33 @@
                     <div class="modal-body">
 
                         <div class="mb-3">
-                            <label for="nama" class="">Nama Pelanggaran</label>
+                            <label for="nama" class="">Nama Tagihan</label>
                             <input type="text" class="form-control" name="nama" id="nama"
-                                aria-describedby="helpId" placeholder="Tulis jenis pelanggaran" /><br>
-                            <label for="desc" class="form-label">Deskripsi Pelanggaran</label>
-                            <input type="text" class="form-control" name="deskripsi" id="desc"
-                                aria-describedby="helpId" placeholder="Tulis deskripsi pelanggaran" /><br>
-                            <label for="poin" class="form-label">Poin Pelanggaran</label>
-                            <input type="text" class="form-control" name="poin" id="poin"
-                                aria-describedby="helpId" placeholder="Tulis poin pelanggaran" /><br>
+                                placeholder="Tulis nama tagihan" /><br>
+
+                            <label for="jenis" class="">Jenis Tagihan</label>
+                            <select name="jenis" class="form-select" id="jenis">
+                                <option value="">-- Pilih Jenis Tagihan --</option>
+                                <option value="bulanan">Rutin Bulanan</option>
+                                <option value="tahunan">Tahunan</option>
+                            </select><br>
+
+                            <label for="ta" class="">Tahun Ajaran</label>
+                            <select name="ta" class="form-select" id="ta">
+                                <option value="">-- Pilih Tahun Ajaran --</option>
+                                @foreach ($ta as $t)
+                                    <option value="{{ $t->year_id }}">{{$t->year_name}}</option>
+                                @endforeach
+                                
+                            </select><br>
+        
+                            <label for="nominal" class="form-label">Nominal</label>
+                            <input type="text" class="form-control" name="nominal" id="nominal"
+                                placeholder="Tulis nominal tagihan" /><br>
+
+                            <label for="keterangan" class="form-label">Keterangan</label>
+                            <input type="text" class="form-control" name="keterangan" id="keterangan"
+                                placeholder="Tulis keterangan tagihan" /><br>
                         </div>
                     </div>
                     <div class="modal-footer">

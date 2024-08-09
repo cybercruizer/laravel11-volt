@@ -57,6 +57,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::any('pelanggaran/cari', 'pelanggaranCari')->name('pelanggaran.cari');
     });
     Route::get('administrasi', [AdministrasiController::class, 'index'])->name('administrasi.index');
+    Route::resource('tagihan', \App\Http\Controllers\TagihanController::class);
     
 });
 /** Route::get('cekkelas/{id}', function($id){

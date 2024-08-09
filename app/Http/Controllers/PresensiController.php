@@ -26,7 +26,8 @@ class PresensiController extends Controller
             $kelas = Auth::user()->kelas;
             $siswas=Siswa::select('student_id','student_name','student_number')->where([
                 ['class_id',$kelas->class_id],
-                ['is_deleted',0]
+                ['is_deleted',0],
+                ['student_status','A'],
                 ])->get();
             //dd($siswas);
         } else {

@@ -46,18 +46,19 @@
                 <i class="fas fa-arrow-right"></i>
             </span>
         </span>
-        <div class="multi-level collapse {{ request()->is('*/kalender/*') ? 'show' : '' }}" role="list" id="kalender-sub" aria-expanded="{{ request()->is('*/kalender/*') ? 'true' : 'false' }}">
+        <div class="multi-level collapse {{ request()->is('*/kalender/*') ? 'show' : '' }}" role="list"
+            id="kalender-sub" aria-expanded="{{ request()->is('*/kalender/*') ? 'true' : 'false' }}">
             <ul class="flex-column nav">
                 @can('event-create')
-                <li class="nav-item {{ request()->routeIs('kalender.index') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('kalender.index') }}">
-                        <span class="sidebar-icon">
-                            <i class="fa fa-edit"></i>
-                        </span>
-                        <span class="sidebar-text">Edit Kalender</span>
-                    </a>
-                </li>
-                @endcan              
+                    <li class="nav-item {{ request()->routeIs('kalender.index') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('kalender.index') }}">
+                            <span class="sidebar-icon">
+                                <i class="fa fa-edit"></i>
+                            </span>
+                            <span class="sidebar-text">Edit Kalender</span>
+                        </a>
+                    </li>
+                @endcan
 
                 <li class="nav-item {{ request()->routeIs('kalender.show') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('kalender.show') }}">
@@ -70,130 +71,178 @@
             </ul>
         </div>
     </li>
-   
+
     @can('woroworo-list')
-    {{-- Pengumuman --}}
-    <li class="nav-item {{ request()->routeIs('woroworo.index') ? 'active' : '' }}">
-        <a href="{{ route('woroworo.index') }}" class="nav-link">
-            <span class="sidebar-icon me-3">
-                <i class="fas fa-satellite-dish"></i>
-            </span>
-            <span class="sidebar-text">Pengumuman</span>
-        </a>
-    </li>
+        {{-- Pengumuman --}}
+        <li class="nav-item {{ request()->routeIs('woroworo.index') ? 'active' : '' }}">
+            <a href="{{ route('woroworo.index') }}" class="nav-link">
+                <span class="sidebar-icon me-3">
+                    <i class="fas fa-satellite-dish"></i>
+                </span>
+                <span class="sidebar-text">Pengumuman</span>
+            </a>
+        </li>
     @endcan
     @can('presensi-list')
-    @role('WaliKelas')
-    <li class="nav-item {{ request()->routeIs('administrasi.index') ? 'active' : '' }}">
-        <a href="{{ route('administrasi.index') }}" class="nav-link">
-            <span class="sidebar-icon me-3">
-                <i class="fas fa-user-cog"></i>
+        @role('WaliKelas')
+            <li class="nav-item {{ request()->routeIs('administrasi.index') ? 'active' : '' }}">
+                <a href="{{ route('administrasi.index') }}" class="nav-link">
+                    <span class="sidebar-icon me-3">
+                        <i class="fas fa-user-cog"></i>
+                    </span>
+                    <span class="sidebar-text">Administrasi Kelas</span>
+                </a>
+            </li>
+        @endrole
+        <!-- Presensi -->
+        <li class="nav-item">
+            <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+                data-bs-target="#presensi-sub">
+                <span>
+                    <span class="sidebar-icon me-3">
+                        <i class="fas fa-list"></i>
+                    </span>
+                    <span class="sidebar-text">Presensi</span>
+                </span>
+                <span class="link-arrow">
+                    <i class="fas fa-arrow-right"></i>
+                </span>
             </span>
-            <span class="sidebar-text">Administrasi Kelas</span>
-        </a>
-    </li>
-    @endrole
- <!-- Presensi -->
+            <div class="multi-level collapse" role="list" id="presensi-sub" aria-expanded="false">
+                <ul class="flex-column nav">
+
+                    <li class="nav-item {{ request()->routeIs('presensi.index') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('presensi.index') }}">
+                            <span class="sidebar-icon">
+                                <i class="fa fa-users"></i>
+                            </span>
+                            <span class="sidebar-text">Isi Presensi</span>
+                        </a>
+                    </li>
+
+
+                    <li class="nav-item {{ request()->routeIs('presensi.laporan') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('presensi.laporan') }}">
+                            <span class="sidebar-icon">
+                                <i class="fa fa-user-tag"></i>
+                            </span>
+                            <span class="sidebar-text">Laporan</span>
+                        </a>
+                    </li>
+
+
+                    @can('presensi-create')
+                        <li class="nav-item {{ request()->routeIs('presensi.edit') ? 'active' : '' }}">
+                            <a class="nav-link" href="/presensi/edit">
+                                <span class="sidebar-icon">
+                                    <i class="fa fa-user-tag"></i>
+                                </span>
+                                <span class="sidebar-text">Edit</span>
+                            </a>
+                        </li>
+                    @endcan
+                </ul>
+            </div>
+        </li>
+    @endcan
+
+    {{-- Menu keuangan --}}
     <li class="nav-item">
         <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
-            data-bs-target="#presensi-sub">
+            data-bs-target="#submenu-keuangan">
             <span>
                 <span class="sidebar-icon me-3">
-                    <i class="fas fa-list"></i>
+                    <i class="fas fa-coins"></i>
                 </span>
-                <span class="sidebar-text">Presensi</span>
+                <span class="sidebar-text">Keuangan</span>
             </span>
             <span class="link-arrow">
                 <i class="fas fa-arrow-right"></i>
             </span>
         </span>
-        <div class="multi-level collapse" role="list" id="presensi-sub" aria-expanded="false">
+        <div class="multi-level collapse" role="list" id="submenu-keuangan" aria-expanded="true">
             <ul class="flex-column nav">
-                
-                <li class="nav-item {{ request()->routeIs('presensi.index') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('presensi.index') }}">
-                        <span class="sidebar-icon">
-                            <i class="fa fa-users"></i>
-                        </span>
-                        <span class="sidebar-text">Isi Presensi</span>
-                    </a>
-                </li>
-                
+                @can('tagihan-list')
+                    <li class="nav-item {{ request()->routeIs('tagihan.index') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('tagihan.index') }}">
+                            <span class="sidebar-icon">
+                                <i class="fas fa-stream"></i>
+                            </span>
+                            <span class="sidebar-text">Jenis Tagihan</span>
+                        </a>
+                    </li>
+                @endcan
+                    <li class="nav-item {{ request()->routeIs('pelanggaran.index') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('pelanggaran.index') }}">
+                            <span class="sidebar-icon">
+                                <i class="fa fa-balance-scale"></i>
+                            </span>
+                            <span class="sidebar-text">Bulan ini</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('pelanggaran.cari') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('pelanggaran.cari') }}">
+                            <span class="sidebar-icon">
+                                <i class="fa fa-user"></i>
+                            </span>
+                            <span class="sidebar-text">Cari Siswa</span>
+                        </a>
+                    </li>
+            </ul>
+        </div>
+    </li>
+    {{-- End Menu keuangan --}}
 
-                <li class="nav-item {{ request()->routeIs('presensi.laporan') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('presensi.laporan') }}">
-                        <span class="sidebar-icon">
-                            <i class="fa fa-user-tag"></i>
-                        </span>
-                        <span class="sidebar-text">Laporan</span>
-                    </a>
-                </li>
-                
-                
-                @can('presensi-create')
-                <li class="nav-item {{ request()->routeIs('presensi.edit') ? 'active' : '' }}">
-                    <a class="nav-link" href="/presensi/edit">
-                        <span class="sidebar-icon">
-                            <i class="fa fa-user-tag"></i>
-                        </span>
-                        <span class="sidebar-text">Edit</span>
-                    </a>
-                </li>
+
+    {{-- Menu BK --}}
+    <li class="nav-item">
+        <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
+            data-bs-target="#submenu-bk">
+            <span>
+                <span class="sidebar-icon me-3">
+                    <i class="fas fa-gavel"></i>
+                </span>
+                <span class="sidebar-text">BK</span>
+            </span>
+            <span class="link-arrow">
+                <i class="fas fa-arrow-right"></i>
+            </span>
+        </span>
+        <div class="multi-level collapse" role="list" id="submenu-bk" aria-expanded="true">
+            <ul class="flex-column nav">
+                @can('pelanggaran-list')
+                    <li class="nav-item {{ request()->routeIs('jenispelanggaran.index') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('jenispelanggaran.index') }}">
+                            <span class="sidebar-icon">
+                                <i class="fas fa-stream"></i>
+                            </span>
+                            <span class="sidebar-text">Jenis Pelanggaran</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item {{ request()->routeIs('pelanggaran.index') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('pelanggaran.index') }}">
+                            <span class="sidebar-icon">
+                                <i class="fa fa-balance-scale"></i>
+                            </span>
+                            <span class="sidebar-text">Bulan ini</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('pelanggaran.cari') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('pelanggaran.cari') }}">
+                            <span class="sidebar-icon">
+                                <i class="fa fa-user"></i>
+                            </span>
+                            <span class="sidebar-text">Cari Siswa</span>
+                        </a>
+                    </li>
                 @endcan
             </ul>
         </div>
     </li>
-    @endcan
+    {{-- End Menu BK --}}
 
-{{-- Menu BK --}}    
-<li class="nav-item">
-    <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
-        data-bs-target="#submenu-bk">
-        <span>
-            <span class="sidebar-icon me-3">
-                <i class="fas fa-gavel"></i>
-            </span>
-            <span class="sidebar-text">BK</span>
-        </span>
-        <span class="link-arrow">
-            <i class="fas fa-arrow-right"></i>
-        </span>
-    </span>
-    <div class="multi-level collapse" role="list" id="submenu-bk" aria-expanded="true">
-        <ul class="flex-column nav">
-            @can('pelanggaran-list')
-            <li class="nav-item {{ request()->routeIs('jenispelanggaran.index') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('jenispelanggaran.index') }}">
-                    <span class="sidebar-icon">
-                        <i class="fas fa-stream"></i>
-                    </span>
-                    <span class="sidebar-text">Jenis Pelanggaran</span>
-                </a>
-            </li>
-
-            <li class="nav-item {{ request()->routeIs('pelanggaran.index') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('pelanggaran.index') }}">
-                    <span class="sidebar-icon">
-                        <i class="fa fa-balance-scale"></i>
-                    </span>
-                    <span class="sidebar-text">Bulan ini</span>
-                </a>
-            </li>
-            <li class="nav-item {{ request()->routeIs('pelanggaran.cari') ? 'active' : '' }}">
-                <a class="nav-link" href="{{ route('pelanggaran.cari') }}">
-                    <span class="sidebar-icon">
-                        <i class="fa fa-user"></i>
-                    </span>
-                    <span class="sidebar-text">Cari Siswa</span>
-                </a>
-            </li>
-            @endcan
-        </ul>
-    </div>
-</li>
-{{-- End Menu BK --}}
-    
- <!-- Seting -->
+    <!-- Seting -->
     <li class="nav-item">
         <span class="nav-link d-flex justify-content-between align-items-center" data-bs-toggle="collapse"
             data-bs-target="#submenu-app">
@@ -210,36 +259,36 @@
         <div class="multi-level collapse" role="list" id="submenu-app" aria-expanded="false">
             <ul class="flex-column nav">
                 @can('user-list')
-                <li class="nav-item {{ request()->routeIs('users.index') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('users.index') }}">
-                        <span class="sidebar-icon">
-                            <i class="fa fa-users"></i>
-                        </span>
-                        <span class="sidebar-text">User</span>
-                    </a>
-                </li>
+                    <li class="nav-item {{ request()->routeIs('users.index') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('users.index') }}">
+                            <span class="sidebar-icon">
+                                <i class="fa fa-users"></i>
+                            </span>
+                            <span class="sidebar-text">User</span>
+                        </a>
+                    </li>
                 @endcan
 
                 @can('role-list')
-                <li class="nav-item {{ request()->routeIs('roles.index') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('roles.index') }}">
-                        <span class="sidebar-icon">
-                            <i class="fa fa-user-tag"></i>
-                        </span>
-                        <span class="sidebar-text">Roles</span>
-                    </a>
-                </li>
+                    <li class="nav-item {{ request()->routeIs('roles.index') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('roles.index') }}">
+                            <span class="sidebar-icon">
+                                <i class="fa fa-user-tag"></i>
+                            </span>
+                            <span class="sidebar-text">Roles</span>
+                        </a>
+                    </li>
                 @endcan
 
                 @can('walikelas-list')
-                <li class="nav-item {{ request()->routeIs('walikelas.index') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('walikelas.index') }}">
-                        <span class="sidebar-icon">
-                            <i class="fa fa-user-tag"></i>
-                        </span>
-                        <span class="sidebar-text">Set Wali Kelas</span>
-                    </a>
-                </li>
+                    <li class="nav-item {{ request()->routeIs('walikelas.index') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('walikelas.index') }}">
+                            <span class="sidebar-icon">
+                                <i class="fa fa-user-tag"></i>
+                            </span>
+                            <span class="sidebar-text">Set Wali Kelas</span>
+                        </a>
+                    </li>
                 @endcan
 
                 <li class="nav-item {{ request()->routeIs('profile.show') ? 'active' : '' }}">

@@ -20,7 +20,10 @@ class PelanggaranController extends Controller
     }
     public function jenispelanggaranIndex() {
         $jenis= JenisPelanggaran::get();
-        return view('jenispelanggaran.index',['jenis'=>$jenis]);
+        return view('jenispelanggaran.index',[
+            'jenis'=>$jenis,
+            'title' => 'Daftar Jenis Pelanggaran',
+        ]);
     }
     public function jenispelanggaranStore(Request $request) {
         $request->validate([

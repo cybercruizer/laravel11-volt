@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="row">
+<div class="row m-3">
     <div class="col-lg-12 margin-tb">
         <div class="pull-left">
             <h2>Create New Role</h2>
@@ -25,7 +25,7 @@
 
 <form method="POST" action="{{ route('roles.store') }}">
     @csrf
-    <div class="row">
+    <div class="row m-3">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Name:</strong>
@@ -33,7 +33,7 @@
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
+            <div class="form-group m-2">
                 <strong>Permission:</strong>
                 <br/>
                 @foreach($permission as $value)
@@ -49,5 +49,4 @@
     </div>
 </form>
 
-<p class="text-center text-primary"><small>Tutorial by ItSolutionStuff.com</small></p>
 @endsection

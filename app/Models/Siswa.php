@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Tagihan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -41,5 +42,14 @@ class Siswa extends Model
     public function pelanggarans(): HasMany
     {
         return $this->hasMany(Pelanggaran::class, 'siswa_id');
+    }
+    /**
+     * Get all of the tagihan for the Siswa
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tagihans(): HasMany
+    {
+        return $this->hasMany(Tagihan::class, 'siswa_id');
     }
 }

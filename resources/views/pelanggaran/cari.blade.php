@@ -39,7 +39,7 @@
         <form action="{{ route('pelanggaran.cari') }}" method="POST">
             <div class="row mb-3">
                 @csrf
-                <div class="col-6 col-md-6 mr-0 pr-0">
+                <div class="col-9 col-md-6 mr-0 pr-0">
                     <select name="cari" class="form-select" id="siswaSelect" placeholder="Pilih Nama Siswa">
                         <option selected>-- Pilih siswa --</option>
                     </select>

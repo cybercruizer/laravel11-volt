@@ -4,7 +4,9 @@ namespace App\Models;
 
 use App\Models\Kelas;
 use App\Models\Siswa;
+use App\Models\Tagihan;
 use App\Models\Woroworo;
+use App\Models\Pembayaran;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -90,5 +92,23 @@ class User extends Authenticatable
     public function pelanggarans(): HasMany
     {
         return $this->hasMany(Pelanggaran::class);
+    }
+    /**
+     * Get all of the Tagihan for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function tagihan(): HasMany
+    {
+        return $this->hasMany(Tagihan::class);
+    }
+    /**
+     * Get all of the pembayaran for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function pembayarans(): HasMany
+    {
+        return $this->hasMany(Pembayaran::class);
     }
 }
