@@ -129,7 +129,16 @@
                             <span class="sidebar-text">Laporan</span>
                         </a>
                     </li>
-
+                    @can('presensi-admin')
+                    <li class="nav-item {{ request()->routeIs('presensi.admin') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('presensi.admin') }}">
+                            <span class="sidebar-icon">
+                                <i class="fa fa-check"></i>
+                            </span>
+                            <span class="sidebar-text">Lap Per Kelas</span>
+                        </a>
+                    </li>
+                    @endcan
 
                     @can('presensi-create')
                         <li class="nav-item {{ request()->routeIs('presensi.edit') ? 'active' : '' }}">
@@ -219,13 +228,12 @@
                             <span class="sidebar-text">Jenis Pelanggaran</span>
                         </a>
                     </li>
-
                     <li class="nav-item {{ request()->routeIs('pelanggaran.index') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('pelanggaran.index') }}">
                             <span class="sidebar-icon">
                                 <i class="fa fa-balance-scale"></i>
                             </span>
-                            <span class="sidebar-text">Bulan ini</span>
+                            <span class="sidebar-text">Laporan Pelanggaran</span>
                         </a>
                     </li>
                     <li class="nav-item {{ request()->routeIs('pelanggaran.cari') ? 'active' : '' }}">

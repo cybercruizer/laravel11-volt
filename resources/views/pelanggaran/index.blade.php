@@ -7,7 +7,10 @@
                 <h2 class="mb-4 h5 ml-3">Pelanggaran Siswa bulan {{ $month }}</h2>
             </div>
             <div class="col-md-6 text-end">
-                <a href="{{ route('pelanggaran.create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Input Pelanggaran</a>
+                @can('pelanggaran-create')
+                    <a href="{{ route('pelanggaran.create') }}" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i> Input Pelanggaran</a>
+                @endcan
+                
             </div>
         </div>
     </div>
@@ -38,6 +41,7 @@
                     <thead>
                         <th>No</th>
                         <th>Nama Siswa</th>
+                        <th>Kelas</th>
                         <th>Jenis Pelanggaran</th>
                         <th>Poin</th>
                         <th>Deskripsi</th>
@@ -45,15 +49,16 @@
                         <th>Aksi</th>
                     </thead>
                     <tbody>
-                        @foreach ($pelanggaran as $day => $items)
+                        @forelse ($pelanggaran as $day => $items)
                             <tr>
-                                <td colspan="6" class="bg-warning"><strong>{{ $day }}</strong> </td>
+                                <td colspan="8" class="bg-warning"><strong>{{ $day }}</strong> </td>
                             </tr>
                             
-                            @foreach ($items as $item)
+                            @forelse ($items as $item)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
                                     <td>{{ $item->siswa->student_name }}</td>
+                                    <td>{{ $item->siswa->kelas->class_name }}</td>
                                     <td>{{ $item->jenisPelanggaran->nama }}</td>
                                     <td>{{ $item->jenisPelanggaran->poin }}</td>
                                     <td>{{ $item->deskripsi }}</td>
@@ -72,8 +77,16 @@
                                         
                                     </td>
                                 </tr>
-                            @endforeach
-                        @endforeach
+                            @empty
+                                <tr>
+                                    <td colspan="7" class="text-center">Tidak ada data</td>
+                                </tr>
+                            @endforelse
+                        @empty
+                            <tr>
+                                <td colspan="7" class="text-center">Tidak ada data</td>
+                            </tr>
+                        @endforelse
                     </tbody>
                 </table>
             </div>

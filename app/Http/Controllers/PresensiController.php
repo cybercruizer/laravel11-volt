@@ -6,6 +6,7 @@ use Carbon\Carbon;
 use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\Presensi;
+use App\Models\Tahunajaran;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -17,6 +18,7 @@ class PresensiController extends Controller
          $this->middleware('permission:presensi-create', ['only' => ['create','store']]);
          $this->middleware('permission:presensi-edit', ['only' => ['edit','update']]);
          $this->middleware('permission:presensi-delete', ['only' => ['destroy']]);
+         $this->middleware('permission:presensi-admin', ['only' => ['admin']]);
     }
 
     public function index(Request $request)
@@ -209,6 +211,39 @@ class PresensiController extends Controller
             'tahun' => $tahun,
             'presensiData' => $presensiData,
             'title' => 'Laporan Presensi Siswa bulan '.$bulan .' Tahun '.$tahun ,
+        ]);
+    }
+    public function admin(Request $request) {
+        $bulan = $request->input('bulan');
+        $tahun = $request->input('tahun') ?? now()->format('Y');
+        $ta=Tahunajaran::where('is_active',1)->first();
+        $kelas = Kelas::where('year_id',$ta->year_id)->get();
+        $jumlahHari = Carbon::create($tahun,$bulan)->daysInMonth;
+        //dd($ta);
+        $kelasdata = [];
+
+        foreach ($kelas as $kel) {
+            $kelasdata[$kel->class_id] = [];
+            foreach (range(1, $jumlahHari) as $day) {
+                $date = Carbon::create($tahun, $bulan, $day);
+                $status=Presensi::with('kelas')
+                    ->where('kelas_id', $kel->class_id)
+                    ->where('tanggal', $date->format('Y-m-d'))->get();
+                if(!$status->isEmpty()){
+                    $kelasdata[$kel->class_id][$day] = "v";
+                }else{
+                    $kelasdata[$kel->class_id][$day] = "-";
+                }
+            }
+        }
+        //dd($kelasdata);
+        return view('presensi.admin', [
+            'kelas' => $kelas,
+            'bulan' => $bulan,
+            'tahun' => $tahun,
+            'jumlahHari' => $jumlahHari,
+            'kelasdata' => $kelasdata,
+            'title' => 'Laporan Presensi Siswa per kelas '.$bulan .' Tahun '.$tahun ,
         ]);
     }
 }
