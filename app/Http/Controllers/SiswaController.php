@@ -46,7 +46,8 @@ class SiswaController extends Controller
     public function show($id)
     {
         $siswa = Siswa::find($id);
-        return view('siswas.show',compact('siswa'));
+        $title = 'Detail Siswa';
+        return view('siswas.show',compact('siswa','title'));
     }
 
     protected function getActionColumn($siswa)

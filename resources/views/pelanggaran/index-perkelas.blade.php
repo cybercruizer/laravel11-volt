@@ -41,47 +41,36 @@
                     <thead>
                         <th>No</th>
                         <th>Nama Siswa</th>
-                        <th>Kelas</th>
-                        <th>Jenis Pelanggaran</th>
-                        <th>Poin</th>
-                        <th>Deskripsi</th>
-                        <th>Tindak Lanjut</th>
-                        <th>Aksi</th>
+                        <th>Pelanggaran</th>
+                        <th>Total Poin</th>
                     </thead>
                     <tbody>
-                        @forelse ($pelanggaran as $day => $items)
-                            <tr>
-                                <td colspan="8" class="bg-warning"><strong>{{ $day }}</strong> </td>
-                            </tr>
-                            
-                            @forelse ($items as $item)
+                        @forelse ($siswa as $s)
                                 <tr>
                                     <td>{{ $loop->iteration }}</td>
-                                    <td>{{ $item->siswa->student_name }}</td>
-                                    <td>{{ $item->siswa->kelas->class_name }}</td>
-                                    <td>{{ $item->jenisPelanggaran->nama }}</td>
-                                    <td>{{ $item->jenisPelanggaran->poin }}</td>
-                                    <td>{{ $item->deskripsi }}</td>
-                                    <td>{{ $item->tindaklanjut }}</td>
-                                    <td>
+                                    <td>{{ $s->student_name }}</td>
+                                    <td><ul>
+                                        @forelse ($s->pelanggarans as $p)
+                                            <li>{{ $p->jenisPelanggaran->nama }}-{{ $p->jenisPelanggaran->poin }}</li>
+                                        @empty
+                                            -
+                                        @endforelse
+                                    </ul></td>
+                                    <td>{{ $s->pelanggarans->sum('poin') }}</td>
+{{--                                     <td>
                                         
-                                            <form action="{{ route('pelanggaran.destroy', $item->id) }}" method="post">
+                                           <form action="{{ route('pelanggaran.destroy', $s->id) }}" method="post">
                                                 @method('DELETE')
                                                 @csrf
                                                 <div class="btn-group" role="group">
-                                                    <a href="{{ route('pelanggaran.edit', $item->id) }}" class='btn btn-primary btn-sm'><i
+                                                    <a href="{{ route('pelanggaran.edit', $s->id) }}" class='btn btn-primary btn-sm'><i
                                                         class="fa fa-edit"></i></a>
                                                 <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
                                                 </div>
-                                            </form>
+                                            </form> 
                                         
-                                    </td>
+                                    </td> --}}
                                 </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="7" class="text-center">Tidak ada data</td>
-                                </tr>
-                            @endforelse
                         @empty
                             <tr>
                                 <td colspan="7" class="text-center">Tidak ada data</td>

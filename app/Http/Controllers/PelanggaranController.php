@@ -8,6 +8,7 @@ use App\Models\Pelanggaran;
 use App\Models\Tahunajaran;
 use Illuminate\Http\Request;
 use App\Models\JenisPelanggaran;
+use Illuminate\Support\Facades\Auth;
 
 class PelanggaranController extends Controller
 {
@@ -69,12 +70,21 @@ class PelanggaranController extends Controller
     public function pelanggaranIndex()
     {
         $month = Carbon::now()->format('m');
-        $pelanggaran=Pelanggaran::with('jenisPelanggaran','siswa')->whereMonth('tgl_pelanggaran',$month)->orderBy('tgl_pelanggaran')->get()->groupBy(function($data) {
-            return Carbon::parse($data->tgl_pelanggaran)->format('Y-m-d');
-        });
-        //dd($jenispelanggaran);
-        //$siswas = Siswa::select('student_number','student_name')->get();
-        return view('pelanggaran.index',compact('pelanggaran','month'));
+        if(Auth::user()->hasRole('WaliKelas')) {
+            $siswa= Siswa::with('pelanggarans')->where([
+                ['class_id',Auth::user()->kelas->class_id],
+                ['student_status','A']]
+            )->get();
+            //dd($siswa);
+            $title='Laporan Pelanggaran Siswa Kelas '.Auth::user()->kelas->class_name;
+            return view('pelanggaran.index-perkelas',compact('siswa','month','title'));
+        } else {
+            $pelanggaran=Pelanggaran::with('jenisPelanggaran','siswa')->whereMonth('tgl_pelanggaran',$month)->orderBy('tgl_pelanggaran')->get()->groupBy(function($data) {
+                return Carbon::parse($data->tgl_pelanggaran)->format('Y-m-d');
+            });
+            $title='Laporan Pelanggaran Siswa Kelas ';
+            return view('pelanggaran.index',compact('pelanggaran','month','title'));
+        }
     }
     public function pelanggaranCreate()
     {
