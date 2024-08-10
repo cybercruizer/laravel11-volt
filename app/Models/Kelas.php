@@ -27,7 +27,7 @@ class Kelas extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function siswa(): HasMany
+    public function siswas(): HasMany
     {
         return $this->hasMany(Siswa::class, 'class_id');
     }

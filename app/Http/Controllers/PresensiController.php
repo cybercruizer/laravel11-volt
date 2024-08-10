@@ -121,14 +121,14 @@ class PresensiController extends Controller
             //dd('wali kelas');
             //dd(Carbon::parse($request->tanggal)->format('Y-m-d'));
             $kelas = Auth::user()->kelas;
+            //dd(Auth::user()->siswas()->get());
             //dd($kelas);
             if($request->has('tanggal')){
                 $tanggal= Carbon::parse($request->tanggal)->format('Y-m-d');
             } else {
                 $tanggal = date("Y-m-d");
             }
-            $presensis = Presensi::where([
-                ['kelas_id', '=', $kelas->class_id],
+            $presensis = $kelas->presensis()->where([
                 ['tanggal','=',$tanggal ]
             ])->get();
             //dd($presensis);
@@ -186,7 +186,10 @@ class PresensiController extends Controller
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun') ?? now()->format('Y');
         $kelas = Auth::user()->kelas;
-        $students = Siswa::where('class_id',$kelas->class_id)->get();
+        $students = Siswa::where([
+            ['class_id',$kelas->class_id],
+            ['student_status','A']
+            ])->get();
         $jumlahHari = Carbon::create($tahun,$bulan)->daysInMonth;
         //dd($students);
         $presensiData = [];
@@ -195,9 +198,11 @@ class PresensiController extends Controller
             $presensiData[$student->student_id] = [];
             foreach (range(1, $jumlahHari) as $day) {
                 $date = Carbon::create($tahun, $bulan, $day);
-                $presensiStatus = Presensi::with('siswa')->where('student_id', $student->student_id)
+/*                $presensiStatus = Presensi::with('siswa')->where('student_id', $student->student_id)
                     ->where('tanggal', $date->format('Y-m-d'))
                     ->value('keterangan');
+*/
+                $presensiStatus = $student->presensis()->where('tanggal', $date->format('Y-m-d'))->value('keterangan');
                 $presensiData[$student->student_id][$day] = $presensiStatus ?? '-';
             }
         }
