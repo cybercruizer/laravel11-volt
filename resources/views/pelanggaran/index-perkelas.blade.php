@@ -39,10 +39,10 @@
             <div class="col-12">
                 <table class="table table-stripped">
                     <thead>
-                        <th>No</th>
-                        <th>Nama Siswa</th>
-                        <th>Pelanggaran</th>
-                        <th>Total Poin</th>
+                        <th width="5%">No</th>
+                        <th width="30%">Nama Siswa</th>
+                        <th width="60%">Pelanggaran</th>
+                        <th width="5%">Total Poin</th>
                     </thead>
                     <tbody>
                         @forelse ($siswa as $s)
