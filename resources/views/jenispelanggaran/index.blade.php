@@ -7,10 +7,12 @@
                 <h2 class="mb-4 h5 ml-3">{{$title}}</h2>
             </div>
             <div class="col-6 text-end">
+                @can('jenispelanggaran-create')
                 <!-- Modal trigger button -->
                 <button type="button" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#tambah">
                     Tambah Jenis Pelanggaran
                 </button>
+                @endcan
             </div>
         </div>
     </div>
@@ -41,7 +43,9 @@
                 <th>Jenis Pelanggaran</th>
                 <th>Deskripsi</th>
                 <th>Poin</th>
+                @can('jenispelanggaran-edit')
                 <th>Aksi</th>
+                @endcan
 
             </thead>
             @foreach ($jenis as $s)
@@ -50,6 +54,7 @@
                     <td>{{ $s->nama }}</td>
                     <td>{{ $s->deskripsi }}</td>
                     <td>{{ $s->poin }}</td>
+                    @can('jenispelanggaran-edit')
                     <td>
                         <div class="btn-group" role="group">
                             <form action="{{ route('jenispelanggaran.destroy', $s->id) }}" method="post">
@@ -61,6 +66,7 @@
                             </form>
                         </div>
                     </td>
+                    @endcan
                 </tr>
             @endforeach
         </table>

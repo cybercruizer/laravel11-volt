@@ -64,7 +64,7 @@ class SiswaController extends Controller
         $search = $request->cari;
 
         if($search == ''){
-           $siswas = Siswa::orderby('student_name','asc')->select('student_id','student_name')->limit(5)->get();
+           $siswas = Siswa::orderby('student_name','asc')->select('student_id','student_name')->limit(10)->get();
         }else{
            $siswas = Siswa::orderby('student_name','asc')->select('student_id','student_name')->where('student_name', 'like', '%' .$search . '%')->limit(5)->get();
         }

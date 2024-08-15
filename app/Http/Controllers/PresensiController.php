@@ -183,46 +183,52 @@ class PresensiController extends Controller
     }
     public function laporan(Request $request)
     {
-        $bulan = $request->input('bulan');
-        $tahun = $request->input('tahun') ?? now()->format('Y');
-        $kelas = Auth::user()->kelas;
-        $students = Siswa::where([
-            ['class_id',$kelas->class_id],
-            ['student_status','A']
-            ])->get();
-        $jumlahHari = Carbon::create($tahun,$bulan)->daysInMonth;
-        //dd($students);
-        $presensiData = [];
+        if (Auth::user()->hasRole('WaliKelas')) {
+            $bulan = $request->input('bulan');
+            $tahun = $request->input('tahun') ?? now()->format('Y');
+            $kelas = Auth::user()->kelas;
+            $students = Siswa::where([
+                ['class_id',$kelas->class_id],
+                ['student_status','A']
+                ])->get();
+            $jumlahHari = Carbon::create($tahun,$bulan)->daysInMonth;
+            //dd($students);
+            $presensiData = [];
 
-        foreach ($students as $student) {
-            $presensiData[$student->student_id] = [];
-            foreach (range(1, $jumlahHari) as $day) {
-                $date = Carbon::create($tahun, $bulan, $day);
-/*                $presensiStatus = Presensi::with('siswa')->where('student_id', $student->student_id)
-                    ->where('tanggal', $date->format('Y-m-d'))
-                    ->value('keterangan');
-*/
-                $presensiStatus = $student->presensis()->where('tanggal', $date->format('Y-m-d'))->value('keterangan');
-                $presensiData[$student->student_id][$day] = $presensiStatus ?? '-';
+            foreach ($students as $student) {
+                $presensiData[$student->student_id] = [];
+                foreach (range(1, $jumlahHari) as $day) {
+                    $date = Carbon::create($tahun, $bulan, $day);
+    /*                $presensiStatus = Presensi::with('siswa')->where('student_id', $student->student_id)
+                        ->where('tanggal', $date->format('Y-m-d'))
+                        ->value('keterangan');
+    */
+                    $presensiStatus = $student->presensis()->where('tanggal', $date->format('Y-m-d'))->value('keterangan');
+                    $presensiData[$student->student_id][$day] = $presensiStatus ?? '-';
+                }
             }
+            //dd($presensiData);
+            return view('presensi.laporan', [
+                'students' => $students,
+                'jumlahHari' => $jumlahHari,
+                'kelas' => $kelas,
+                'bulan' => $bulan,
+                'tahun' => $tahun,
+                'presensiData' => $presensiData,
+                'title' => 'Laporan Presensi Siswa bulan '.$bulan .' Tahun '.$tahun ,
+            ]);
+        } elseif (Auth::user()->hasRole('Guru')) {
+            return view('presensi.laporan', [
+                'title' => 'Laporan Presensi Siswa',
+                'kelas' => Kelas::where('is_active',1)->orderBy('class_name')->get(),
+            ]);
         }
-        //dd($presensiData);
-
-        return view('presensi.laporan', [
-            'students' => $students,
-            'jumlahHari' => $jumlahHari,
-            'kelas' => $kelas,
-            'bulan' => $bulan,
-            'tahun' => $tahun,
-            'presensiData' => $presensiData,
-            'title' => 'Laporan Presensi Siswa bulan '.$bulan .' Tahun '.$tahun ,
-        ]);
     }
     public function admin(Request $request) {
         $bulan = $request->input('bulan');
         $tahun = $request->input('tahun') ?? now()->format('Y');
         $ta=Tahunajaran::where('is_active',1)->first();
-        $kelas = Kelas::where('year_id',$ta->year_id)->get();
+        $kelas = Kelas::where([['is_active',1],['year_id',$ta->year_id]])->orderBy('class_name')->get();
         $jumlahHari = Carbon::create($tahun,$bulan)->daysInMonth;
         //dd($ta);
         $kelasdata = [];
