@@ -79,7 +79,7 @@ class PelanggaranController extends Controller
             $title='Laporan Pelanggaran Siswa Kelas '.Auth::user()->kelas->class_name;
             return view('pelanggaran.index-perkelas',compact('siswa','month','title'));
         } else {
-            $pelanggaran=Pelanggaran::with('jenisPelanggaran','siswa')->whereMonth('tgl_pelanggaran',$month)->orderBy('tgl_pelanggaran')->get()->groupBy(function($data) {
+            $pelanggaran=Pelanggaran::with('jenisPelanggaran','siswa')->whereMonth('tgl_pelanggaran',$month)->orderBy('tgl_pelanggaran')->paginate(10)->groupBy(function($data) {
                 return Carbon::parse($data->tgl_pelanggaran)->format('Y-m-d');
             });
             $title='Laporan Pelanggaran Siswa Kelas ';

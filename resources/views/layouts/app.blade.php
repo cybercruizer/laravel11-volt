@@ -29,7 +29,7 @@
     <main class="content">
         {{-- TopBar --}}
         @include('layouts.topbar')
-        <div class="main py-4">
+        <div class="main py-2">
             <div class="card">
                 @yield('content')
             </div>

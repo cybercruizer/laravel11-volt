@@ -89,6 +89,7 @@
                         @endforelse
                     </tbody>
                 </table>
+                {{ $pelanggaran->links() }}
             </div>
         </div>
     </div>
