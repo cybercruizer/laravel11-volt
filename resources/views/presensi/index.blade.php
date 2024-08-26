@@ -66,6 +66,7 @@
                                     <option value="S">Sakit</option>
                                     <option value="I">Ijin</option>
                                     <option value="T">Terlambat</option>
+                                    <option value="N">Non-Shift PKL</option>
                                 </select>
                             </td>
                             <td><input type="text" class="form-control" name="alasan[]"></td>

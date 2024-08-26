@@ -154,7 +154,7 @@ class PresensiController extends Controller
         $attendance=Presensi::where('kelas_id',$kelas)->where('tanggal',$tanggal);
         $validatedData= $request->validate([
             'siswa.*.id' => 'required',
-            'siswa.*.keterangan' => 'required|in:H,S,I,A,T',
+            'siswa.*.keterangan' => 'required|in:H,S,I,A,T,N',
             'siswa.*.alasan' => 'nullable',
         ]);
         //simpan ke database

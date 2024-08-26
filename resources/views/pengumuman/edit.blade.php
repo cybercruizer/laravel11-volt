@@ -46,6 +46,7 @@
                         <option value="kurikulum" {{ $woro2->kategori == 'kurikulum' ? 'selected' : '' }}>Kurikulum</option>
                         <option value="kesiswaan" {{ $woro2->kategori == 'kesiswaan' ? 'selected' : '' }}>Kesiswaan</option>
                         <option value="keuangan" {{ $woro2->kategori == 'keuangan' ? 'selected' : '' }}>Keuangan</option>
+                        <option value="walikelas" {{ $woro2->kategori == 'walikelas' ? 'selected' : '' }}>Khusus Wali Kelas</option>
                     </select>
                 </div>
                 <div class="form-group col-3 mb-3">

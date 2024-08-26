@@ -69,6 +69,8 @@
                                         Alpha</option>
                                     <option value="T" {{ $presensi->keterangan === 'T' ? 'selected' : '' }}>
                                         Terlambat</option>
+                                    <option value="N" {{ $presensi->keterangan === 'N' ? 'selected' : '' }}>
+                                        Non-Shift PKL</option>
                                 </SELECt>
                             </td>
                             <td>

@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->integer('student_id');
             $table->integer('user_id');
-            $table->enum('keterangan',['S','I','H','A','T']);
+            $table->enum('keterangan',['S','I','H','A','T','N']);
             $table->timestamps();
         });
     }
