@@ -225,10 +225,15 @@ class PresensiController extends Controller
         }
     }
     public function admin(Request $request) {
-        $bulan = $request->input('bulan');
+        $bulan = $request->input('bulan') ?? now()->format('m');
         $tahun = $request->input('tahun') ?? now()->format('Y');
-        $ta=Tahunajaran::where('is_active',1)->first();
-        $kelas = Kelas::where([['is_active',1],['year_id',$ta->year_id]])->orderBy('class_name')->get();
+        $ta=Tahunajaran::where('is_deleted',0)->first();
+        $kelas = Kelas::where([
+            ['is_active',1],
+            ['is_deleted',0],
+            ['year_id',$ta->year_id]
+            ])
+            ->orderBy('class_name')->get();
         $jumlahHari = Carbon::create($tahun,$bulan)->daysInMonth;
         //dd($ta);
         $kelasdata = [];
@@ -254,7 +259,7 @@ class PresensiController extends Controller
             'tahun' => $tahun,
             'jumlahHari' => $jumlahHari,
             'kelasdata' => $kelasdata,
-            'title' => 'Laporan Presensi Siswa per kelas '.$bulan .' Tahun '.$tahun ,
+            'title' => 'Laporan Presensi Siswa bulan '.$bulan .' Tahun '.$tahun ,
         ]);
     }
 }
