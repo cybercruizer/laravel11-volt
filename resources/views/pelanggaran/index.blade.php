@@ -61,8 +61,8 @@
                                     <td>{{ $item->siswa->kelas->class_name }}</td>
                                     <td>{{ $item->jenisPelanggaran->nama }}</td>
                                     <td>{{ $item->jenisPelanggaran->poin }}</td>
-                                    <td>{{ $item->deskripsi }}</td>
-                                    <td>{{ $item->tindaklanjut }}</td>
+                                    <td class="text-wrap">{{ $item->deskripsi }}</td>
+                                    <td class="text-wrap">{{ $item->tindaklanjut }}</td>
                                     <td>
                                         
                                             <form action="{{ route('pelanggaran.destroy', $item->id) }}" method="post">

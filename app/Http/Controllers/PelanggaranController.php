@@ -129,24 +129,32 @@ class PelanggaranController extends Controller
     {
         $pelanggaran = Pelanggaran::find($id);
         $jenispelanggaran=JenisPelanggaran::get();
-        return view('pelanggaran.edit',['pelanggaran'=>$pelanggaran,'jenispelanggaran'=>$jenispelanggaran]);
+        return view('pelanggaran.edit',[
+            'pelanggaran'=>$pelanggaran,
+            'jenis'=>$jenispelanggaran
+        ]);
     }
     public function pelanggaranUpdate(Request $request, $id)
     {
         $request->validate([
+            'siswa' => 'required',
             'pelanggaran' => 'required',
-            'jenis' => 'required',
-            'poin' => 'required|numeric|max:500',
+            'pelanggaran' => 'required',
             'tanggal' => 'required',
         ]);
+        $poin = JenisPelanggaran::find($request->pelanggaran)->poin;
         $data = Pelanggaran::find($id);
         $data->update(
             [
-                'pelanggaran' => $request->pelanggaran,
-                'jenis' => $request->jenis,
-                'poin' => $request->poin,
+                'tahun_ajaran_id' => $request->ta_id,
+                'user_id' => Auth::user()->id,
+                'siswa_id' => $request->siswa,
+                'tgl_pelanggaran' => $request->tanggal,
+                'jenis_pelanggaran_id' => $request->pelanggaran,
+                'poin' => $poin,
+                'deskripsi' => $request->deskripsi,
                 'tindaklanjut' => $request->tindaklanjut,
-                'tanggal' => $request->tanggal,
+                
             ]
         );
         return redirect()->route('pelanggaran.index')->with('success','Pelanggaran berhasil diupdate');

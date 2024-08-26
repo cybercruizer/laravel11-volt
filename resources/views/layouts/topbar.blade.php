@@ -1,26 +1,30 @@
 <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0 d-print-none">
     <div class="container-fluid px-0">
         <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
+            
             <div class="d-flex align-items-center">
-                <form class="navbar-search form-inline" id="navbar-search-main">
-                    <div class="input-group input-group-merge search-bar"><span class="input-group-text"
-                            id="topbar-addon"><svg class="icon icon-xs" x-description="Heroicon name: solid/search"
-                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"
-                                aria-hidden="true">
-                                <path fill-rule="evenodd"
-                                    d="M8 4a4 4 0 100 8 4 4 0 000-8zM2 8a6 6 0 1110.89 3.476l4.817 4.817a1 1 0 01-1.414 1.414l-4.816-4.816A6 6 0 012 8z"
-                                    clip-rule="evenodd"></path>
-                            </svg> </span><input type="text" class="form-control" id="topbarInputIconLeft"
-                            placeholder="Cari Siswa" aria-label="Search" aria-describedby="topbar-addon"></div>
+                <form class="navbar-search form-inline" id="navbar-search-main" action="{{ route('pelanggaran.cari') }}">
+                    @csrf
+                    <div class="input-group input-group-merge search-bar">
+                        <span class="input-group-text" id="topbar-addon">
+                            <select name="cari" class="form-select" id="siswaSelect" placeholder="Pilih Nama Siswa">
+                            </select>
+                            <div class="col-3 col-md-3 text-start ml-0 pl-0">
+                                <button type="submit" class="btn btn-primary"> Cari</button>
+                            </div>
+                        </span>
+                    </div>
                 </form>
             </div>
+            
+
             <!-- Navbar links -->
             <ul class="navbar-nav align-items-center">
                 <li class="nav-item dropdown ms-lg-3">
                     <a class="nav-link dropdown-toggle pt-1 px-0" href="#" role="button"
                         data-bs-toggle="dropdown" aria-expanded="false">
                         <div class="media d-flex align-items-center">
-                            <img class="avatar rounded-circle" 
+                            <img class="avatar rounded-circle"
                                 src="https://ui-avatars.com/api/?background=random&name={{ Auth::user()->name }}"
                                 alt="{{ Auth::user()->name }}">
                             <div class="media-body ms-2 text-dark align-items-center d-none d-lg-block">
@@ -60,3 +64,39 @@
         </div>
     </div>
 </nav>
+@push('scripts')
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+    <script type="text/javascript">
+        // CSRF Token
+        var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
+        $(document).ready(function() {
+
+            $("#siswaSelect").select2({
+                theme: 'bootstrap-5',
+                placeholder: '--- Ketik Nama Siswa untuk mencari ---',
+                minimumInputLength: 3,
+                width: '100%',
+                ajax: {
+                    url: "{{ route('siswas.getSiswas') }}",
+                    type: "post",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            _token: CSRF_TOKEN,
+                            cari: params.term // search term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    cache: true
+                }
+
+            });
+
+        });
+    </script>
+@endpush
