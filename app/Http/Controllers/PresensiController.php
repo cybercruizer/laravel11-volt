@@ -248,7 +248,7 @@ class PresensiController extends Controller
     public function admin(Request $request) {
         $bulan = $request->input('bulan') ?? now()->format('m');
         $tahun = $request->input('tahun') ?? now()->format('Y');
-        $ta=Tahunajaran::where('is_deleted',0)->first();
+        $ta=Tahunajaran::where([['is_deleted',0],['is_active',1]])->first();
         $kelas = Kelas::where([
             ['is_active',1],
             ['is_deleted',0],
