@@ -102,6 +102,27 @@ class PresensiController extends Controller
         }
         return redirect()->route('presensi.index')->with('success', 'Data kehadiran tanggal '.$tanggal->format('Y-m-d').' berhasil disimpan.');
     }
+    public function store1(Request $request) {
+        $request->validate([
+            'student_id' => 'required',
+            'keterangan' => 'required',
+            'tanggal' => 'required|date_format:Y-m-d',
+        ]);
+        $student_id = $request->student_id;
+        $keterangan = $request->keterangan;
+        $tanggal = Carbon::parse($request->tanggal);
+        $alasan = $request->alasan;
+        Presensi::create([
+            'student_id' => $student_id,
+            'keterangan' => $keterangan,
+            'kelas_id' => Auth::user()->kelas->class_id,
+            'user_id' => Auth::user()->id,
+            'tanggal' => $tanggal->format('Y-m-d'),
+            'alasan' => $alasan,
+        ]);
+        return redirect()->route('presensi.index')->with('success', 'Data kehadiran tanggal '.$tanggal->format('Y-m-d').' berhasil disimpan.');
+        //dd($tanggal);
+    }
 
     /**
      * Display the specified resource.
