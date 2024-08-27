@@ -99,7 +99,6 @@
         // CSRF Token
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         $(document).ready(function() {
-
             $("#siswaSelect").select2({
                 theme: 'bootstrap-5',
                 minimumInputLength: 3,
@@ -148,7 +147,6 @@
                 }
 
             });
-
         });
     </script>
 @endpush

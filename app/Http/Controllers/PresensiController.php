@@ -34,7 +34,7 @@ class PresensiController extends Controller
             //dd($siswas);
         } else {
             $kelas=Kelas::get();
-            $siswas=Siswa::get();
+            $siswas=Siswa::select('student_id','student_name','student_number')->get();
 
         }
         return view('presensi.index',[
@@ -211,7 +211,7 @@ class PresensiController extends Controller
             $students = Siswa::where([
                 ['class_id',$kelas->class_id],
                 ['student_status','A']
-                ])->get();
+                ])->select('student_id','student_name','student_number')->get();
             $jumlahHari = Carbon::create($tahun,$bulan)->daysInMonth;
             //dd($students);
             $presensiData = [];
