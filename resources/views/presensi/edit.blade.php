@@ -8,7 +8,7 @@
             </div>
         </div>
     </div>
-    <div class="card-body">
+    <div class="card-body border-0 shadow table-wrapper table-responsive">
         <!-- Konten -->
         @if ($errors->any())
             <div class="alert alert-danger">

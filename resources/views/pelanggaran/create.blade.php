@@ -35,7 +35,7 @@
                 <div class="col-md-6 col-12 mb-2">
                     <div class="form-group mb-2 col-10">
                         <label for="siswa_id">Nama Siswa</label>
-                        <select name="siswa" class="form-select" id="siswaSelect">
+                        <select name="siswa" class="form-select" id="siswaSelect2">
                             <option selected>--Pilih Nama Siswa--</option>
                         </select>
                     </div>
@@ -101,6 +101,30 @@
         $(document).ready(function() {
 
             $("#siswaSelect").select2({
+                theme: 'bootstrap-5',
+                minimumInputLength: 3,
+                width: '100%',
+                ajax: {
+                    url: "{{ route('siswas.getSiswas') }}",
+                    type: "post",
+                    dataType: 'json',
+                    delay: 250,
+                    data: function(params) {
+                        return {
+                            _token: CSRF_TOKEN,
+                            cari: params.term // search term
+                        };
+                    },
+                    processResults: function(response) {
+                        return {
+                            results: response
+                        };
+                    },
+                    cache: true
+                }
+
+            });
+            $("#siswaSelect2").select2({
                 theme: 'bootstrap-5',
                 minimumInputLength: 3,
                 width: '100%',

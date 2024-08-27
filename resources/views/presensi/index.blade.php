@@ -52,9 +52,9 @@
                 <thead>
                     <tr class="text-center">
                         <th class="col-1">No</th>
-                        <th class="col-3">Nama Siswa</th>
+                        <th class="col-2">Nama Siswa</th>
                         <th class="col-1">NIS</th>
-                        <th class="col-2">Keterangan</th>
+                        <th class="col-1">Keterangan</th>
                         <th class="col-2">Alasan</th>
                     </tr>
                 </thead>
