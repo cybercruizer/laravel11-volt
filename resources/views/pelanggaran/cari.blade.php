@@ -40,7 +40,7 @@
             <div class="row mb-3">
                 @csrf
                 <div class="col-9 col-md-6 mr-0 pr-0">
-                    <select name="cari" class="form-select" id="siswaSelect" placeholder="Pilih Nama Siswa">
+                    <select name="cari" class="form-select" id="siswaSelect2" placeholder="Pilih Nama Siswa">
                         <option selected>-- Pilih siswa --</option>
                     </select>
                 </div>
@@ -161,8 +161,7 @@
         // CSRF Token
         var CSRF_TOKEN = $('meta[name="csrf-token"]').attr('content');
         $(document).ready(function() {
-
-            $("#siswaSelect").select2({
+            $("#siswaSelect2").select2({
                 theme: 'bootstrap-5',
                 minimumInputLength: 3,
                 width: '100%',
