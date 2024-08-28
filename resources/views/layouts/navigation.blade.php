@@ -150,6 +150,16 @@
                             </a>
                         </li>
                     @endcan
+                    @can('presensi-delete')
+                        <li class="nav-item {{ request()->routeIs('presensi.reset') ? 'active' : '' }}">
+                            <a class="nav-link" href="/presensi/reset">
+                                <span class="sidebar-icon">
+                                    <i class="fa fa-user-tag"></i>
+                                </span>
+                                <span class="sidebar-text">Reset</span>
+                            </a>
+                        </li>
+                    @endcan
                 </ul>
             </div>
         </li>

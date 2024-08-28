@@ -17,6 +17,9 @@ class Siswa extends Model
     protected $guarded=[];
     protected $primaryKey='student_id';
 
+    public function scopeAktif($query) {
+        return $query->where([['student_status', 'A'],['is_deleted', 0]]);
+    }
     /**
      * Get the kelas that owns the Siswa
      *

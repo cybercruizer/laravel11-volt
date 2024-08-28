@@ -17,7 +17,7 @@ class PresensiController extends Controller
          $this->middleware('permission:presensi-list|presensi-create|presensi-edit|presensi-delete', ['only' => ['index','show','laporan']]);
          $this->middleware('permission:presensi-create', ['only' => ['create','store']]);
          $this->middleware('permission:presensi-edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:presensi-delete', ['only' => ['destroy']]);
+         $this->middleware('permission:presensi-delete', ['only' => ['destroy','reset']]);
          $this->middleware('permission:presensi-admin', ['only' => ['admin']]);
     }
 
@@ -241,7 +241,7 @@ class PresensiController extends Controller
         } elseif (Auth::user()->hasRole('Guru')) {
             return view('presensi.laporan', [
                 'title' => 'Laporan Presensi Siswa',
-                'kelas' => Kelas::where('is_active',1)->orderBy('class_name')->get(),
+                'kelas' => Kelas::aktif()->orderBy('class_name')->get(),
             ]);
         }
     }
@@ -249,12 +249,7 @@ class PresensiController extends Controller
         $bulan = $request->input('bulan') ?? now()->format('m');
         $tahun = $request->input('tahun') ?? now()->format('Y');
         $ta=Tahunajaran::where([['is_deleted',0],['is_active',1]])->first();
-        $kelas = Kelas::where([
-            ['is_active',1],
-            ['is_deleted',0],
-            ['year_id',$ta->year_id]
-            ])
-            ->orderBy('class_name')->get();
+        $kelas = Kelas::aktif()->where('year_id',$ta->year_id)->orderBy('class_name')->get();
         $jumlahHari = Carbon::create($tahun,$bulan)->daysInMonth;
         //dd($ta);
         $kelasdata = [];
@@ -282,6 +277,22 @@ class PresensiController extends Controller
             'kelasdata' => $kelasdata,
             'title' => 'Laporan Presensi Siswa bulan '.$bulan .' Tahun '.$tahun ,
         ]);
+    }
+    public function reset(Request $request) {
+        if($request->has('kelas') && $request->has('tanggal')) {
+            $kelas = $request->input('kelas');
+            $tanggal = $request->input('tanggal');
+            Presensi::where([
+                ['kelas_id', $kelas],
+                ['tanggal', $tanggal]
+            ])->delete();
+            return redirect()->route('presensi.reset')->with('success', 'Data kehadiran tanggal '.$tanggal.' pada kelas '.$kelas.' berhasil direset.');
+        } else {
+            $kelas = Kelas::aktif()->get();
+            return view ('presensi.reset', [
+                'kelas' => $kelas,
+            ]);
+        };
     }
 }
 

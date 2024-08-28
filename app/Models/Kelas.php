@@ -22,9 +22,12 @@ class Kelas extends Model
     //    $this->table = env('SECOND_DB_DATABASE').'.'.$this->table;
     //    parent::__construct($attributes);
     //}
+    public function scopeAktif($query) {
+        return $query->where([['is_active', 1],['is_deleted', 0]]);
+    }
     /**
      * Get all of the siswa for the Kelas
-     *
+     *\
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function siswas(): HasMany
