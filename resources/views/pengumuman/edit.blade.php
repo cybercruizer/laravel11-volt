@@ -60,7 +60,7 @@
 
             <div class="form-group mb-3">
                 <label for="konten">Konten</label>
-                <textarea class="form-control" name="konten" id="konten" rows="3">{{ $woro2->konten }}</textarea>
+                <textarea class="form-control" name="konten" id="konten" rows="3">{!! $woro2->konten !!}</textarea>
             </div>
             <div class="row">
                 <div class="col-6 form-group mb-3">
@@ -82,7 +82,7 @@
     </div>
 @endsection
 @push('scripts')
-    <script src="{{ asset('ckeditor4/ckeditor.js') }}"></script>
+    <script src="{{ asset('ckeditor4-custom/ckeditor.js') }}"></script>
     <script>
         CKEDITOR.replace('konten');
     </script>
