@@ -26,7 +26,7 @@
         @endif
         <form action="{{ route('presensi.edit', $tanggal) }}" method="GET">
             @csrf
-            <div class="input-group md-3">
+            <div class="input-group mb-3 col-md-3">
                 <span class="input-group-text" id="basic-addon1"><i class="bi bi-search"></i></span>
                 <input type="date" class="form-control" value="{{ $tanggal }}"
                     placeholder="{{ $tanggal }}" aria-label="Pilih Tanggal"
@@ -85,11 +85,17 @@
                         </tr>
                     @endforelse
                 </tbody>
+                <tfoot>
+                    <tr class="text-center">
+                        <td colspan="4">
+                            <div class="btn-group pull-right">
+                                <button type="submit" class="btn btn-success">Kirim</button>
+                                <button type="reset" class="btn btn-secondary">Reset</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tfoot>
             </table>
-            <div class="btn-group pull-right">
-                <button type="submit" class="btn btn-primary">Kirim</button>
-                <button type="reset">Reset</button>
-            </div>
         </form>
     </div>
     

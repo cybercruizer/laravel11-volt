@@ -26,12 +26,10 @@ class PresensiController extends Controller
 
         if (Auth::user()->hasRole('WaliKelas')) {
             $kelas = Auth::user()->kelas;
-            $siswas=Siswa::select('student_id','student_name','student_number')->where([
+            $siswas=Siswa::aktif()->select('student_id','student_name','student_number')->where([
                 ['class_id',$kelas->class_id],
-                ['is_deleted',0],
-                ['student_status','A'],
                 ])->get();
-            //dd($siswas);
+            //dd($siswas);u
         } else {
             $kelas=Kelas::get();
             $siswas=Siswa::select('student_id','student_name','student_number')->get();
