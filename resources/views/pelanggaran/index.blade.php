@@ -66,7 +66,10 @@
                                             @forelse ($items as $item)
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $item->siswa->student_name }}</td>
+                                                    <td>
+                                                        {{ $item->siswa->student_name }}<br>
+                                                        <small>{{ $item->user->name }}</small>
+                                                    </td>
                                                     <td>{{ $item->siswa->kelas->class_name }}</td>
                                                     <td>{{ $item->jenisPelanggaran->nama }}</td>
                                                     <td>{{ $item->jenisPelanggaran->poin }}</td>
