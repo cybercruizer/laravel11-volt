@@ -22,10 +22,13 @@ class WoroworoController extends Controller
     public function index()
     {
         
-        if(Auth::user()->hasRole(['Admin','WaliKelas','Kurikulum'])) {
+        if (Auth::user()->hasRole(['Admin','Kurikulum'])) {
             $woro2=Woroworo::latest()->paginate(20);
         } else {
-            $woro2=Woroworo::where('kategori','!=','walikelas')->latest()->paginate(20);
+            $woro2=Woroworo::where([
+                ['kategori','!=','walikelas'],
+                ['status','aktif']
+                ])->latest()->paginate(20);
         }
         return view('pengumuman.index',compact('woro2'));
     }

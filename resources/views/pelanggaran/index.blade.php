@@ -60,7 +60,10 @@
                                             <th>Poin</th>
                                             <th>Deskripsi</th>
                                             <th>Tindak Lanjut</th>
-                                            <th>Aksi</th>
+                                            @can('pelanggaran-edit')
+                                                <th>Aksi</th>
+                                            @endcan
+                                            
                                         </thead>
                                         <tbody>
                                             @forelse ($items as $item)
@@ -75,8 +78,8 @@
                                                     <td>{{ $item->jenisPelanggaran->poin }}</td>
                                                     <td class="text-wrap">{{ $item->deskripsi }}</td>
                                                     <td class="text-wrap">{{ $item->tindaklanjut }}</td>
-                                                    <td>
-
+                                                    @can('pelanggaran-edit')
+                                                    <td> 
                                                         <form action="{{ route('pelanggaran.destroy', $item->id) }}"
                                                             method="post">
                                                             @method('DELETE')
@@ -85,12 +88,15 @@
                                                                 <a href="{{ route('pelanggaran.edit', $item->id) }}"
                                                                     class='btn btn-primary btn-sm'><i
                                                                         class="fa fa-edit"></i></a>
+                                                                @can('pelanggaran-delete')
                                                                 <button type="submit" class="btn btn-danger btn-sm"><i
                                                                         class="fa fa-trash"></i></button>
+                                                                @endcan
                                                             </div>
                                                         </form>
 
                                                     </td>
+                                                    @endcan
                                                 </tr>
                                             @empty
                                                 <tr>
