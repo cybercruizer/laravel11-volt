@@ -56,7 +56,7 @@
                             <input type="hidden" name="siswa[{{ $presensi->student_id }}][id]"
                                 value="{{ $presensi->student_id }}">
                             <td>{{ $loop->iteration }}.</td>
-                            <td>{{ $presensi->siswa->student_name }}</td>
+                            <td>{{ $presensi->siswa->student_name ?? '' }}</td>
                             <td>
                                 <SELECt name="siswa[{{ $presensi->student_id }}][keterangan]" class="form-select">
                                     <option value="H" {{ $presensi->keterangan === 'H' ? 'selected' : '' }}>
