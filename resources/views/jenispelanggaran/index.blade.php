@@ -26,17 +26,6 @@
                 </ul>
             </div>
         @endif
-        @if (session()->has('success'))
-            <div class="alert alert-success">
-                {{ session()->get('success') }}
-            </div>
-        @endif
-        @if (session()->has('error'))
-            <div class="alert alert-danger">
-                {{ session()->get('error') }}
-            </div>
-        @endif
-
         <table class="table table-bordered table-striped table-responsive mb-0">
             <thead>
                 <th>No</th>
@@ -57,13 +46,9 @@
                     @can('jenispelanggaran-edit')
                     <td>
                         <div class="btn-group" role="group">
-                            <form action="{{ route('jenispelanggaran.destroy', $s->id) }}" method="post">
-                                @method('DELETE')
-                                @csrf
-                                <a href="{{ route('jenispelanggaran.edit', $s->id) }}" class='btn btn-primary btn-sm'><i
+                            <a href="{{ route('jenispelanggaran.destroy', $s->id) }}" class="btn btn-info btn-sm" data-confirm-delete="true"><i class="fa fa-trash"></i></a>
+                            <a href="{{ route('jenispelanggaran.edit', $s->id) }}" class='btn btn-primary btn-sm'><i
                                         class="fa fa-edit"></i></a>
-                                <button type="submit" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></button>
-                            </form>
                         </div>
                     </td>
                     @endcan

@@ -13,6 +13,7 @@
 
     <!-- Scripts -->
     @vite('resources/js/app.js')
+    
     <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
 
     <link href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css" rel="stylesheet">
@@ -62,7 +63,7 @@
         {{-- Footer --}}
         @include('layouts.footer')
     </main>
-
+    @include('sweetalert::alert')
     @yield('scripts')
 </body>
 

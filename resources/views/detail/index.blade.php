@@ -37,9 +37,11 @@
                 </thead>
                 <tbody>
                     @foreach ($data as $s)
+                    <tr>
                         <td>{{$loop->iteration}}</td>
                         <td>{{$s->siswa->student_name}}</td>
                         <td>{{$s->siswa->kelas->class_name}}</td>
+                    </tr>
                     @endforeach
                     
                 </tbody>

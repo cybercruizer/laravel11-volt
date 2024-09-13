@@ -10,6 +10,7 @@
         "laravel/tinker": "^2.9",
         "laravel/ui": "^4.5",
         "laraveldaily/laravel-charts": "^0.2.3",
+        "realrashid/sweet-alert": "^7.2",
         "spatie/laravel-html": "^3.9",
         "spatie/laravel-permission": "^6.7",
         "yajra/laravel-datatables-oracle": "^11"

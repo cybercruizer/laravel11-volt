@@ -9,18 +9,38 @@ use App\Models\Tahunajaran;
 use Illuminate\Http\Request;
 use App\Models\JenisPelanggaran;
 use Illuminate\Support\Facades\Auth;
+use RealRashid\SweetAlert\Facades\Alert;
+
 
 class PelanggaranController extends Controller
 {
+    private $satitle = 'Konfirmasi Penghapusan';
+    private $satext = 'Yakin menghapus data pelanggaran ';
     function __construct()
     {
-         $this->middleware('permission:pelanggaran-list|pelanggaran-create|pelanggaran-edit|pelanggaran-delete', ['only' => ['jenispelanggaranIndex','pelanggaranIndex']]);
-         $this->middleware('permission:pelanggaran-create', ['only' => ['jenispelanggaranStore','pelanggaranStore','pelanggaranCreate']]);
-         $this->middleware('permission:pelanggaran-edit', ['only' => ['jenispelanggaranUpdate','pelanggaranUpdate','jenispelanggaranEdit','pelanggaranEdit']]);
-         $this->middleware('permission:pelanggaran-delete', ['only' => ['jenispelanggaranDestroy','pelanggaranDestroy']]);
+         $this->middleware('permission:pelanggaran-list|pelanggaran-create|pelanggaran-edit|pelanggaran-delete', ['only' => ['pelanggaranIndex']]);
+         $this->middleware('permission:pelanggaran-create', ['only' => ['pelanggaranStore','pelanggaranCreate']]);
+         $this->middleware('permission:pelanggaran-edit', ['only' => ['pelanggaranUpdate','pelanggaranEdit']]);
+         $this->middleware('permission:pelanggaran-delete', ['only' => ['pelanggaranDestroy']]);
+
+         $this->middleware('permission:jenispelanggaran-list|jenispelanggaran-create|jenispelanggaran-edit|jenispelanggaran-delete', ['only' => ['jenispelanggaranIndex']]);
+         $this->middleware('permission:jenispelanggaran-create', ['only' => ['jenispelanggaranStore','jenispelanggaranCreate']]);
+         $this->middleware('permission:jenispelanggaran-edit', ['only' => ['jenispelanggaranUpdate','jenispelanggaranEdit']]);
+         $this->middleware('permission:jenispelanggaran-delete', ['only' => ['jenispelanggaranDestroy']]);
+
+         $this->middleware(function($request, $next) {
+            if (session('success')) {
+                Alert::success(session('success'));
+            } 
+            if (session('error')) {
+                Alert::error(session('error'));
+            }
+            return $next($request);
+        });
     }
     public function jenispelanggaranIndex() {
         $jenis= JenisPelanggaran::get();
+        confirmDelete($this->satitle, $this->satext);
         return view('jenispelanggaran.index',[
             'jenis'=>$jenis,
             'title' => 'Daftar Jenis Pelanggaran',
@@ -34,12 +54,14 @@ class PelanggaranController extends Controller
         $nama = $request->nama;
         $poin = $request->poin;
         $desk = $request->deskripsi;
+        
         JenisPelanggaran::create([
             'nama' => $nama,
             'poin' => $poin,
             'deskripsi' => $desk,
         ]);
-        return redirect()->route('jenispelanggaran.index')->with('success','Jenis Pelanggaran berhasil diinput');
+        Alert::toast('Jenis Pelanggaran Berhasil ditambahkan','success');
+        return back();
     }
     public function jenispelanggaranEdit($id) {
         $jenis = JenisPelanggaran::find($id);
@@ -65,7 +87,8 @@ class PelanggaranController extends Controller
         $data = JenisPelanggaran::find($id);
         $data->delete();
         $jenis= JenisPelanggaran::get();
-        return view('jenispelanggaran.index',['jenis'=>$jenis])->with('success','Jenis Pelanggaran berhasil dihapus');
+        Alert::toast('Jenis Pelanggaran Berhasil dihapus', 'success');
+        return back();
     }
     public function pelanggaranIndex()
     {
@@ -83,6 +106,7 @@ class PelanggaranController extends Controller
                 return Carbon::parse($data->tgl_pelanggaran)->format('Y-m-d');
             });
             $title='Laporan Pelanggaran Siswa' ;
+            confirmDelete($this->satitle, $this->satext);
             return view('pelanggaran.index',compact('pelanggaran','month','title'));
         }
     }
@@ -112,6 +136,7 @@ class PelanggaranController extends Controller
         $pelanggaran = $request->pelanggaran;
         $deskripsi = $request->deskripsi;
         $tindaklanjut = $request->tindaklanjut;
+        $siswa=Siswa::find($siswa_id);
         Pelanggaran::create([
             'tahun_ajaran_id' => $ta->year_id,
             'user_id' => auth()->user()->id,
@@ -122,7 +147,8 @@ class PelanggaranController extends Controller
             'poin' => $poin,
             'tindaklanjut' => $tindaklanjut
         ]);
-        return redirect()->route('pelanggaran.index')->with('success','Pelanggaran berhasil diinput');
+        Alert::toast('Data pelanggaran untuk '.$siswa->student_name.' berhasil ditambahkan','success');
+        return back();
     }
 
     public function pelanggaranEdit($id)
@@ -163,7 +189,8 @@ class PelanggaranController extends Controller
     {
         $data = Pelanggaran::find($id);
         $data->delete();
-        return redirect()->route('pelanggaran.index')->with('success','Pelanggaran berhasil dihapus');
+        Alert::toast('Pelanggaran berhasil dihapus','success');
+        return back();
     }
     public function pelanggaranCari(Request $request)
     {

@@ -80,20 +80,14 @@
                                                     <td class="text-wrap">{{ $item->tindaklanjut }}</td>
                                                     @can('pelanggaran-edit')
                                                     <td> 
-                                                        <form action="{{ route('pelanggaran.destroy', $item->id) }}"
-                                                            method="post">
-                                                            @method('DELETE')
-                                                            @csrf
                                                             <div class="btn-group" role="group">
                                                                 <a href="{{ route('pelanggaran.edit', $item->id) }}"
                                                                     class='btn btn-primary btn-sm'><i
                                                                         class="fa fa-edit"></i></a>
                                                                 @can('pelanggaran-delete')
-                                                                <button type="submit" class="btn btn-danger btn-sm"><i
-                                                                        class="fa fa-trash"></i></button>
+                                                                <a href="{{ route('pelanggaran.destroy', $item->id) }}" class="btn btn-info btn-sm" data-confirm-delete="true"><i class="fa fa-trash"></i></a>
                                                                 @endcan
                                                             </div>
-                                                        </form>
 
                                                     </td>
                                                     @endcan
