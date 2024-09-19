@@ -59,8 +59,14 @@ Route::group(['middleware' => ['auth']], function() {
         Route::delete('pelanggaran/destroy/{id}', 'pelanggaranDestroy')->name('pelanggaran.destroy');
         Route::any('pelanggaran/cari', 'pelanggaranCari')->name('pelanggaran.cari');
     });
+    Route::controller(\App\Http\Controllers\PenangananController::class)-> group(function() {
+        Route::get('penanganan', 'index')->name('penanganan.index');
+        Route::get('penanganan/create', 'create')->name('penanganan.create');
+        Route::get('penanganan/getPelanggaran/{studentId}', 'getPelanggaran')->name('penanganan.getPelanggaran');
+    });
     Route::get('administrasi', [AdministrasiController::class, 'index'])->name('administrasi.index');
     Route::resource('tagihan', \App\Http\Controllers\TagihanController::class);
+
     
 });
 /** Route::get('cekkelas/{id}', function($id){

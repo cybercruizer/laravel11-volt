@@ -4,10 +4,12 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Siswa;
+use App\Models\Penanganan;
 use App\Models\JenisPelanggaran;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Pelanggaran extends Model
 {
@@ -38,5 +40,14 @@ class Pelanggaran extends Model
     public function user(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+    /**
+     * The penanganans that belong to the Pelanggaran
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsToMany
+     */
+    public function penanganans(): BelongsToMany
+    {
+        return $this->belongsToMany(Penanganan::class);
     }
 }

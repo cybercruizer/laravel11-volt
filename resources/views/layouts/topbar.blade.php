@@ -1,8 +1,7 @@
 <nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark ps-0 pe-2 pb-0 d-print-none">
     <div class="container-fluid px-0">
         <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
-            
-            <div class="d-flex align-items-center">
+            <div class="d-flex align-items-right">
                 <form class="navbar-search form-inline" id="navbar-search-main" action="{{ route('pelanggaran.cari') }}">
                     @csrf
                     <div class="input-group input-group-merge search-bar">
@@ -15,8 +14,7 @@
                         </span>
                     </div>
                 </form>
-            </div>
-            
+            </div>            
 
             <!-- Navbar links -->
             <ul class="navbar-nav align-items-center">
