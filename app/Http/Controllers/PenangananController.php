@@ -24,8 +24,9 @@ class PenangananController extends Controller
         ]);
     }
 
-    public function store(Request $request, $id) {
-
+    public function store(Request $request) {
+        $semua = $request->all();
+        dd($semua);
     }
     public function getPelanggaran($studentId)  {
         $pel=Pelanggaran::with('jenisPelanggaran','siswa')->where('siswa_id',$studentId)->get()->sortBy('tgl_pelanggaran');

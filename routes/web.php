@@ -63,6 +63,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('penanganan', 'index')->name('penanganan.index');
         Route::get('penanganan/create', 'create')->name('penanganan.create');
         Route::get('penanganan/getPelanggaran/{studentId}', 'getPelanggaran')->name('penanganan.getPelanggaran');
+        Route::post('penanganan/store','store')->name('penanganan.store');
     });
     Route::get('administrasi', [AdministrasiController::class, 'index'])->name('administrasi.index');
     Route::resource('tagihan', \App\Http\Controllers\TagihanController::class);

@@ -98,6 +98,7 @@ class WoroworoController extends Controller
     {
         $request->validate([
             'judul' => 'required',
+            'kategori' => 'required',
             'konten' => 'required',
             'gambar' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'status' => 'required',
@@ -109,6 +110,7 @@ class WoroworoController extends Controller
             $woro2->gambar=$path.$filename;
         }
         $woro2->judul=$request->input('judul');
+        $woro2->kategori=$request->input('kategori');
         $woro2->konten=$request->input('konten');
         $woro2->status=$request->input('status');
         

@@ -248,6 +248,14 @@
                             <span class="sidebar-text">Cari Siswa</span>
                         </a>
                     </li>
+                    <li class="nav-item {{ request()->routeIs('penanganan.index') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('penanganan.index') }}">
+                            <span class="sidebar-icon">
+                                <i class="fa fa-list"></i>
+                            </span>
+                            <span class="sidebar-text">Penanganan Siswa</span>
+                        </a>
+                    </li>
                 @endcan
             </ul>
         </div>

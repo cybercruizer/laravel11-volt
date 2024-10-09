@@ -32,7 +32,8 @@
                 {{ session()->get('error') }}
             </div>
         @endif
-
+        <form method="POST" action="{{ route('penanganan.store') }}">
+            @csrf
         <div class="row">
             <div class="col-md-6 col-12">
                 <div class="form-group mb-2 col-10">
@@ -48,7 +49,7 @@
             <div class="col-md-6 col-12">
                 <div class="form-group mb-2 col-10">
                     <label for="siswa">Pelanggaran</label>
-                    <select name="pelanggaran" class="form-select" id="pelanggaran" multiple>
+                    <select name="pelanggaran[]" class="form-select" id="pelanggaran" multiple>
                     </select>
                 </div>
 
@@ -93,6 +94,7 @@
                 </div>
             </div>
         </div>
+        </form>
     </div>
 @endsection
 @push('scripts')
