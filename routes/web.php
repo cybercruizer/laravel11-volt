@@ -23,6 +23,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/presensi/admin', [\App\Http\Controllers\PresensiController::class, 'admin'])->name('presensi.admin');
     ROute::post('/presensi/store1', [\App\Http\Controllers\PresensiController::class, 'store1'])->name('presensi1.store');
     Route::any('/presensi/reset', [\App\Http\Controllers\PresensiController::class, 'reset'])->name('presensi.reset');
+    Route::get('/presensi/rekap', [\App\Http\Controllers\PresensiController::class, 'rekapIndex'])->name('presensi.rekap.index');
+    Route::post('/presensi/rekapShow', [\App\Http\Controllers\PresensiController::class, 'rekapShow'])->name('presensi.rekap.show');
     Route::resource('presensi', \App\Http\Controllers\PresensiController::class)->except('edit');
     Route::resource('walikelas', \App\Http\Controllers\WalikelasController::class);
     Route::resource('woroworo', \App\Http\Controllers\WoroworoController::class);

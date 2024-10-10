@@ -292,5 +292,36 @@ class PresensiController extends Controller
             ]);
         };
     }
+    public function rekapIndex() {
+        return view ('presensi.rekap_index', [
+            'title' => 'Rekap Presensi Siswa',
+        ]);
+    }
+    public function rekapShow(Request $request) {
+        $dari=Carbon::parse($request->input('dari'));
+        $sampai=Carbon::parse($request->input('sampai'));
+
+        $siswa = Siswa::aktif()->withCount([
+            'presensis as totalS'=>function($query) use ($dari, $sampai) {
+            $query->whereBetween('tanggal',[$dari,$sampai])->where('keterangan','S');
+            },
+            'presensis as totalI'=>function($query) use ($dari, $sampai) {
+                $query->whereBetween('tanggal',[$dari,$sampai])->where('keterangan','I');
+            },
+            'presensis as totalA'=>function($query) use ($dari, $sampai) {
+                $query->whereBetween('tanggal',[$dari,$sampai])->where('keterangan','A');
+            },
+        ])->get()->sortBy('student_number');
+        //$s=$siswa->find(900)->totalA;
+        //dd($s);
+        
+        
+        return view ('presensi.rekap_show', [
+            'title' => 'Rekap Presensi Siswa',
+            'siswa' => $siswa,
+            'dari' => $dari->format('d-m-Y'),
+            'sampai' => $sampai->format('d-m-Y'),
+        ]);
+    }
 }
 

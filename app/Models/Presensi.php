@@ -22,7 +22,7 @@ class Presensi extends Model
      */
     public function siswa(): BelongsTo
     {
-        return $this->belongsTo(Siswa::class, 'student_id');
+        return $this->belongsTo(Siswa::class,'student_id');
     }
     /**
      * Get the kelas that owns the Presensi
@@ -32,5 +32,9 @@ class Presensi extends Model
     public function kelas(): BelongsTo
     {
         return $this->belongsTo(Kelas::class,'kelas_id');
+    }
+    public function totalA ($query)
+    {
+        return $query->where('keterangan','A')->count();
     }
 }

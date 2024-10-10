@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Tagihan;
+use App\Models\Presensi;
 use App\Models\Pelanggaran;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -12,8 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Siswa extends Model
 {
     use HasFactory;
-    protected $connection = 'second_db';
-    protected $table = 'students';
+    protected $table = 'spa_students';
     protected $guarded=[];
     protected $primaryKey='student_id';
 
@@ -36,7 +36,7 @@ class Siswa extends Model
      */
     public function presensis(): HasMany
     {
-        return $this->hasMany(Presensi::class, 'student_id');
+        return $this->hasMany(Presensi::class,'student_id');
     }
     /**
      * Get all of the pelanggarans for the Siswa

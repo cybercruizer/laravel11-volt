@@ -138,6 +138,14 @@
                             <span class="sidebar-text">Lap Per Kelas</span>
                         </a>
                     </li>
+                    <li class="nav-item {{ request()->routeIs('presensi.rekap.index') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('presensi.rekap.index') }}">
+                            <span class="sidebar-icon">
+                                <i class="fa fa-check"></i>
+                            </span>
+                            <span class="sidebar-text">Rekap per tanggal</span>
+                        </a>
+                    </li>
                     @endcan
 
                     @can('presensi-create')
