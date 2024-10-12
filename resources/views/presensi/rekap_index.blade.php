@@ -32,22 +32,20 @@
             @csrf
             @method('POST')
             <div class="row">
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="mb-3">
                         <label for="dari" class="form-label">Dari</label>
                         <input type="date" name="dari" id="dari" class="form-control">
                     </div>
                     
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-4">
                     <div class="mb-3">
                         <label for="sampai" class="form-label">Sampai</label>
                         <input type="date" name="sampai" id="sampai" class="form-control">
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
+                <div class="col-md-4 mb-3 mt-auto">
                     <button type="submit" class="btn btn-info">Tampilkan</button>
                 </div>
             </div>
