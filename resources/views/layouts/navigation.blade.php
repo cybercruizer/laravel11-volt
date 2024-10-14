@@ -138,6 +138,8 @@
                             <span class="sidebar-text">Lap Per Kelas</span>
                         </a>
                     </li>
+                    @endcan
+                    @can('presensi-list')
                     <li class="nav-item {{ request()->routeIs('presensi.rekap.index') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('presensi.rekap.index') }}">
                             <span class="sidebar-icon">

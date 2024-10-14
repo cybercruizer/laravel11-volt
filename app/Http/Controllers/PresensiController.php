@@ -301,7 +301,14 @@ class PresensiController extends Controller
         $dari=Carbon::parse($request->input('dari'));
         $sampai=Carbon::parse($request->input('sampai'));
 
-        $siswa = Siswa::aktif()->withCount([
+        if(Auth::user()->hasRole('WaliKelas')) {
+            $kelas = Auth::user()->kelas;
+            $siswas = Siswa::aktif()->where('class_id', $kelas->class_id);
+        } else {
+            $siswas = Siswa::aktif();
+        }
+        //$siswas = Siswa::aktif();
+        $siswa=$siswas->withCount([
             'presensis as totalS'=>function($query) use ($dari, $sampai) {
             $query->whereBetween('tanggal',[$dari,$sampai])->where('keterangan','S');
             },
