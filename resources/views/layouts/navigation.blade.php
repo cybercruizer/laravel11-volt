@@ -333,3 +333,5 @@
         </div>
     </li>
 </ul>
+<li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
+<span class="text-gray-400 text-xs letter-spacing-0 mx-3 d-block">Peran anda: {{ Auth::user()->getRoleNames()[0] }}</span>

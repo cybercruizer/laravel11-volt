@@ -14,7 +14,7 @@
     <!-- Scripts -->
     @vite('resources/js/app.js')
     
-    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+    <script src="{{asset('jquery.min.js')}}"></script>
 
     <link href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css" rel="stylesheet">
 
@@ -38,11 +38,14 @@
 
         @media print {
             body {
-                margin: 0;
+                margin: 0 !important;
                 /* Remove margin */
             }
             div {
-                margin: 0;
+                margin: 0 !important;
+            }
+            .content {
+                margin: 0 !important;
             }
         }
     </style>
@@ -53,6 +56,7 @@
     @include('layouts.nav')
     @include('layouts.sidenav')
     <main class="content">
+        @include('sweetalert::alert')
         {{-- TopBar --}}
         @include('layouts.topbar')
         <div class="main py-2">
@@ -63,7 +67,6 @@
         {{-- Footer --}}
         @include('layouts.footer')
     </main>
-    @include('sweetalert::alert')
     @yield('scripts')
 </body>
 

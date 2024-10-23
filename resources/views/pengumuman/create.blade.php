@@ -82,7 +82,7 @@
     </div>
 @endsection
 @push('scripts')
-    <script src="{{ asset('ckeditor4/ckeditor.js') }}"></script>
+    <script src="{{ asset('ckeditor4-custom/ckeditor.js') }}"></script>
     <script>
         CKEDITOR.replace('konten');
     </script>

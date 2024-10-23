@@ -4,7 +4,7 @@
     <div class="card-header">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="mb-4 h5 ml-3">Rekap Presensi per {{ $dari }} sampai {{ $sampai }}</h2>
+                <h2 class="mb-4 h5 ml-3">{{$title}} {{ $dari }} sampai {{ $sampai }}</h2>
             </div>
         </div>
     </div>
@@ -31,25 +31,37 @@
         <form action="{{ route('presensi.rekap.show') }}" method="post">
             @csrf
             @method('POST')
-            <div class="row">
-                <div class="col-md-6">
+            <div class="row d-print-none">
+                <div class="col-md-3">
                     <div class="mb-3">
                         <label for="dari" class="form-label">Dari</label>
                         <input type="date" name="dari" id="dari" class="form-control" value="{{ $dari}}">
                     </div>
                     
                 </div>
-                <div class="col-md-6">
+                <div class="col-md-3">
                     <div class="mb-3">
                         <label for="sampai" class="form-label">Sampai</label>
                         <input type="date" name="sampai" id="sampai" class="form-control" value="{{ $sampai}}">
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
+                @role('Admin|Bk|Kurikulum')
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="kelas" class="form-label">Kelas</label>
+                            <select name="kelas" id="kelas" class="form-select">
+                                <option value="0">-- Semua --</option>
+                                @foreach ($kelas as $k)
+                                    <option value="{{ $k->class_id }}">{{ $k->class_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                @endrole
+                <div class="col-md-3 mb-3 mt-auto">
                     <button type="submit" class="btn btn-info">Tampilkan</button>
                 </div>
+
             </div>
         </form>
         <div class="table-responsive row mt-2"></div>

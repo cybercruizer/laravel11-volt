@@ -32,20 +32,33 @@
             @csrf
             @method('POST')
             <div class="row">
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="mb-3">
                         <label for="dari" class="form-label">Dari</label>
                         <input type="date" name="dari" id="dari" class="form-control">
                     </div>
                     
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-3">
                     <div class="mb-3">
                         <label for="sampai" class="form-label">Sampai</label>
                         <input type="date" name="sampai" id="sampai" class="form-control">
                     </div>
                 </div>
-                <div class="col-md-4 mb-3 mt-auto">
+                @role('Admin|Bk|Kurikulum')
+                    <div class="col-md-3">
+                        <div class="mb-3">
+                            <label for="kelas" class="form-label">Kelas</label>
+                            <select name="kelas" id="kelas" class="form-select">
+                                <option value="0">-- Semua --</option>
+                                @foreach ($kelas as $k)
+                                    <option value="{{ $k->class_id }}">{{ $k->class_name }}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                    </div>
+                @endrole
+                <div class="col-md-3 mb-3 mt-auto">
                     <button type="submit" class="btn btn-info">Tampilkan</button>
                 </div>
             </div>

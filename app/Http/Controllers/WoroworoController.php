@@ -6,6 +6,7 @@ use App\Models\Woroworo;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class WoroworoController extends Controller
 {
@@ -30,6 +31,7 @@ class WoroworoController extends Controller
                 ['status','aktif']
                 ])->latest()->paginate(20);
         }
+        confirmDelete('Konfirmasi','Apakah anda yakin ingin menghapus pengumuman ini?');
         return view('pengumuman.index',compact('woro2'));
     }
 
@@ -70,7 +72,8 @@ class WoroworoController extends Controller
         $woro2->gambar=$path.$filename;
         $woro2->user_id=auth()->user()->id;
         $woro2->save();
-        return redirect()->route('woroworo.index')->with('success','Pengumuman Berhasil ditambahkan');
+        toast('Pengumuman Berhasil ditambahkan','success');
+        return redirect()->route('woroworo.index');
     }
 
     /**
@@ -115,13 +118,14 @@ class WoroworoController extends Controller
         $woro2->status=$request->input('status');
         
         $woro2->save();
-        return redirect()->route('woroworo.index')->with('success','Pengumuman Berhasil diubah');
+        alert()->success('Sukses','Pengumuman Berhasil diubah');
+        return redirect()->route('woroworo.index');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy($id)
+    public function destroy(string $id)
     {
         //dd($id);
         $woro2=Woroworo::findOrFail($id);
@@ -129,6 +133,7 @@ class WoroworoController extends Controller
             File::delete($woro2->gambar);
         }
         $woro2->delete();
-        return redirect()->route('woroworo.index')->with('success','Pengumuman Berhasil dihapus');
+        toast('Pengumuman Berhasil dihapus','success');
+        return redirect()->route('woroworo.index');
     }
 }

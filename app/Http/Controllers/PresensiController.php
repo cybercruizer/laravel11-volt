@@ -84,7 +84,8 @@ class PresensiController extends Controller
                 //cek duplikasi data presensi
                 $cek = Presensi::where('student_id', $student_id)->where('tanggal', $tanggal)->first();
                 if ($cek) {
-                    return redirect()->route('presensi.index')->with('error', 'Data kehadiran tanggal '.$tanggal->format('Y-m-d').' sudah ada.');
+                    alert()->error('Kesalahan', 'Data kehadiran tanggal '.$tanggal->format('Y-m-d').' sudah ada.');
+                    return redirect()->route('presensi.index')->withInput();
                 }
                 $keterangan = $keterangans[$index];
                 $alasan = $alasans[$index];
@@ -98,7 +99,8 @@ class PresensiController extends Controller
                 ]);
             }
         }
-        return redirect()->route('presensi.index')->with('success', 'Data kehadiran tanggal '.$tanggal->format('Y-m-d').' berhasil disimpan.');
+        alert()->success('Sukses', 'Data kehadiran tanggal '.$tanggal->format('Y-m-d').' berhasil disimpan.');
+        return redirect()->route('presensi.index');
     }
     public function store1(Request $request) {
         $request->validate([
@@ -118,7 +120,8 @@ class PresensiController extends Controller
             'tanggal' => $tanggal->format('Y-m-d'),
             'alasan' => $alasan,
         ]);
-        return redirect()->route('presensi.index')->with('success', 'Data kehadiran tanggal '.$tanggal->format('Y-m-d').' berhasil disimpan.');
+        alert()->success('Sukses', 'Data kehadiran tanggal '.$tanggal->format('Y-m-d').' berhasil disimpan.');
+        return redirect()->route('presensi.index');
         //dd($tanggal);
     }
 
@@ -189,8 +192,9 @@ class PresensiController extends Controller
                 ]
             );
         }
+        alert()->success('Sukses', 'Data kehadiran tanggal '.$tanggal.' berhasil disimpan.');
         // Redirect kembali ke halaman presensi
-        return redirect()->route('presensi.edit',$tanggal)->with('success', 'Presensi tanggal '.$tanggal.' berhasil diubah');
+        return redirect()->route('presensi.edit',$tanggal);
     }
 
     /**
@@ -295,6 +299,7 @@ class PresensiController extends Controller
     public function rekapIndex() {
         return view ('presensi.rekap_index', [
             'title' => 'Rekap Presensi Siswa',
+            'kelas' => Kelas::aktif()->select('class_id','class_name')->get(),
         ]);
     }
     public function rekapShow(Request $request) {
@@ -305,7 +310,12 @@ class PresensiController extends Controller
             $kelas = Auth::user()->kelas;
             $siswas = Siswa::aktif()->where('class_id', $kelas->class_id);
         } else {
-            $siswas = Siswa::aktif();
+            $kelas = Kelas::aktif()->select('class_id','class_name')->get();
+            if($request->input('kelas')==0) {
+                $siswas = Siswa::aktif();
+            } else {
+                $siswas = Siswa::aktif()->where('class_id', $request->input('kelas'));
+            }
         }
         //$siswas = Siswa::aktif();
         $siswa=$siswas->withCount([
@@ -326,6 +336,7 @@ class PresensiController extends Controller
         return view ('presensi.rekap_show', [
             'title' => 'Rekap Presensi Siswa',
             'siswa' => $siswa,
+            'kelas' => $kelas,
             'dari' => $dari->format('d-m-Y'),
             'sampai' => $sampai->format('d-m-Y'),
         ]);

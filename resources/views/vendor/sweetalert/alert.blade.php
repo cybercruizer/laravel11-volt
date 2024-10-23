@@ -26,9 +26,9 @@
                             form.action = confirmDeleteElement.href;
                             form.method = 'POST';
                             form.innerHTML = `
-                            @csrf
-                            @method('DELETE')
-                        `;
+                                @csrf
+                                @method('DELETE')
+                            `;
                             document.body.appendChild(form);
                             form.submit();
                         }
