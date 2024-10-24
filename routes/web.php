@@ -26,6 +26,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/presensi/rekap', [\App\Http\Controllers\PresensiController::class, 'rekapIndex'])->name('presensi.rekap.index');
     Route::post('/presensi/rekapShow', [\App\Http\Controllers\PresensiController::class, 'rekapShow'])->name('presensi.rekap.show');
     Route::resource('presensi', \App\Http\Controllers\PresensiController::class)->except('edit');
+    Route::get('walikelas/guruajax', [\App\Http\Controllers\WalikelasController::class, 'guruAjax'])->name('walikelas.guru.ajax');
+    Route::get('walikelas/kelasajax', [\App\Http\Controllers\WalikelasController::class, 'kelasAjax'])->name('walikelas.kelas.ajax');
+    Route::put('walikelas/{id}', [\App\Http\Controllers\WalikelasController::class, 'update'])->name('walikelas.update');
     Route::resource('walikelas', \App\Http\Controllers\WalikelasController::class);
     Route::resource('woroworo', \App\Http\Controllers\WoroworoController::class);
     //Route::get('pelanggaran/create', [\App\Http\Controllers\BkController::class,'create'])->name('pelanggaran.create');
@@ -72,10 +75,3 @@ Route::group(['middleware' => ['auth']], function() {
 
     
 });
-/** Route::get('cekkelas/{id}', function($id){
-    $guru=User::find($id);
-    $siswas=$guru->siswas()->get();
-    foreach($siswas as $siswa){
-        dump($siswa->attributesToArray());
-    }})->name('cekkelas');
-**/

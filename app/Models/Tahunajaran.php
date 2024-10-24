@@ -12,8 +12,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Tahunajaran extends Model
 {
     use HasFactory;
-    protected $connection = 'second_db';
-    protected $table = 'classyears';
+    protected $table = 'spa_classyears';
     protected $guarded=[];
     protected $primaryKey='year_id';
 

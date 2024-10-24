@@ -163,131 +163,123 @@
     });
   </script>
 --}}
-<script>
-$(document).ready(function() {
-    // Handle edit button click
-    const Toast = Swal.mixin({
-            toast: true,
-            position: 'top-end',
-            showConfirmButton: false,
-            timer: 3000,
-            timerProgressBar: true,
-            didOpen: (toast) => {
-                toast.addEventListener('mouseenter', Swal.stopTimer)
-                toast.addEventListener('mouseleave', Swal.resumeTimer)
-            }
-    });
-    $(document).on('click', '#btn-edit', function() {
-        const tr = $(this).closest('tr');
-        const classId = tr.data('id');
-        const userId = tr.data('user-id');
-        const className = tr.find('td:first').text();
+    <script>
+        console.log("Route:", '{{ route('walikelas.guru.ajax') }}');
+    </script>
+    <script type="text/javascript">
+        // Wait for document to be ready
+        $(document).ready(function() {
+            // Handle edit button click
+            $(document).on('click', '#btn-edit', function() {
+                const tr = $(this).closest('tr');
+                const classId = tr.data('id');
+                const userId = tr.data('user-id');
+                const className = tr.find('td:first').text();
 
-        // Set values in modal
-        $('#kelas-id').val(classId);
-        $('#nama-kelas').val(className);
+                // Set values in modal
+                $('#kelas-id').val(classId);
+                $('#nama-kelas').val(className);
 
-        // Fetch available teachers via AJAX
-        $.ajax({
-            url: '{{ route('walikelas.guru.ajax') }}',
-            type: 'GET',
-            success: function(response) {
-                const selectElement = $('#walikelas-select');
-                selectElement.empty();
+                // Fetch available teachers via AJAX
+                $.ajax({
+                    //url: route('walikelas.guru.ajax'),
+                    url: '{{ route('walikelas.guru.ajax') }}',
+                    type: 'GET',
+                    success: function(response) {
+                        console.log('AJAX Response:', response);
+                        console.log('Class ID:', classId);
+                        console.log('Guru terseleksi', userId);
+                        const selectElement = $('#walikelas-select');
+                        selectElement.empty();
 
-                // Add empty option
-                selectElement.append('<option value="">Pilih Wali Kelas</option>');
+                        // Add empty option
+                        selectElement.append('<option value="">Pilih Wali Kelas</option>');
 
-                // Add teachers to select
-                response.forEach(function(guru) {
-                    const selected = guru.id === userId ? 'selected' : '';
-                    selectElement.append(
-                        `<option value="${guru.id}" ${selected}>${guru.name}</option>`
-                    );
-                });
-            },
-            error: function(xhr, status, error) {
-                Toast.fire({
-                    icon: 'error',
-                    title: 'Error loading guru: ' + error
-                });
-            }
-        });
-
-        // Show modal
-        $('#userEditModal').modal('show');
-    });
-
-    // Handle update button click
-    $('#user-update').click(function() {
-        const classId = $('#kelas-id').val();
-        const walikelasId = $('#walikelas-select').val();
-
-        if (!walikelasId) {
-            Toast.fire({
-                icon: 'warning',
-                title: 'Silakan pilih wali kelas'
-            });
-            return;
-        }
-
-        // Send update request
-        $.ajax({
-            url: `/walikelas/${classId}`,
-            type: 'PUT',
-            data: {
-                user_id: walikelasId,
-                _token: $('meta[name="csrf-token"]').attr('content')
-            },
-            beforeSend: function() {
-                $('#user-update').prop('disabled', true).text('Memperbarui...');
-            },
-            success: function(response) {
-                if (response.status === 'success') {
-                    $('#userEditModal').modal('hide');
-                    Toast.fire({
-                        icon: 'success',
-                        title: `Wali Kelas ${response.details.className}`,
-                        html: `Berhasil diupdate dari:<br>
-                             <strong>${response.details.oldTeacher}</strong> ke 
-                            <strong>${response.details.newTeacher}</strong>`
-                    }).then(() => {
-                        window.location.reload();
-                    });
-                } else {
-                    Toast.fire({
-                        icon: 'error',
-                        title: response.message || 'Terjadi kesalahan saat memperbarui wali kelas'
-                    });
-                }
-            },
-            error: function(xhr, status, error) {
-                let errorMessage = 'Terjadi kesalahan saat memperbarui wali kelas';
-                
-                try {
-                    const response = JSON.parse(xhr.responseText);
-                    if (response.message) {
-                        errorMessage = response.message;
+                        // Add teachers to select
+                        if (Array.isArray(response)) {
+                            response.forEach(function(guru) {
+                                const selected = guru.id === userId ? 'selected' : '-';
+                                selectElement.append(
+                                    `<option value="${guru.id}" ${selected}>${guru.name}</option>`
+                                );
+                                console.log('dari ajax:', guru.id, 'dari elemen:', userId);
+                            });
+                        } else {
+                            console.error('Response bukan array:', response);
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('AJAX Error:', error);
+                        console.error('Status:', status);
+                        console.error('Response:', xhr.responseText);
+                        alert('Error loading guru: ' + error);
                     }
-                } catch (e) {
-                    console.error('Error parsing error response:', e);
-                }
-                
-                Toast.fire({
-                    toast:'true',
-                    icon: 'error',
-                    title: errorMessage
                 });
-            },
-            complete: function() {
-                $('#user-update').prop('disabled', false).text('Update');
-            }
-        });
-    });
-});
-</script>
-@endsection
 
-@push('styles')
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/11.7.32/sweetalert2.min.css">
-@endpush
+                // Show modal
+                $('#userEditModal').modal('show');
+            });
+
+            // Handle update button click
+            $('#user-update').click(function() {
+                const classId = $('#kelas-id').val();
+                const walikelasId = $('#walikelas-select').val();
+
+                if (!walikelasId) {
+                    alert('Please select a wali kelas');
+                    return;
+                }
+
+                // Send update request
+                $.ajax({
+                    url: `{{ route('walikelas.update', ':classId') }}`.replace(':classId', classId),
+                    type: 'PUT',
+                    data: {
+                        user_id: walikelasId,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    beforeSend: function() {
+                        // Disable update button
+                        $('#user-update').prop('disabled', true).text('Updating...');
+                    },
+                    success: function(response) {
+                        if (response.status === 'success') {
+                            // Show success message
+                            alert(response.message || 'Wali Kelas berhasil diperbarui');
+
+                            // Close modal
+                            $('#userEditModal').modal('hide');
+
+                            // Reload page to show updated data
+                            window.location.reload();
+                        } else {
+                            alert(response.message || 'Terjadi kesalahan saat memperbarui wali kelas');
+                        }
+                    },
+                    error: function(xhr, status, error) {
+                        console.error('Update Error:', error);
+                        console.error('Status:', status);
+                        console.error('Response:', xhr.responseText);
+                        let errorMessage = 'Terjadi kesalahan saat memperbarui wali kelas';
+                
+                // Try to get more specific error message from response
+                        try {
+                            const response = JSON.parse(xhr.responseText);
+                            if (response.message) {
+                                errorMessage = response.message;
+                            }
+                        } catch (e) {
+                            console.error('Error parsing error response:', e);
+                        }
+                        
+                        alert(errorMessage);
+                    },
+                    complete: function() {
+                        // Re-enable update button
+                        $('#user-update').prop('disabled', false).text('Update');
+                    }
+                });
+            });
+        });
+    </script>
+@endsection

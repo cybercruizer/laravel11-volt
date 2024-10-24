@@ -14,8 +14,7 @@ class Kelas extends Model
 {
     use HasFactory;
     protected $guarded = [];
-    protected $connection = 'second_db';
-    protected $table = 'classrooms';
+    protected $table = 'spa_classrooms';
     protected $primaryKey = 'class_id';
     //public function __construct(array $attributes = [])
     //{
