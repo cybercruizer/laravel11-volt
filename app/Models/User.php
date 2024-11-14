@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Kelas;
 use App\Models\Siswa;
+use App\Models\Jurusan;
 use App\Models\Tagihan;
 use App\Models\Woroworo;
 use App\Models\Pembayaran;
@@ -110,5 +111,14 @@ class User extends Authenticatable
     public function pembayarans(): HasMany
     {
         return $this->hasMany(Pembayaran::class);
+    }
+    /**
+     * Get the kelas associated with the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function jurusan(): HasOne
+    {
+        return $this->hasOne(Jurusan::class, 'user_id',);
     }
 }

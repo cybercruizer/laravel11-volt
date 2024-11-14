@@ -3,6 +3,7 @@
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\JurusanController;
 use App\Http\Controllers\AdministrasiController;
 
 Route::get('/', function () {
@@ -17,7 +18,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', \App\Http\Controllers\RoleController::class);
     //Route::get('users/cekrole', [\App\Http\Controllers\UserController::class, 'cekrole'])->name('cekrole');
     Route::resource('users', \App\Http\Controllers\UserController::class);
-    Route::resource('products', \App\Http\Controllers\ProductController::class);
+    //Route::resource('products', \App\Http\Controllers\ProductController::class);
     Route::get('/presensi/laporan', [\App\Http\Controllers\PresensiController::class, 'laporan'])->name('presensi.laporan');
     Route::get('/presensi/edit', [\App\Http\Controllers\PresensiController::class, 'edit'])->name('presensi.edit');
     Route::get('/presensi/admin', [\App\Http\Controllers\PresensiController::class, 'admin'])->name('presensi.admin');
@@ -26,6 +27,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('/presensi/rekap', [\App\Http\Controllers\PresensiController::class, 'rekapIndex'])->name('presensi.rekap.index');
     Route::post('/presensi/rekapShow', [\App\Http\Controllers\PresensiController::class, 'rekapShow'])->name('presensi.rekap.show');
     Route::resource('presensi', \App\Http\Controllers\PresensiController::class)->except('edit');
+
     Route::get('walikelas/guruajax', [\App\Http\Controllers\WalikelasController::class, 'guruAjax'])->name('walikelas.guru.ajax');
     Route::get('walikelas/kelasajax', [\App\Http\Controllers\WalikelasController::class, 'kelasAjax'])->name('walikelas.kelas.ajax');
     Route::put('walikelas/{id}', [\App\Http\Controllers\WalikelasController::class, 'update'])->name('walikelas.update');
@@ -43,6 +45,8 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
     Route::get('siswas', [\App\Http\Controllers\SiswaController::class, 'index'])->name('siswas.index');
     Route::get('siswas/{id}', [\App\Http\Controllers\SiswaController::class, 'show'])->name('siswas.show');
+    Route::get('siswas/edit/{siswa}', [\App\Http\Controllers\SiswaController::class, 'edit'])->name('siswas.edit');
+    Route::put('siswas/{siswa}', [\App\Http\Controllers\SiswaController::class, 'update'])->name('siswas.update');
     Route::post('siswas/ajax', [\App\Http\Controllers\SiswaController::class, 'getSiswas'])->name('siswas.getSiswas');
     //Route::get('siswas/datatable', [\App\Http\Controllers\SiswaController::class, 'datatable'])->name('siswas.datatable');
 
@@ -70,6 +74,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('penanganan/getPelanggaran/{studentId}', 'getPelanggaran')->name('penanganan.getPelanggaran');
         Route::post('penanganan/store','store')->name('penanganan.store');
     });
+    Route::resource('jurusan', JurusanController::class);
     Route::get('administrasi', [AdministrasiController::class, 'index'])->name('administrasi.index');
     Route::resource('tagihan', \App\Http\Controllers\TagihanController::class);
 

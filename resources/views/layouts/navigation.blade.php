@@ -316,7 +316,7 @@
                             <span class="sidebar-icon">
                                 <i class="fa fa-user-tag"></i>
                             </span>
-                            <span class="sidebar-text">Set Wali Kelas</span>
+                            <span class="sidebar-text">Daft Wali Kelas</span>
                         </a>
                     </li>
                 @endcan
@@ -335,3 +335,13 @@
 </ul>
 <li role="separator" class="dropdown-divider mt-4 mb-3 border-gray-700"></li>
 <span class="text-gray-400 text-xs letter-spacing-0 mx-3 d-block">Peran anda: {{ Auth::user()->getRoleNames()[0] }}</span>
+@role('Kapro')
+    @php
+        $kelas=Auth::user()->jurusan->kelas;
+    @endphp
+    <span class="text-gray-400 text-xs letter-spacing-0 mx-3 d-block">Kelas:
+        @foreach ($kelas as $kel )
+            {{$kel->class_name}}, 
+    @endforeach
+    </span>
+@endrole

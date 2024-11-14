@@ -45,7 +45,7 @@
                         <input type="date" name="sampai" id="sampai" class="form-control" value="{{ $sampai}}">
                     </div>
                 </div>
-                @role('Admin|Bk|Kurikulum')
+                @role('Admin|Bk|Kurikulum|Kapro')
                     <div class="col-md-3">
                         <div class="mb-3">
                             <label for="kelas" class="form-label">Kelas</label>

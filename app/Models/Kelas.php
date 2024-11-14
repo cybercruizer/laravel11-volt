@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Siswa;
+use App\Models\Jurusan;
 use App\Models\Tahunajaran;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -59,5 +60,14 @@ class Kelas extends Model
     public function presensis(): HasMany
     {
         return $this->hasMany(Presensi::class, 'kelas_id');
+    }
+    /**
+     * Get the jurusan that owns the Kelas
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function jurusan(): BelongsTo
+    {
+        return $this->belongsTo(Jurusan::class, 'kode', 'class_major');
     }
 }

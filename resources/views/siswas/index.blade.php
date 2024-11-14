@@ -40,7 +40,7 @@
                         //{ data: 'student_email', name: 'student_email' }
                         { data: 'aksi', 
                             render:function(data){
-                                return '<a href="/siswas/'+data+'" class="btn btn-primary btn-sm" target="_blank">Detail</a>';
+                                return '<a href="/siswas/'+data+'" class="btn btn-success btn-sm" target="_blank">Detail</a>  <a href="/siswas/edit/'+data+'" class="btn btn-warning btn-sm" target="_blank">Edit</a>';
                             }
                         }
                  ]

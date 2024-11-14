@@ -14,7 +14,33 @@ class Siswa extends Model
 {
     use HasFactory;
     protected $table = 'spa_students';
-    protected $guarded=[];
+    protected $fillable = [
+        'student_name',
+        'student_number',
+        'class_id',
+        'year_id',
+        'student_category',
+        'student_pob',
+        'student_dob',
+        'student_gender',
+        'student_nik',
+        'student_nkk',
+        'student_school_name',
+        'student_province',
+        'student_city',
+        'student_district',
+        'student_village',
+        'student_address',
+        'student_phone',
+        'student_year_in',
+        'student_year_out',
+        'student_status',
+        'is_deleted',
+        'created_at',
+        'updated_at',
+        'deleted_at',
+        'ortu_phone',
+    ];
     protected $primaryKey='student_id';
 
     public function scopeAktif($query) {

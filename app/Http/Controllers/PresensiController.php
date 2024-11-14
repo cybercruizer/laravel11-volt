@@ -297,9 +297,15 @@ class PresensiController extends Controller
         };
     }
     public function rekapIndex() {
+        if (Auth::user()->hasRole('Kapro')) {
+            $kelas = Auth::user()->jurusan->kelas;
+            //dd($kelas);
+        } else {
+            $kelas=Kelas::aktif()->select('class_id','class_name')->get();
+        }
         return view ('presensi.rekap_index', [
             'title' => 'Rekap Presensi Siswa',
-            'kelas' => Kelas::aktif()->select('class_id','class_name')->get(),
+            'kelas' => $kelas,
         ]);
     }
     public function rekapShow(Request $request) {
@@ -309,6 +315,10 @@ class PresensiController extends Controller
         if(Auth::user()->hasRole('WaliKelas')) {
             $kelas = Auth::user()->kelas;
             $siswas = Siswa::aktif()->where('class_id', $kelas->class_id);
+        } elseif(Auth::user()->hasRole('Kapro')) {
+            $kelas = Auth::user()->jurusan->kelas;
+            $siswas = Siswa::aktif()->where('class_id', $request->input('kelas'));
+            //dd($siswas);
         } else {
             $kelas = Kelas::aktif()->select('class_id','class_name')->get();
             if($request->input('kelas')==0) {
@@ -328,11 +338,11 @@ class PresensiController extends Controller
             'presensis as totalA'=>function($query) use ($dari, $sampai) {
                 $query->whereBetween('tanggal',[$dari,$sampai])->where('keterangan','A');
             },
-        ])->get()->sortBy('student_number');
+        ])->orderBy('class_id')
+        ->orderBy('student_number')
+        ->get();
         //$s=$siswa->find(900)->totalA;
-        //dd($s);
-        
-        
+        //dd($s); 
         return view ('presensi.rekap_show', [
             'title' => 'Rekap Presensi Siswa',
             'siswa' => $siswa,

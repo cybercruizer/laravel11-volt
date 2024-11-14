@@ -69,6 +69,14 @@ return [
             'prefix' => 'spa_',
             // ...
         ],
+        'keuangan_db' => [
+            'driver' => 'mysql',
+            'host' => env('KEUANGAN_DB_HOST', '127.0.0.1'),
+            'port' => env('KEUANGAN_DB_PORT', '3306'),
+            'database' => env('KKEUANGAN_DB_USERNAME', 'forge'),
+            'password' => env('KEUANGAN_DB_PASSWORD', ''),
+            // ...
+        ],
 
         'mariadb' => [
             'driver' => 'mariadb',
