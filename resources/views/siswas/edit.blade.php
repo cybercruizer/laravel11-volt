@@ -9,6 +9,15 @@
                         <h5 class="mb-0">Edit Data Siswa</h5>
                     </div>
                     <div class="card-body">
+                        @if($errors->any())
+                            <div class="alert alert-danger">
+                                <ul>
+                                    @foreach($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        @endif
                         <form action="{{ route('siswas.update', $siswa->student_id) }}" method="POST">
                             @csrf
                             @method('PUT')
@@ -178,7 +187,7 @@
                                     {{-- <input type="text" class="form-control @error('student_province') is-invalid @enderror" 
                                     id="province" name="student_province" 
                                     value="{{ old('student_province', $siswa->student_province) }}"> --}}
-                                    @error('province')
+                                    @error('student_province')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>

@@ -119,6 +119,7 @@ class SiswaController extends Controller
             'student_year_out' => 'nullable|integer|min:2023|max:' . (date('Y') + 10),
             'student_status' => 'nullable|in:A,L,P',
         ]);
+        dd($request);
         
         if ($validator->fails()) {
             return redirect()
@@ -167,6 +168,4 @@ class SiswaController extends Controller
                 ->withInput();
         }
     }
-
-
 }
