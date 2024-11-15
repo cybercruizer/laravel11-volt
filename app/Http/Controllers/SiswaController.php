@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use DataTables;
 use App\Models\Kelas;
 use App\Models\Siswa;
+use App\Models\Wilayah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
@@ -87,7 +88,8 @@ class SiswaController extends Controller
      public function edit(Siswa $siswa)
     {
         $classes = Kelas::where('is_deleted', 0)->get();
-        return view('siswas.edit', compact('siswa', 'classes'));
+        $provinces = Wilayah::provinces()->get();
+        return view('siswas.edit', compact('siswa', 'classes','provinces'));
     }
 
     /**

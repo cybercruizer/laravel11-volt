@@ -3,8 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Wilayah extends Model
 {
@@ -15,101 +13,30 @@ class Wilayah extends Model
         'name'
     ];
 
-    // Get parent wilayah
-    public function parent(): BelongsTo
-    {
-        return $this->belongsTo(Wilayah::class, 'parent_code', 'code');
-    }
-
-    // Get child wilayah
-    public function children(): HasMany
-    {
-        return $this->hasMany(Wilayah::class, 'parent_code', 'code');
-    }
-
-    // Get province level records
+    // Scope for provinces (2 digits)
     public function scopeProvinces($query)
     {
         return $query->whereRaw('LENGTH(REPLACE(code, ".", "")) = 2');
     }
 
-    // Get regency level records
+    // Scope for regencies (4 digits total: 2 for province + 2 for regency)
     public function scopeRegencies($query)
     {
-        return $query->whereRaw('LENGTH(REPLACE(code, ".", "")) = 5');
+        return $query->whereRaw('LENGTH(REPLACE(code, ".", "")) = 4')
+                    ->whereRaw('code LIKE "__.__"');
     }
 
-    // Get district level records
+    // Scope for districts (6 digits total)
     public function scopeDistricts($query)
     {
-        return $query->whereRaw('LENGTH(REPLACE(code, ".", "")) = 8');
+        return $query->whereRaw('LENGTH(REPLACE(code, ".", "")) = 6')
+                    ->whereRaw('code LIKE "__.__.__"');
     }
 
-    // Get village level records
+    // Scope for villages (10 digits total)
     public function scopeVillages($query)
     {
-        return $query->whereRaw('LENGTH(REPLACE(code, ".", "")) = 13');
-    }
-
-    // Get parent code
-    public function getParentCodeAttribute()
-    {
-        $parts = explode('.', $this->code);
-        array_pop($parts);
-        return !empty($parts) ? implode('.', $parts) : null;
-    }
-
-    // Get level (province, regency, district, or village)
-    public function getLevelAttribute()
-    {
-        $length = strlen(str_replace('.', '', $this->code));
-        switch ($length) {
-            case 2:
-                return 'province';
-            case 5:
-                return 'regency';
-            case 8:
-                return 'district';
-            case 13:
-                return 'village';
-            default:
-                return 'unknown';
-        }
-    }
-
-    // Get children of specific wilayah
-    public function getChildrenByCode($code)
-    {
-        return self::where('code', 'like', $code . '.%')
-            ->whereRaw('LENGTH(REPLACE(code, ".", "")) = ?', [
-                strlen(str_replace('.', '', $code)) + 3
-            ]);
-    }
-
-    // Get province data
-    public function getProvince()
-    {
-        $provinceCode = explode('.', $this->code)[0];
-        return self::where('code', $provinceCode)->first();
-    }
-
-    // Get regency data
-    public function getRegency()
-    {
-        if ($this->level === 'province') return null;
-        
-        $parts = explode('.', $this->code);
-        $regencyCode = $parts[0] . '.' . $parts[1];
-        return self::where('code', $regencyCode)->first();
-    }
-
-    // Get district data
-    public function getDistrict()
-    {
-        if (in_array($this->level, ['province', 'regency'])) return null;
-        
-        $parts = explode('.', $this->code);
-        $districtCode = $parts[0] . '.' . $parts[1] . '.' . $parts[2];
-        return self::where('code', $districtCode)->first();
+        return $query->whereRaw('LENGTH(REPLACE(code, ".", "")) = 10')
+                    ->whereRaw('code LIKE "__.__.__.____"');
     }
 }

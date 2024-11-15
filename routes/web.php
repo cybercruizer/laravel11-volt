@@ -4,6 +4,7 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JurusanController;
+use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\AdministrasiController;
 
 Route::get('/', function () {
@@ -68,6 +69,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::delete('pelanggaran/destroy/{id}', 'pelanggaranDestroy')->name('pelanggaran.destroy');
         Route::any('pelanggaran/cari', 'pelanggaranCari')->name('pelanggaran.cari');
     });
+
     Route::controller(\App\Http\Controllers\PenangananController::class)-> group(function() {
         Route::get('penanganan', 'index')->name('penanganan.index');
         Route::get('penanganan/create', 'create')->name('penanganan.create');
@@ -77,6 +79,38 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('jurusan', JurusanController::class);
     Route::get('administrasi', [AdministrasiController::class, 'index'])->name('administrasi.index');
     Route::resource('tagihan', \App\Http\Controllers\TagihanController::class);
+
+    Route::get('/wilayah/provinces', [WilayahController::class, 'getProvinces']);
+    Route::get('/wilayah/regencies/{provinceCode}', [WilayahController::class, 'getRegencies']);
+    Route::get('/wilayah/districts/{regencyCode}', [WilayahController::class, 'getDistricts']);
+    Route::get('/wilayah/villages/{districtCode}', [WilayahController::class, 'getVillages']);
+
+    Route::get('/wilayah/test/{code}', function($code) {
+        $results = \App\Models\Wilayah::where(function($query) use ($code) {
+            $query->whereRaw('LEFT(code, 2) = ?', [$code])
+                  ->whereRaw('LENGTH(REPLACE(code, ".", "")) = 4')
+                  ->whereRaw('code LIKE "__.__"');
+        })->get(['code', 'name']);
+    
+        return response()->json([
+            'code' => $code,
+            'sql' => \App\Models\Wilayah::whereRaw('LEFT(code, 2) = ?', [$code])
+                    ->whereRaw('LENGTH(REPLACE(code, ".", "")) = 4')
+                    ->whereRaw('code LIKE "__.__"')
+                    ->toSql(),
+            'results' => $results,
+            'count' => $results->count()
+        ]);
+    });
+    
+    // Get raw data for debugging
+    Route::get('/wilayah/raw', function() {
+        return response()->json([
+            'all_data' => \App\Models\Wilayah::all(['code', 'name']),
+            'sample_regency' => \App\Models\Wilayah::whereRaw('code LIKE "__.__"')->first(),
+            'total_count' => \App\Models\Wilayah::count()
+        ]);
+    });
 
     
 });
