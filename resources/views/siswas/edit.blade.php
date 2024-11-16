@@ -9,10 +9,10 @@
                         <h5 class="mb-0">Edit Data Siswa</h5>
                     </div>
                     <div class="card-body">
-                        @if($errors->any())
+                        @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>
-                                    @foreach($errors->all() as $error)
+                                    @foreach ($errors->all() as $error)
                                         <li>{{ $error }}</li>
                                     @endforeach
                                 </ul>
@@ -64,8 +64,7 @@
 
                                 <div class="col-md-6">
                                     <label for="student_category" class="form-label">Kategori Siswa</label>
-                                    <select name="student_category" id="student_category" disabled="disabled"
-                                        class="form-select">
+                                    <select name="student_category" id="student_category" disabled class="form-select">
                                         <option value="REG"
                                             {{ old('student_category', $siswa->student_category) == 'REG' ? 'selected' : '' }}>
                                             REGULER</option>
@@ -120,9 +119,10 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
-
+                            </div>
+                            <div class="row mb-3">
                                 <div class="col-md-6">
-                                    <label for="student_phone" class="form-label">No HP</label>
+                                    <label for="student_phone" class="form-label">No HP Siswa</label>
                                     <input type="tel" class="form-control @error('student_phone') is-invalid @enderror"
                                         id="student_phone" name="student_phone"
                                         value="{{ old('student_phone', $siswa->student_phone) }}">
@@ -130,6 +130,7 @@
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                                 <div class="col-md-6">
                                     <label for="ortu_phone" class="form-label">No HP Orang tua/wali</label>
                                     <input type="tel" class="form-control @error('ortu_phone') is-invalid @enderror"
@@ -140,6 +141,7 @@
                                     @enderror
                                 </div>
                             </div>
+
 
                             {{-- <div class="row mb-3">
                             <div class="col-md-6">
@@ -176,7 +178,7 @@
                                 <div class="col-md-6">
                                     <label for="province" class="form-label">Propinsi</label>
                                     <select name="student_province" id="province" class="form-select">
-                                        <option value="">Select Province</option>
+                                        <option value="">Pilih Propinsi</option>
                                         @foreach ($provinces as $province)
                                             <option value="{{ $province->code }}"
                                                 {{ old('student_province', $siswa->student_province) == $province->code ? 'selected' : '' }}>
@@ -267,7 +269,6 @@
                             </div>
 
                             <div class="col-md-6">
-                                {{ $siswa->student_status }}
                                 <label for="student_status" class="form-label">Status Siswa</label>
                                 <select name="student_status" id="student_status" class="form-select">
                                     <option value="A"
@@ -339,7 +340,7 @@
                     url: `/wilayah/regencies/${provinceCode}`,
                     method: 'GET',
                     success: function(data) {
-                        $regency.empty().append('<option value="">Select Regency</option>');
+                        $regency.empty().append('<option value="">Pilih Kabupaten</option>');
 
                         if (Array.isArray(data) && data.length > 0) {
                             $.each(data, function(index, item) {
@@ -368,7 +369,7 @@
                     url: `/wilayah/districts/${regencyCode}`,
                     method: 'GET',
                     success: function(data) {
-                        $district.empty().append('<option value="">Select District</option>');
+                        $district.empty().append('<option value="">Pilih Kecamatan</option>');
 
                         if (Array.isArray(data) && data.length > 0) {
                             $.each(data, function(index, item) {
@@ -397,7 +398,7 @@
                     url: `/wilayah/villages/${districtCode}`,
                     method: 'GET',
                     success: function(data) {
-                        $village.empty().append('<option value="">Select Village</option>');
+                        $village.empty().append('<option value="">Pilih Desa</option>');
 
                         if (Array.isArray(data) && data.length > 0) {
                             $.each(data, function(index, item) {

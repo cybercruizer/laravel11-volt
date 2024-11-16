@@ -98,11 +98,12 @@ class SiswaController extends Controller
      */
     public function update(Request $request, Siswa $siswa)
     {
+        $kategori = $siswa->student_category;
         $validator = Validator::make($request->all(), [
             'student_name' => 'required|string|max:255',
             'student_number' => 'required|string|max:50|unique:spa_students,student_number,' . $siswa->student_id . ',student_id',
             'class_id' => 'required',
-            'student_category' => 'nullable|string|max:50',
+        //    'student_category' => 'nullable|string|max:50',
             'student_pob' => 'nullable|string|max:100',
             'student_dob' => 'nullable|date',
             'student_gender' => 'required|in:L,P',
@@ -136,7 +137,7 @@ class SiswaController extends Controller
                 'student_name' => $request->student_name,
                 'student_number' => $request->student_number,
                 'class_id' => $request->class_id,
-                'student_category' => $request->student_category,
+                'student_category' => $kategori,
                 'student_pob' => $request->student_pob,
                 'student_dob' => $request->student_dob,
                 'student_gender' => $request->student_gender,
