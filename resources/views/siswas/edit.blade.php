@@ -20,7 +20,7 @@
                         @endif
                         <form action="{{ route('siswas.update', $siswa->student_id) }}" method="POST">
                             @csrf
-                            @method('PUT')
+                            @method('PATCH')
 
                             <div class="row mb-3">
                                 <div class="col-md-6">

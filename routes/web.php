@@ -47,7 +47,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::get('siswas', [\App\Http\Controllers\SiswaController::class, 'index'])->name('siswas.index');
     Route::get('siswas/{id}', [\App\Http\Controllers\SiswaController::class, 'show'])->name('siswas.show');
     Route::get('siswas/edit/{siswa}', [\App\Http\Controllers\SiswaController::class, 'edit'])->name('siswas.edit');
-    Route::put('siswas/{siswa}', [\App\Http\Controllers\SiswaController::class, 'update'])->name('siswas.update');
+    Route::patch('siswas/{siswa}', [\App\Http\Controllers\SiswaController::class, 'update'])->name('siswas.update');
     Route::post('siswas/ajax', [\App\Http\Controllers\SiswaController::class, 'getSiswas'])->name('siswas.getSiswas');
     //Route::get('siswas/datatable', [\App\Http\Controllers\SiswaController::class, 'datatable'])->name('siswas.datatable');
 
