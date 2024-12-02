@@ -10,7 +10,23 @@ use App\Http\Requests\JurusanRequest;
 
 class JurusanController extends Controller
 {
-    /**
+    function __construct()
+    {
+         $this->middleware('permission:jurusan-list|jurusan-create|jurusan-edit|jurusan-delete', ['only' => ['jurusanIndex']]);
+         $this->middleware('permission:jurusan-create', ['only' => ['Store']]);
+         $this->middleware('permission:jurusan-edit', ['only' => ['update']]);
+         $this->middleware('permission:jurusan-delete', ['only' => ['destroy']]);
+
+         $this->middleware(function($request, $next) {
+            if (session('success')) {
+                Alert::success(session('success'));
+            } 
+            if (session('error')) {
+                Alert::error(session('error'));
+            }
+            return $next($request);
+        });
+    }/**
      * Display a listing of the resource.
      */
     public function index()

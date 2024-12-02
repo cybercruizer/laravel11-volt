@@ -8,6 +8,7 @@ use App\Models\Siswa;
 use App\Models\Wilayah;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 use Illuminate\Support\Facades\Validator;
@@ -74,7 +75,7 @@ class SiswaController extends Controller
         if($search == ''){
            $siswas = Siswa::orderby('student_name','asc')->select('student_id','student_name')->limit(10)->get();
         }else{
-           $siswas = Siswa::orderby('student_name','asc')->select('student_id','student_name')->where('student_name', 'like', '%' .$search . '%')->limit(5)->get();
+           $siswas = Siswa::orderby('student_name','asc')->select('student_id','student_name')->where('student_name', 'like', '%' .$search . '%')->limit(10)->get();
         }
 
         $response = array();
@@ -106,25 +107,25 @@ class SiswaController extends Controller
 
         $kategori = $siswa->student_category;
         $validator = Validator::make($request->all(), [
-            'student_name' => 'required|string|max:255',
-            'student_number' => 'required|string|max:50|unique:spa_students,student_number,' . $siswa->student_id . ',student_id',
-            'class_id' => 'required',
-            'student_pob' => 'nullable|string|max:100',
-            'student_dob' => 'nullable|date',
-            'student_gender' => 'required|in:L,P',
-            'student_nik' => 'nullable|string|max:20',
-            'student_nkk' => 'nullable|string|max:20',
-            'student_school_name' => 'nullable|string|max:255',
-            'student_province' => 'nullable|string|max:100',
-            'student_city' => 'nullable|string|max:100',
-            'student_district' => 'nullable|string|max:100',
-            'student_village' => 'nullable|string|max:100',
-            'student_address' => 'nullable|string',
-            'student_phone' => 'nullable|string|max:20',
-            'ortu_phone' => 'nullable|string|max:20',
-            'student_year_in' => 'nullable|integer|min:2020|max:' . (date('Y') + 1),
-            'student_year_out' => 'nullable|integer|min:2023|max:' . (date('Y') + 10),
-            'student_status' => 'nullable|in:A,L,K',
+            'student_name' => 'sometimes|string|max:255',
+            'student_number' => 'sometimes|string|max:50|unique:spa_students,student_number,' . $siswa->student_id . ',student_id',
+            'class_id' => 'sometimes',
+            'student_pob' => 'sometimes|string|max:100',
+            'student_dob' => 'sometimes|date',
+            'student_gender' => 'sometimes|in:L,P',
+            'student_nik' => 'sometimes|string|max:20',
+            'student_nkk' => 'sometimes|string|max:20',
+            'student_school_name' => 'sometimes|string|max:255',
+            'student_province' => 'sometimes|string|max:100',
+            'student_city' => 'sometimes|string|max:100',
+            'student_district' => 'sometimes|string|max:100',
+            'student_village' => 'sometimes|string|max:100',
+            'student_address' => 'sometimes|string',
+            'student_phone' => 'sometimes|string|max:20',
+            'ortu_phone' => 'sometimes|string|max:20',
+            'student_year_in' => 'sometimes|integer|min:2020|max:' . (date('Y') + 1),
+            'student_year_out' => 'sometimes|integer|min:2023|max:' . (date('Y') + 10),
+            'student_status' => 'sometimes|in:A,L,K',
         ]);
 
         if ($validator->fails()) {

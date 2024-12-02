@@ -309,7 +309,16 @@
                         </a>
                     </li>
                 @endcan
-
+                @can('jurusan-list')
+                    <li class="nav-item {{ request()->routeIs('jurusan.index') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('jurusan.index') }}">
+                            <span class="sidebar-icon">
+                                <i class="fa fa-list"></i>
+                            </span>
+                            <span class="sidebar-text">Jurusan</span>
+                        </a>
+                    </li>
+                @endcan    
                 @can('walikelas-list')
                     <li class="nav-item {{ request()->routeIs('walikelas.index') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('walikelas.index') }}">
