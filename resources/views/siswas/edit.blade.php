@@ -173,7 +173,8 @@
                                     <div class="invalid-feedback">{{ $message }}</div>
                                 @enderror
                             </div>
-
+                            <h5 class="mt-3" style="text-align: center">~ Alamat Rumah ~</h5>
+                            <hr>
                             <div class="row mb-3">
                                 <div class="col-md-6">
                                     <label for="province" class="form-label">Propinsi</label>
@@ -261,7 +262,7 @@
                                     <input type="number"
                                         class="form-control @error('student_year_out') is-invalid @enderror"
                                         id="student_year_out" name="student_year_out"
-                                        value="{{ old('student_year_out', $siswa->student_year_out) }}">
+                                        value="{{ old('student_year_out', $siswa->student_year_out) }}" disabled>
                                     @error('student_year_out')
                                         <div class="invalid-feedback">{{ $message }}</div>
                                     @enderror

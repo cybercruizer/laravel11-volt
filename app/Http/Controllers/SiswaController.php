@@ -17,10 +17,11 @@ class SiswaController extends Controller
 {
     function __construct()
     {
-         $this->middleware('permission:siswa-list|siswa-create|siswa-edit|siswa-delete', ['only' => ['index','show','getSiswas']]);
+         $this->middleware('permission:siswa-list|siswa-create|siswa-edit|siswa-delete|siswa-keuangan', ['only' => ['index','show','getSiswas']]);
          $this->middleware('permission:siswa-create', ['only' => ['create','store']]);
          $this->middleware('permission:siswa-edit', ['only' => ['edit','update']]);
          $this->middleware('permission:siswa-delete', ['only' => ['destroy']]);
+         $this->middleware('permission:siswa-keuangan', ['only' => ['keuangan']]);
     }
     public function index(Request $request) {
         if ($request->ajax()) {
@@ -31,11 +32,7 @@ class SiswaController extends Controller
                     ])->get();
             } elseif (Auth::user()->hasRole('WaliKelas')){
                 $kelas=Auth::user()->kelas->class_id;
-                $siswas = Siswa::where([
-                    ['class_id', $kelas],
-                    ['is_deleted', 0],
-                    ['student_status','A']
-                    ])->get();
+                $siswas = Siswa::aktif()->where('class_id', $kelas)->get();
             } elseif(Auth::user()->hasRole('Kapro')) {
                 $kelas = Auth::user()->jurusan->kelas;
                 $siswas = Siswa::aktif()->whereIn('class_id',$kelas->select('class_id'))->get();
@@ -50,13 +47,41 @@ class SiswaController extends Controller
                 })
                 ->make(true);
         }
-        return view('siswas.index');
+        $kelas=Kelas::get();
+        return view('siswas.index',[
+            'title' => 'Data Siswa',
+            'kelas' => $kelas,
+        ]);
     }
     public function show($id)
     {
         $siswa = Siswa::find($id);
         $title = 'Detail Siswa';
         return view('siswas.show',compact('siswa','title'));
+    }
+    public function store(Request $request) {
+        $validator= Validator::make($request->all(), [
+            'student_number' => 'required|unique:spa_students,student_number',
+            'student_name' => 'required',
+            'class_id' => 'required',
+            'student_pob' => 'required',
+            'student_dob' => 'required',
+            'student_gender' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()
+                ->route('siswas.index')
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $siswa = Siswa::create($request->all());
+        //redirect if $siswa success
+        if($siswa){
+            alert()->success('Sukses', 'Data siswa '.$request->student_name.' berhasil disimpan.');
+            return redirect()->route('siswas.index');
+        }
     }
 
     protected function getActionColumn($siswa)
