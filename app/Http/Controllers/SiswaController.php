@@ -100,38 +100,38 @@ class SiswaController extends Controller
     public function update(Request $request, Siswa $siswa)
     {
         // Add logging to track the incoming request
-        Log::info('Update request received for student:', [
-            'student_id' => $siswa->student_id,
-            'request_data' => $request->all()
-        ]);
+        //Log::info('Update request received for student:', [
+        //    'student_id' => $siswa->student_id,
+        //    'request_data' => $request->all()
+        //]);
 
         $kategori = $siswa->student_category;
         $validator = Validator::make($request->all(), [
-            'student_name' => 'sometimes|string|max:255',
-            'student_number' => 'sometimes|string|max:50|unique:spa_students,student_number,' . $siswa->student_id . ',student_id',
-            'class_id' => 'sometimes',
-            'student_pob' => 'sometimes|string|max:100',
-            'student_dob' => 'sometimes|date',
-            'student_gender' => 'sometimes|in:L,P',
-            'student_nik' => 'sometimes|string|max:20',
-            'student_nkk' => 'sometimes|string|max:20',
-            'student_school_name' => 'sometimes|string|max:255',
-            'student_province' => 'sometimes|string|max:100',
-            'student_city' => 'sometimes|string|max:100',
-            'student_district' => 'sometimes|string|max:100',
-            'student_village' => 'sometimes|string|max:100',
-            'student_address' => 'sometimes|string',
-            'student_phone' => 'sometimes|string|max:20',
-            'ortu_phone' => 'sometimes|string|max:20',
-            'student_year_in' => 'sometimes|integer|min:2020|max:' . (date('Y') + 1),
-            'student_year_out' => 'sometimes|integer|min:2023|max:' . (date('Y') + 10),
-            'student_status' => 'sometimes|in:A,L,K',
+            'student_name' => 'sometimes|nullable|string|max:255',
+            'student_number' => 'sometimes|nullable|string|max:50|unique:spa_students,student_number,' . $siswa->student_id . ',student_id',
+            'class_id' => 'required|nullable',
+            'student_pob' => 'sometimes|nullable|string|max:100',
+            'student_dob' => 'sometimes|nullable|date',
+            'student_gender' => 'required|in:L,P',
+            'student_nik' => 'nullable|string|max:20',
+            'student_nkk' => 'nullable|string|max:20',
+            'student_school_name' => 'nullable|string|max:255',
+            'student_province' => 'sometimes|nullable|string|max:100',
+            'student_city' => 'sometimes|nullable|string|max:100',
+            'student_district' => 'sometimes|nullable|string|max:100',
+            'student_village' => 'sometimes|nullable|string|max:100',
+            'student_address' => 'sometimes|nullable|string',
+            'student_phone' => 'sometimes|nullable|string|max:20',
+            'ortu_phone' => 'sometimes|nullable|string|max:20',
+            'student_year_in' => 'sometimes|nullable|integer|min:2020|max:' . (date('Y') + 1),
+            'student_year_out' => 'sometimes|nullable|integer|min:2023|max:' . (date('Y') + 10),
+            'student_status' => 'nullable|in:A,L,K',
         ]);
 
         if ($validator->fails()) {
-            Log::error('Validation failed:', [
-                'errors' => $validator->errors()->toArray()
-            ]);
+            //Log::error('Validation failed:', [
+            //    'errors' => $validator->errors()->toArray()
+            //]);
             
             return redirect()
                 ->route('siswas.edit', $siswa->student_id)
@@ -143,9 +143,9 @@ class SiswaController extends Controller
             DB::beginTransaction();
 
             // Log the current state of the student
-            Log::info('Current student state:', [
-                'before_update' => $siswa->toArray()
-            ]);
+            //Log::info('Current student state:', [
+            //    'before_update' => $siswa->toArray()
+            //]);
 
             $updateData = [
                 'student_name' => $request->student_name,
@@ -171,18 +171,18 @@ class SiswaController extends Controller
             ];
 
             // Log the update data
-            Log::info('Attempting to update with data:', [
-                'update_data' => $updateData
-            ]);
+            //Log::info('Attempting to update with data:', [
+            //    'update_data' => $updateData
+            //]);
 
             // Try to update and get the result
             $updated = $siswa->update($updateData);
 
             // Log the update result
-            Log::info('Update result:', [
-                'success' => $updated,
-                'after_update' => $siswa->fresh()->toArray()
-            ]);
+            //Log::info('Update result:', [
+            //    'success' => $updated,
+            //    'after_update' => $siswa->fresh()->toArray()
+            //]);
 
             if (!$updated) {
                 throw new \Exception('Failed to update student record');
@@ -197,10 +197,10 @@ class SiswaController extends Controller
 
         } catch (\Exception $e) {
             DB::rollBack();
-            Log::error('Exception during update:', [
-                'message' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
+            //Log::error('Exception during update:', [
+            //    'message' => $e->getMessage(),
+            //    'trace' => $e->getTraceAsString()
+            //]);
             
             Alert::error('Siswa gagal diupdate', 'Failed');
             return redirect()
