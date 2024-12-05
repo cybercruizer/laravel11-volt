@@ -21,6 +21,9 @@ class Tahunajaran extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
+    public function scopeAktif($query) {
+        return $query->where([['is_active', 1],['is_deleted', 0]]);
+    }
     public function kelases(): HasMany
     {
         return $this->hasMany(Kelas::class, 'year_id', 'year_id');
@@ -32,7 +35,7 @@ class Tahunajaran extends Model
      */
     public function tagihans(): HasMany
     {
-        return $this->hasMany(Tagihan::class, 'ta_id');
+        return $this->hasMany(Tagihan::class, 'tp','year_code');
     }
     /**
      * Get all of the pembayarans for the Tahunajaran

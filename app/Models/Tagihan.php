@@ -4,35 +4,30 @@ namespace App\Models;
 
 use App\Models\Siswa;
 use App\Models\Tahunajaran;
+use App\Models\Pembayaran2425;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Tagihan extends Model
 {
     use HasFactory;
+    protected $connection='keuangan';
+    protected $table = 'tb_nama_bayar';
+    protected $primaryKey= 'id';
+    public $incrementing=false;
+    protected $keyType = 'string';
     protected $guarded = [];
 
-    public function user()
-    { 
-        return $this->belongsTo(User::class);
-    }
     /**
-     * Get the tahunajaran that owns the Tagihan
+     * Get all of the pembayarans for the Tagihan
      *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    /**
-     * Get the siswa that owns the Tagihan
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
-     */
-    public function siswa(): BelongsTo
+    public function pembayarans(): HasMany
     {
-        return $this->belongsTo(Siswa::class, 'siswa_id');
+        return $this->hasMany(Pembayaran2425::class, 'pem_id', 'id');
     }
-    public function tahunajaran(): BelongsTo
-    {
-        return $this->belongsTo(Tahunajaran::class,'ta_id');
-    }
+    
 }

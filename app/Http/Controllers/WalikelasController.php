@@ -40,59 +40,60 @@ class WalikelasController extends Controller
     }
 
     public function update(Request $request, $id)
-{
-    // Validate the request
-    $request->validate([
-        'user_id' => 'required|exists:users,id',
-    ], [
-        'user_id.required' => 'Wali kelas harus dipilih',
-        'user_id.exists' => 'Guru tidak valid',
-    ]);
+    {
+        // Validate the request
+        $request->validate([
+            'user_id' => 'required|exists:users,id',
+        ], [
+            'user_id.required' => 'Wali kelas harus dipilih',
+            'user_id.exists' => 'Guru tidak valid',
+        ]);
 
-    try {
-        // Find the kelas record
-        $kelas = Kelas::where('class_id', $id)->firstOrFail();
+        try {
+            // Find the kelas record
+            $kelas = Kelas::where('class_id', $id)->firstOrFail();
+            //User::find($kelas->user_id)->assignRole('Guru');
+            User::find($request->user_id)->assignRole('WaliKelas');
+            // Check if teacher is already a wali kelas for another class
+            $existingTeacher = Kelas::where('user_id', $request->user_id)
+                ->where('class_id', '!=', $id)
+                ->where('is_active', 1)
+                ->where('is_deleted', 0)
+                ->first();
 
-        // Check if teacher is already a wali kelas for another class
-        $existingTeacher = Kelas::where('user_id', $request->user_id)
-            ->where('class_id', '!=', $id)
-            ->where('is_active', 1)
-            ->where('is_deleted', 0)
-            ->first();
+            if ($existingTeacher) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Guru ini sudah menjadi wali kelas untuk kelas lain'
+                ], 422);
+            }
+            $oldTeacherName = User::find($kelas->user_id)?->name ?? 'Tidak ada';
+            $newTeacherName = User::find($request->user_id)->name;
 
-        if ($existingTeacher) {
+            // Update the kelas
+            $kelas->update([
+                'user_id' => $request->user_id
+            ]);
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Wali kelas berhasil diperbarui',
+                'details' => [
+                    'className' => $kelas->class_name,
+                    'oldTeacher' => $oldTeacherName,
+                    'newTeacher' => $newTeacherName
+                ]
+            ]);
+
+        } catch (\Exception $e) {
+            \Log::error('Error updating wali kelas: ' . $e->getMessage());
+            
             return response()->json([
                 'status' => 'error',
-                'message' => 'Guru ini sudah menjadi wali kelas untuk kelas lain'
-            ], 422);
+                'message' => 'Terjadi kesalahan saat memperbarui wali kelas'
+            ], 500);
         }
-        $oldTeacherName = User::find($kelas->user_id)?->name ?? 'Tidak ada';
-        $newTeacherName = User::find($request->user_id)->name;
-
-        // Update the kelas
-        $kelas->update([
-            'user_id' => $request->user_id
-        ]);
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Wali kelas berhasil diperbarui',
-            'details' => [
-                'className' => $kelas->class_name,
-                'oldTeacher' => $oldTeacherName,
-                'newTeacher' => $newTeacherName
-            ]
-        ]);
-
-    } catch (\Exception $e) {
-        \Log::error('Error updating wali kelas: ' . $e->getMessage());
-        
-        return response()->json([
-            'status' => 'error',
-            'message' => 'Terjadi kesalahan saat memperbarui wali kelas'
-        ], 500);
     }
-}
 
     /**
      * Show the form for creating a new resource.

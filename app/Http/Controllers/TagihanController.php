@@ -21,8 +21,10 @@ class TagihanController extends Controller
      */
     public function index()
     {
-        $jenis= Tagihan::get();
-        $ta = Tahunajaran::select('year_id','year_name')->get();
+        $ta = Tahunajaran::aktif()->select('year_id','year_code')->first();
+        //dd($ta);
+        $jenis= Tagihan::select('no','tp','nama','kode','bulanan','kelas')->orderBy('kelas')->get();
+        
         return view('tagihan.index',[
             'jenis'=>$jenis,
             'ta' => $ta,

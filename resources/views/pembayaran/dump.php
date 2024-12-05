@@ -6,21 +6,6 @@
             <div class="col-6">
                 <h2 class="mb-4 h5 ml-3">{{$title}}</h2>
             </div>
-            <div class="col-6 text-end">
-                <form class="d-flex">
-                    <div class="col">
-                        <div class="mb-3">
-                            <label for="" class="form-label">Tahun ajaran</label>
-                            <select name="ta" id="filter" class="form-select"  onchange="filterTable()">
-                                <option value="all">-Pilih Tahun Ajaran-</option>
-                                <option value="2023/2024">2023/2024</option>
-                                <option value="2024/2025">2024/2025</option>
-                            </select>
-                        </div>
-                    </div>
-                </form>
-                                
-            </div>
         </div>
     </div>
     <div class="card card-body border-0 shadow table-wrapper table-responsive">
@@ -44,7 +29,7 @@
             </div>
         @endif
 
-        <table class="table table-bordered table-striped table-responsive mb-0" id="tagihan">
+        <table class="table table-bordered table-striped table-responsive mb-0">
             <thead>
                 <th class="col-1">No</th>
                 <th class="col-3">TP</th>
@@ -146,24 +131,5 @@
             document.getElementById("modalId"),
             options,
         );
-    </script>
-    <script>
-        function filterTable() {
-            var dropdown, table, rows, cells, genre, filter;
-            dropdown = document.getElementById("filter");
-            table = document.getElementById("tagihan");
-            rows = table.getElementsByTagName("tr");
-            filter = dropdown.value;
-
-            for (var rowIndex = 1; rowIndex < rows.length; rowIndex++) {
-                cells = rows[rowIndex].getElementsByTagName("td");
-                ta = cells[1] || null;
-                if (filter === "all" || !ta || ta.textContent === filter) {
-                    rows[rowIndex].style.display = "";
-                } else {
-                    rows[rowIndex].style.display = "none";
-                }
-            }
-        }
     </script>
 @endsection

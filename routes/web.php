@@ -79,7 +79,9 @@ Route::group(['middleware' => ['auth']], function() {
     });
     Route::resource('jurusan', JurusanController::class);
     Route::get('administrasi', [AdministrasiController::class, 'index'])->name('administrasi.index');
+
     Route::resource('tagihan', \App\Http\Controllers\TagihanController::class);
+    Route::get('spp', [\App\Http\Controllers\PembayaranController::class,'spp'])->name('pembayaran.spp');
 
     Route::get('/wilayah/provinces', [WilayahController::class, 'getProvinces']);
     Route::get('/wilayah/regencies/{provinceCode}', [WilayahController::class, 'getRegencies']);

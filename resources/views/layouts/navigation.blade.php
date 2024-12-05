@@ -200,15 +200,23 @@
                             <span class="sidebar-text">Jenis Tagihan</span>
                         </a>
                     </li>
-                @can('tagihan-create')
-                    <li class="nav-item {{ request()->routeIs('pelanggaran.index') ? 'active' : '' }}">
+                @can('pembayaran-list')
+                    <li class="nav-item {{ request()->routeIs('pembayaran.spp') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('pembayaran.spp') }}">
+                            <span class="sidebar-icon">
+                                <i class="fa fa-balance-scale"></i>
+                            </span>
+                            <span class="sidebar-text">Rekap SPP</span>
+                        </a>
+                    </li>
+                    {{--<li class="nav-item {{ request()->routeIs('pelanggaran.index') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('pelanggaran.index') }}">
                             <span class="sidebar-icon">
                                 <i class="fa fa-balance-scale"></i>
                             </span>
-                            <span class="sidebar-text">Bulan ini</span>
+                            <span class="sidebar-text">Rekap Pembayaran lain</span>
                         </a>
-                    </li>
+                    </li>--}}
                 @endcan
             </ul>
         </div>
