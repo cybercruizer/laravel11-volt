@@ -55,7 +55,7 @@ class PembayaranController extends Controller
             $paralel = $sep[1];
         }
         
-        $kode = $ta.$jenis.$jenjang;
+//        $kode = $ta.$jenis.$jenjang;
         $pembayaran = Pembayaran2425::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah')
             ->whereIn('nis',$nis)
             ->where([
