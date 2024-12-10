@@ -13,7 +13,7 @@ class PembayaranController extends Controller
 {
     function __construct()
     {
-         $this->middleware('permission:pembayaran-list|pembayaran-create|pembayaran-edit|pembayaran-delete', ['only' => ['spp']]);
+         $this->middleware('permission:pembayaran-list|pembayaran-create|pembayaran-edit|pembayaran-delete', ['only' => ['spp','lain']]);
          $this->middleware('permission:pembayaran-create', ['only' => ['create','store']]);
          $this->middleware('permission:pembayaran-edit', ['only' => ['edit','update']]);
          $this->middleware('permission:pembayaran-delete', ['only' => ['destroy']]);
@@ -34,28 +34,10 @@ class PembayaranController extends Controller
     public function spp()
     {
         $wali = auth()->user()->kelas;
-        $siswa=auth()->user()->kelas->siswas;
         $nis=Siswa::aktif()->select('student_number')->where('class_id',$wali->class_id)->pluck('student_number');
         //dd($nis);
-        $sep = explode("-",$wali->class_code);
-        $panjangarray= count($sep);
-        $ta=Tahunajaran::aktif()->first()->year_code;
         $jenis = "A";
 
-        //konvert ke desimal
-        switch ($sep[0]) {
-            case 'X' : $jenjang=10; break;
-            case 'XI' : $jenjang=11; break;
-            case 'XII' : $jenjang=12; break;
-        };
-        
-        if ($panjangarray>2) {
-            $paralel = $sep[1]." ".$sep[2];
-        } else {
-            $paralel = $sep[1];
-        }
-        
-//        $kode = $ta.$jenis.$jenjang;
         $pembayaran = Pembayaran2425::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah')
             ->whereIn('nis',$nis)
             ->where([
@@ -72,6 +54,55 @@ class PembayaranController extends Controller
             'title' => 'Daftar Pembayaran SPP kelas '.$wali->class_code,
             'pembayaran'=>$pembayaran
         ]);
+    }
+    public function lain ()
+    {
+        $wali = auth()->user()->kelas;
+        $nis=Siswa::aktif()->select('student_number','student_name')->where('class_id',$wali->class_id)->get();
+        //dd($nis);
+        $kelas=explode('-',$wali->class_code);
+        switch($kelas[0]) {
+            case 'X' : 
+                $kel = 10; 
+                break;
+            case 'XI' : 
+                $kel = 11; 
+                break;
+            case 'XII' : 
+                $kel = 12; 
+                break;
+        }
+        //dd($kel);
+        $data=[];
+        $tagihan=Tagihan::where([['kelas',$kel],['tp','2024/2025']])->whereNot('kode','A')->get();
+        //dd($tagihan);
+        $data = [];
+        foreach($nis->pluck('student_number') as $n) {
+            foreach($tagihan->pluck('kode') as $tag) {
+                $data[$n][$tag] = Pembayaran2425::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah')
+                ->where([
+                    ['jenis', $tag],
+                    ['nis', $n]
+                ])
+                ->sum('jumlah');
+            }
+        }
+        //dd($data);
+/*        $data['TES'] = Pembayaran2425::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah')
+            ->whereIn('nis',$nis)
+            ->where('jenis',"B")
+            ->get()pluck('student_number'
+            ->groupBy(function($data){
+                return $data->nis;
+            }
+        );
+        //dd($pembayaran);
+        return view('pembayaran.lain',[
+            'title' => 'Daftar Pembayaran SPP kelas '.$wali->class_code,
+            'pembayaran'=>$data
+        ]); */
+        $title= "Rekap pembayaran kelas ".$wali->class_code;
+        return view('pembayaran.lain', compact('title','nis', 'tagihan', 'data'));
     }
 
     /**

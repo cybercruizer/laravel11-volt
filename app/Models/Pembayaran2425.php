@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Siswa;
 use App\Models\Tagihan;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -43,6 +44,12 @@ class Pembayaran2425 extends Model
     public function tahunajaran(): BelongsTo
     {
         return $this->belongsTo(Tahunajaran::class, 'ta_id');
+    }
+    public function getTotalBayar($kode, $nis) {
+        return $this->where([
+            ['jenis',$kode],
+            ['nis',$nis]
+            ])->sum('jumlah');
     }
     /**
      * Get the siswa that owns the Pembayaran

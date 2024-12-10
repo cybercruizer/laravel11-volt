@@ -56,7 +56,7 @@
                     <td>{{ $val[0]->nama }}</td>
                     @forelse($val as $bayar)
                         @if($loop->iteration==$bayar->tahap)
-                            <td><small>{{ $bayar->jumlah }}</small></td>
+                            <td><small>{{ $bayar->jumlah/1000 }}</small></td>
                         @endif
                     @empty
                         <td colspan="12">Kosong</td>
