@@ -84,8 +84,9 @@ class PembayaranController extends Controller
         $wali = auth()->user()->kelas;
         $nis=Siswa::aktif()->select('student_number','student_name')->where('class_id',$wali->class_id)->get();
         //dd($nis);
+        //dd($wali);
         $kelas=explode('-',$wali->class_code);
-        switch($kelas[0]) {
+        switch($kelas[1]) {
             case 'X' : 
                 $kel = 10; 
                 break;
@@ -113,7 +114,7 @@ class PembayaranController extends Controller
             }
         }
         //dd($data);
-        $title= "Rekap pembayaran kelas ".$wali->class_code;
+        $title= "Rekap pembayaran kelas ".$wali->class_name;
         return view('pembayaran.lain', compact('title','nis', 'tagihan', 'data'));
     }
     public function sync() {

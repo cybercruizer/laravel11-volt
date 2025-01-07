@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Tagihan extends Model
 {
     use HasFactory;
-    protected $connection='keuangan';
+    protected $connection='keuangan_db';
     protected $table = 'tb_nama_bayar';
     protected $primaryKey= 'id';
     public $incrementing=false;
