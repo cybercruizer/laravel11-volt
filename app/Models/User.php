@@ -11,6 +11,7 @@ use App\Models\Pembayaran;
 use Spatie\Permission\Traits\HasRoles;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -103,15 +104,7 @@ class User extends Authenticatable
     {
         return $this->hasMany(Tagihan::class);
     }
-    /**
-     * Get all of the pembayaran for the User
-     *
-     * @return \Illuminate\Database\Eloquent\Relations\HasMany
-     */
-    public function pembayarans(): HasMany
-    {
-        return $this->hasMany(Pembayaran::class);
-    }
+
     /**
      * Get the kelas associated with the User
      *

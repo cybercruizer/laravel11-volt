@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kelas;
 use App\Models\Siswa;
 use App\Models\Tagihan;
 use App\Models\Tahunajaran;
 use Illuminate\Http\Request;
 use App\Models\Pembayaran2425;
+use App\Models\Pembayaran2425Ol;
+use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
 
 class PembayaranController extends Controller
@@ -31,29 +34,50 @@ class PembayaranController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function spp()
+    public function spp(Request $request)
     {
-        $wali = auth()->user()->kelas;
-        $nis=Siswa::aktif()->select('student_number')->where('class_id',$wali->class_id)->pluck('student_number');
-        //dd($nis);
-        $jenis = "A";
+        if(Auth::user()->hasRole('WaliKelas'))
+        {
+            $wali = Auth::user()->kelas;
+            $nis=Siswa::aktif()->select('student_number')->where('class_id',$wali->class_id)->pluck('student_number');
+            //dd($nis);
 
-        $pembayaran = Pembayaran2425::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah')
-            ->whereIn('nis',$nis)
-            ->where([
-            //    ['jenjang',$jenjang],
-            //    ['paralel',$paralel],
-                ['jenis',$jenis]
-            ])
-            ->get()
-            ->groupBy(function($data){
-                return $data->nis;
-        });
-        //dd($pembayaran);
-        return view('pembayaran.spp',[
-            'title' => 'Daftar Pembayaran SPP kelas '.$wali->class_code,
-            'pembayaran'=>$pembayaran
-        ]);
+            $pembayaran = Pembayaran2425::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah','kategori')
+                ->whereIn('nis',$nis)
+                ->where('jenis','A')
+                ->get()
+                ->sortBy('nis')
+                ->groupBy(function($data){
+                    return $data->nis;
+                }
+            );
+            //dd($pembayaran);
+            return view('pembayaran.spp',[
+                'title' => 'Daftar Pembayaran SPP kelas '.$wali->class_code,
+                'pembayaran'=>$pembayaran,
+                'kelas' => $wali
+            ]);
+        }
+        if(Auth::user()->hasRole(['Admin','Keuangan']))
+        {
+            $kelas = Kelas::aktif()->select('class_id','class_code','class_name')->get();
+            $r_kelas = Kelas::find($request->class_id)->class_name ??'-';
+            $nis = Siswa::aktif()->select('student_number')->where('class_id',$request->class_id)->pluck('student_number');
+            $pembayaran=Pembayaran2425::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah','kategori')
+                ->whereIn('nis',$nis)
+                ->where('jenis','A')
+                ->get()
+                ->sortBy('nis')
+                ->groupBy(function($data){
+                    return $data->nis;
+                }
+            );
+            return view('pembayaran.spp',[
+                'title' => 'Daftar Pembayaran SPP kelas '.$r_kelas,
+                'pembayaran'=>$pembayaran,
+                'kelas' => $kelas,
+            ]);
+        }
     }
     public function lain ()
     {
@@ -79,30 +103,29 @@ class PembayaranController extends Controller
         $data = [];
         foreach($nis->pluck('student_number') as $n) {
             foreach($tagihan->pluck('kode') as $tag) {
-                $data[$n][$tag] = Pembayaran2425::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah')
+               $data[$n][$tag] = Pembayaran2425::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah')
                 ->where([
                     ['jenis', $tag],
                     ['nis', $n]
                 ])
-                ->sum('jumlah');
+                ->sum('jumlah'); 
+                
             }
         }
         //dd($data);
-/*        $data['TES'] = Pembayaran2425::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah')
-            ->whereIn('nis',$nis)
-            ->where('jenis',"B")
-            ->get()pluck('student_number'
-            ->groupBy(function($data){
-                return $data->nis;
-            }
-        );
-        //dd($pembayaran);
-        return view('pembayaran.lain',[
-            'title' => 'Daftar Pembayaran SPP kelas '.$wali->class_code,
-            'pembayaran'=>$data
-        ]); */
         $title= "Rekap pembayaran kelas ".$wali->class_code;
         return view('pembayaran.lain', compact('title','nis', 'tagihan', 'data'));
+    }
+    public function sync() {
+        $pembayaranOl=Pembayaran2425Ol::all();
+        foreach ($pembayaranOl as $pem) {
+            Pembayaran2425::updateOrCreate(
+                ['no'=>$pem->no],
+                $pem->toArray()
+            );
+        }
+        alert()->success('Sukses', 'Pembayaran berhasil tersinkronisasi');
+        return redirect()->back();
     }
 
     /**

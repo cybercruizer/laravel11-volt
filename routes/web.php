@@ -83,8 +83,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('tagihan', \App\Http\Controllers\TagihanController::class);
 
     Route::controller(\App\Http\Controllers\PembayaranController::class)->group(function(){
-        Route::get('pembayaran/spp', 'spp')->name('pembayaran.spp');
+        Route::any('pembayaran/spp', 'spp')->name('pembayaran.spp');
         Route::get('pembayaran/lain','lain')->name('pembayaran.lain'); 
+        ROute::get('pembayaran/sync','sync')->name('pembayaran.sync');
     });
 
     Route::get('/wilayah/provinces', [WilayahController::class, 'getProvinces']);

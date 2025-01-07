@@ -226,6 +226,16 @@
                         </a>
                     </li>--}}
                 @endcan
+                @can('pembayaran-edit')
+                <li class="nav-item {{ request()->routeIs('pembayaran.sync') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('pembayaran.sync') }}">
+                        <span class="sidebar-icon">
+                            <i class="fa fa-balance-scale"></i>
+                        </span>
+                        <span class="sidebar-text">Sinkronisasi</span>
+                    </a>
+                </li>
+                @endcan
             </ul>
         </div>
     </li>

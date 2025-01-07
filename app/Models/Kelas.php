@@ -23,7 +23,7 @@ class Kelas extends Model
     //    parent::__construct($attributes);
     //}
     public function scopeAktif($query) {
-        return $query->where([['is_active', 1],['is_deleted', 0]]);
+        return $query->where([['is_active', 1],['is_deleted', 0]])->where('year_id', Tahunajaran::where('is_active', 1)->first()->year_id);
     }
     /**
      * Get all of the siswa for the Kelas

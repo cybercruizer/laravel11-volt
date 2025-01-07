@@ -10,13 +10,12 @@ use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Pembayaran2425 extends Model
+class Pembayaran2425Ol extends Model
 {
     use HasFactory;
-    protected $connection = 'keuangan_db';
+    protected $connection='keuangan';
     protected $table='db_transaksi2425';
     protected $guarded = [];
-    protected $appends = ['pem_id'];
     public $timestamps=false;
 
     public function getkelasAttribute() {
@@ -45,12 +44,6 @@ class Pembayaran2425 extends Model
     public function tahunajaran(): BelongsTo
     {
         return $this->belongsTo(Tahunajaran::class, 'ta_id');
-    }
-    public function getTotalBayar($kode, $nis) {
-        return $this->where([
-            ['jenis',$kode],
-            ['nis',$nis]
-            ])->sum('jumlah');
     }
     /**
      * Get the siswa that owns the Pembayaran

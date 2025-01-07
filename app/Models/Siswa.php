@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Tagihan;
 use App\Models\Presensi;
 use App\Models\Pelanggaran;
+use App\Models\Pembayaran2425;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -81,5 +82,9 @@ class Siswa extends Model
     public function tagihans(): HasMany
     {
         return $this->hasMany(Tagihan::class, 'siswa_id');
+    }
+    public function pembayarans () : HasMany
+    {
+        return $this->hasMany(Pembayaran2425::class,'nis','student_number');
     }
 }
