@@ -66,7 +66,7 @@ class PresensiController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request) //gak dipake
     {
         $request->validate([
             'student_id' => 'required',
@@ -218,16 +218,20 @@ class PresensiController extends Controller
             //dd($students);
             $presensiData = [];
 
+            $presensiRecords = Presensi::whereIn('student_id', $students->pluck('student_id'))
+                ->whereMonth('tanggal', $bulan)
+                ->whereYear('tanggal', $tahun)
+                ->get()
+                ->groupBy('student_id');
+
             foreach ($students as $student) {
                 $presensiData[$student->student_id] = [];
                 foreach (range(1, $jumlahHari) as $day) {
-                    $date = Carbon::create($tahun, $bulan, $day);
-    /*                $presensiStatus = Presensi::with('siswa')->where('student_id', $student->student_id)
-                        ->where('tanggal', $date->format('Y-m-d'))
-                        ->value('keterangan');
-    */
-                    $presensiStatus = $student->presensis()->where('tanggal', $date->format('Y-m-d'))->value('keterangan');
-                    $presensiData[$student->student_id][$day] = $presensiStatus ?? '-';
+                    $date = Carbon::create($tahun, $bulan, $day)->format('Y-m-d');
+                    $presensiStatus = $presensiRecords->get($student->student_id)
+                        ? optional($presensiRecords->get($student->student_id)->firstWhere('tanggal', $date))->keterangan ?? '-' 
+                        : '-';
+                    $presensiData[$student->student_id][$day] = $presensiStatus;
                 }
             }
             //dd($presensiData);
@@ -349,6 +353,51 @@ class PresensiController extends Controller
             'kelas' => $kelas,
             'dari' => $dari->format('d-m-Y'),
             'sampai' => $sampai->format('d-m-Y'),
+        ]);
+    }
+    public function apiPresensi($nis, $jam) {
+        $siswa = Siswa::where('student_number', $nis)->first();
+        if(!$siswa) {
+            return response()->json([
+                'status' => 'error',
+                'nama' => '-',
+                'keterangan' => 'NIS tidak ditemukan',
+                'nis' => '-',
+            ]);
+        };
+        $kelas = $siswa->kelas;
+        $tanggal = Carbon::now()->format('Y-m-d');
+        $presensi = Presensi::where([
+            ['student_id', $siswa->student_id],
+            ['kelas_id', $kelas->class_id],
+            ['tanggal', $tanggal],
+        ])->first();
+        $keterangan='';
+        if ($jam <= '07:00:00') {
+            $keterangan = 'H';
+            $keteranganJ= 'Tepat Waktu';
+        } else {
+            $keterangan = 'T';
+            $keteranganJ = 'Terlambat';
+        }
+        if ($presensi) {
+            $presensi->jam_masuk = $jam;
+            $presensi->save();
+        } else {
+            Presensi::create([
+                'student_id' => $siswa->student_id,
+                'kelas_id' => $kelas->class_id,
+                'keterangan' => $keterangan,
+                'tanggal' => $tanggal,
+                'jam_masuk' => $jam,
+                'user_id' => Auth::user()->id,
+            ]);
+        }
+        return response()->json([
+            'status' => 'sukses',
+            'nama' => $siswa->student_name,
+            'keterangan' => $keterangan,
+            'nis' => $siswa->student_number,
         ]);
     }
 }

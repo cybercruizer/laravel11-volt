@@ -90,9 +90,10 @@ class PelanggaranController extends Controller
         Alert::toast('Jenis Pelanggaran Berhasil dihapus', 'success');
         return back();
     }
-    public function pelanggaranIndex()
+    public function pelanggaranIndex(Request $request)
     {
-        $month = Carbon::now()->format('m');
+        $month = $request->bulan;
+        $year = $request->tahun;
         if(Auth::user()->hasRole('WaliKelas')) {
             $siswa= Siswa::with('pelanggarans')->where([
                 ['class_id',Auth::user()->kelas->class_id],
@@ -102,11 +103,33 @@ class PelanggaranController extends Controller
             $title='Laporan Pelanggaran Siswa Kelas '.Auth::user()->kelas->class_name;
             return view('pelanggaran.index-perkelas',compact('siswa','month','title'));
         } else {
-            $pelanggaran=Pelanggaran::with('jenisPelanggaran','siswa')->orderBy('tgl_pelanggaran')->get()->groupBy(function($data) {
-                return Carbon::parse($data->tgl_pelanggaran)->format('Y-m-d');
-            });
-            $title='Laporan Pelanggaran Siswa' ;
-            confirmDelete($this->satitle, $this->satext);
+            if($request->has('bulan')) {
+                $pelanggaran=Pelanggaran::with('jenisPelanggaran','siswa')
+                    ->whereMonth('tgl_pelanggaran',$month)
+                    ->whereYear('tgl_pelanggaran',$year)
+                    ->orderBy('tgl_pelanggaran')
+                    ->get()
+                    ->groupBy(function($data) {
+                        return Carbon::parse($data->tgl_pelanggaran)->format('Y-m-d');
+                    });
+                $title='Laporan Pelanggaran Siswa Bulan '.$month.'/'.$year ;
+                confirmDelete($this->satitle, $this->satext);
+                //dd($month);
+            } else {
+                $month = Carbon::now()->format('m');
+                $year = Carbon::now()->format('Y');
+                $pelanggaran=Pelanggaran::with('jenisPelanggaran','siswa')
+                    ->whereMonth('tgl_pelanggaran',$month)
+                    ->whereYear('tgl_pelanggaran',$year)
+                    ->orderBy('tgl_pelanggaran')
+                    ->get()
+                    ->groupBy(function($data) {
+                        return Carbon::parse($data->tgl_pelanggaran)->format('Y-m-d');
+                    });
+                $title='Laporan Pelanggaran Siswa Bulan '.$month.'/'.$year ;
+                confirmDelete($this->satitle, $this->satext);
+            }
+            //dd($month);
             return view('pelanggaran.index',compact('pelanggaran','month','title'));
         }
     }

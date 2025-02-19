@@ -4,7 +4,6 @@ use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JurusanController;
-use App\Http\Controllers\WilayahController;
 use App\Http\Controllers\AdministrasiController;
 
 Route::get('/', function () {
@@ -27,6 +26,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::any('/presensi/reset', [\App\Http\Controllers\PresensiController::class, 'reset'])->name('presensi.reset');
     Route::get('/presensi/rekap', [\App\Http\Controllers\PresensiController::class, 'rekapIndex'])->name('presensi.rekap.index');
     Route::post('/presensi/rekapShow', [\App\Http\Controllers\PresensiController::class, 'rekapShow'])->name('presensi.rekap.show');
+    Route::get('/api/presensi/{nis}/{jam}', [\App\Http\Controllers\PresensiController::class, 'apiPresensi']);
     Route::resource('presensi', \App\Http\Controllers\PresensiController::class)->except('edit');
 
     Route::get('walikelas/guruajax', [\App\Http\Controllers\WalikelasController::class, 'guruAjax'])->name('walikelas.guru.ajax');
@@ -44,12 +44,21 @@ Route::group(['middleware' => ['auth']], function() {
     });
     Route::view('about', 'about')->name('about');
     Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
-    Route::get('siswas', [\App\Http\Controllers\SiswaController::class, 'index'])->name('siswas.index');
-    Route::get('siswas/{id}', [\App\Http\Controllers\SiswaController::class, 'show'])->name('siswas.show');
-    Route::post('siswas/store', [\App\Http\Controllers\SiswaController::class, 'store'])->name('siswas.store');
-    Route::get('siswas/edit/{siswa}', [\App\Http\Controllers\SiswaController::class, 'edit'])->name('siswas.edit');
-    Route::patch('siswas/{siswa}', [\App\Http\Controllers\SiswaController::class, 'update'])->name('siswas.update');
-    Route::post('siswas/ajax', [\App\Http\Controllers\SiswaController::class, 'getSiswas'])->name('siswas.getSiswas');
+
+    Route::controller(\App\Http\Controllers\SiswaController::class)->prefix('siswas')->group(function(){
+        Route::get('/', 'index')->name('siswas.index');
+        Route::get('{id}', 'show')->name('siswas.show');
+        Route::post('store', 'store')->name('siswas.store');
+        Route::get('edit/{siswa}', 'edit')->name('siswas.edit');
+        Route::patch('{siswa}', 'update')->name('siswas.update');
+        Route::get('ajax', 'getSiswas')->name('siswas.getSiswas');
+    });
+    //Route::get('siswas', [\App\Http\Controllers\SiswaController::class, 'index'])->name('siswas.index');
+    //Route::get('siswas/{id}', [\App\Http\Controllers\SiswaController::class, 'show'])->name('siswas.show');
+    //Route::post('siswas/store', [\App\Http\Controllers\SiswaController::class, 'store'])->name('siswas.store');
+    //Route::get('siswas/edit/{siswa}', [\App\Http\Controllers\SiswaController::class, 'edit'])->name('siswas.edit');
+    //Route::patch('siswas/{siswa}', [\App\Http\Controllers\SiswaController::class, 'update'])->name('siswas.update');
+    //Route::post('siswas/ajax', [\App\Http\Controllers\SiswaController::class, 'getSiswas'])->name('siswas.getSiswas');
     //Route::get('siswas/datatable', [\App\Http\Controllers\SiswaController::class, 'datatable'])->name('siswas.datatable');
 
     Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
@@ -62,7 +71,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::get('jenispelanggaran/edit/{id}', 'jenispelanggaranEdit')->name('jenispelanggaran.edit');
         Route::put('jenispelanggaran/update/{id}', 'jenispelanggaranUpdate')->name('jenispelanggaran.update');
         Route::delete('jenispelanggaran/destroy/{id}', 'jenispelanggaranDestroy')->name('jenispelanggaran.destroy');
-        Route::get('pelanggaran', 'pelanggaranIndex')->name('pelanggaran.index');
+        Route::any('pelanggaran', 'pelanggaranIndex')->name('pelanggaran.index');
         Route::get('pelanggaran/create', 'pelanggaranCreate')->name('pelanggaran.create');
         Route::post('pelanggaran/store', 'pelanggaranStore')->name('pelanggaran.store');
         Route::get('pelanggaran/edit/{id}', 'pelanggaranEdit')->name('pelanggaran.edit');
@@ -71,54 +80,51 @@ Route::group(['middleware' => ['auth']], function() {
         Route::any('pelanggaran/cari', 'pelanggaranCari')->name('pelanggaran.cari');
     });
 
-    Route::controller(\App\Http\Controllers\PenangananController::class)-> group(function() {
-        Route::get('penanganan', 'index')->name('penanganan.index');
-        Route::get('penanganan/create', 'create')->name('penanganan.create');
-        Route::get('penanganan/getPelanggaran/{studentId}', 'getPelanggaran')->name('penanganan.getPelanggaran');
-        Route::post('penanganan/store','store')->name('penanganan.store');
+    Route::controller(\App\Http\Controllers\PenangananController::class)->prefix('penanganan')-> group(function() {
+        Route::get('/', 'index')->name('penanganan.index');
+        Route::get('create', 'create')->name('penanganan.create');
+        Route::get('getPelanggaran/{studentId}', 'getPelanggaran')->name('penanganan.getPelanggaran');
+        Route::post('store','store')->name('penanganan.store');
     });
     Route::resource('jurusan', JurusanController::class);
     Route::get('administrasi', [AdministrasiController::class, 'index'])->name('administrasi.index');
     
     Route::resource('tagihan', \App\Http\Controllers\TagihanController::class);
 
-    Route::controller(\App\Http\Controllers\PembayaranController::class)->group(function(){
-        Route::any('pembayaran/spp', 'spp')->name('pembayaran.spp');
-        Route::get('pembayaran/lain','lain')->name('pembayaran.lain'); 
-        ROute::get('pembayaran/sync','sync')->name('pembayaran.sync');
+    Route::controller(\App\Http\Controllers\PembayaranController::class)->prefix('pembayaran')->group(function(){
+        Route::any('spp', 'spp')->name('pembayaran.spp');
+        Route::get('lain', 'lain')->name('pembayaran.lain'); 
+        Route::get('sync', 'sync')->name('pembayaran.sync');
     });
 
-    Route::get('/wilayah/provinces', [WilayahController::class, 'getProvinces']);
-    Route::get('/wilayah/regencies/{provinceCode}', [WilayahController::class, 'getRegencies']);
-    Route::get('/wilayah/districts/{regencyCode}', [WilayahController::class, 'getDistricts']);
-    Route::get('/wilayah/villages/{districtCode}', [WilayahController::class, 'getVillages']);
-
-    Route::get('/wilayah/test/{code}', function($code) {
-        $results = \App\Models\Wilayah::where(function($query) use ($code) {
-            $query->whereRaw('LEFT(code, 2) = ?', [$code])
-                  ->whereRaw('LENGTH(REPLACE(code, ".", "")) = 4')
-                  ->whereRaw('code LIKE "__.__"');
-        })->get(['code', 'name']);
-    
-        return response()->json([
-            'code' => $code,
-            'sql' => \App\Models\Wilayah::whereRaw('LEFT(code, 2) = ?', [$code])
-                    ->whereRaw('LENGTH(REPLACE(code, ".", "")) = 4')
-                    ->whereRaw('code LIKE "__.__"')
-                    ->toSql(),
-            'results' => $results,
-            'count' => $results->count()
-        ]);
+    Route::controller(\App\Http\Controllers\WilayahController::class)->prefix('wilayah')->group(function(){
+        Route::get('provinces', 'getProvinces');
+        Route::get('regencies/{provinceCode}', 'getRegencies');
+        Route::get('districts/{regencyCode}', 'getDistricts');
+        Route::get('villages/{districtCode}', 'getVillages');
+        Route::get('test/{code}', function($code) {
+            $results = \App\Models\Wilayah::where(function($query) use ($code) {
+                $query->whereRaw('LEFT(code, 2) = ?', [$code])
+                      ->whereRaw('LENGTH(REPLACE(code, ".", "")) = 4')
+                      ->whereRaw('code LIKE "__.__"');
+            })->get(['code', 'name']);
+        
+            return response()->json([
+                'code' => $code,
+                'sql' => \App\Models\Wilayah::whereRaw('LEFT(code, 2) = ?', [$code])
+                        ->whereRaw('LENGTH(REPLACE(code, ".", "")) = 4')
+                        ->whereRaw('code LIKE "__.__"')
+                        ->toSql(),
+                'results' => $results,
+                'count' => $results->count()
+            ]);
+        });
+        Route::get('raw', function() {
+            return response()->json([
+                'all_data' => \App\Models\Wilayah::all(['code', 'name']),
+                'sample_regency' => \App\Models\Wilayah::whereRaw('code LIKE "__.__"')->first(),
+                'total_count' => \App\Models\Wilayah::count()
+            ]);
+        });
     });
-    
-    // Get raw data for debugging
-    Route::get('/wilayah/raw', function() {
-        return response()->json([
-            'all_data' => \App\Models\Wilayah::all(['code', 'name']),
-            'sample_regency' => \App\Models\Wilayah::whereRaw('code LIKE "__.__"')->first(),
-            'total_count' => \App\Models\Wilayah::count()
-        ]);
-    });
-
-    
 });
