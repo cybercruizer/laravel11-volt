@@ -98,21 +98,24 @@ class PembayaranController extends Controller
                 break;
         }
         //dd($kel);
-        $data=[];
-        $tagihan=Tagihan::where([['kelas',$kel],['tp','2024/2025']])->whereNot('kode','A')->get();
-        //dd($tagihan);
-        $data = [];
-        foreach($nis->pluck('student_number') as $n) {
-            foreach($tagihan->pluck('kode') as $tag) {
-               $data[$n][$tag] = Pembayaran2425::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah')
-                ->where([
-                    ['jenis', $tag],
-                    ['nis', $n]
-                ])
-                ->sum('jumlah'); 
-                
+        $tagihan = Tagihan::where([['kelas', $kel], ['tp', '2024/2025']])->whereNot('kode', 'A')->get();
+        $data = Pembayaran2425::select('nis', 'jenis', Pembayaran2425::raw('SUM(jumlah) as total'))
+            ->whereIn('nis', $nis->pluck('student_number'))
+            ->whereIn('jenis', $tagihan->pluck('kode'))
+            ->groupBy('nis', 'jenis')
+            ->get()
+            ->groupBy('nis')
+            ->map(function ($item) {
+            return $item->pluck('total', 'jenis');
+            });
+
+        $data = $nis->pluck('student_number')->mapWithKeys(function ($n) use ($data, $tagihan) {
+            $studentData = $data->get($n, []);
+            foreach ($tagihan->pluck('kode') as $tag) {
+            $studentData[$tag] = $studentData[$tag] ?? 0;
             }
-        }
+            return [$n => $studentData];
+        });
         //dd($data);
         $title= "Rekap pembayaran kelas ".$wali->class_name;
         return view('pembayaran.lain', compact('title','nis', 'tagihan', 'data'));

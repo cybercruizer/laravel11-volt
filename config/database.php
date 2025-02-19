@@ -69,17 +69,17 @@ return [
             'prefix' => 'spa_',
             // ...
         ],
-        'keuangan_db' => [
-            'driver' => 'mariadb',
-            'host' => env('KEUANGAN_DB_HOST', '127.0.0.1'),
-            'port' => env('KEUANGAN_DB_PORT', '3306'),
-            'database' => env('KEUANGAN_DB_DATABASE', 'forge'),
-            'username' => env('KEUANGAN_DB_USERNAME', 'forge'),
-            'password' => env('KEUANGAN_DB_PASSWORD', ''),
+        //'keuangan_db' => [
+        //    'driver' => 'mariadb',
+        //    'host' => env('KEUANGAN_DB_HOST', '127.0.0.1'),
+        //    'port' => env('KEUANGAN_DB_PORT', '3306'),
+        //    'database' => env('KEUANGAN_DB_DATABASE', 'forge'),
+        //    'username' => env('KEUANGAN_DB_USERNAME', 'forge'),
+        //    'password' => env('KEUANGAN_DB_PASSWORD', ''),
             // ...
-        ],
+        //],
 
-        'keuangan' => [
+        'keuangan_db' => [
             'driver' => 'mariadb',
             'url' => env('DB_URL'),
             'host' => env('KEUANGAN_DB_HOST', '127.0.0.1'),
