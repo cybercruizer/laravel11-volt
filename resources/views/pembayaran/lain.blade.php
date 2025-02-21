@@ -6,6 +6,22 @@
             <div class="col-6">
                 <h2 class="mb-4 h5 ml-3">{{$title}}</h2>
             </div>
+            @role('Admin||Keuangan||Kapro')
+                <form method="post" action="{{route('pembayaran.lain')}}">
+                @csrf
+                    <div class="col-md-4 col-4">
+                        <div class="input-group">
+                            <select name="class_id" id="class_id" class="form-select">
+                                <option value="">--Pilih Kelas--</option>
+                                @foreach ($kelas as $k )
+                                    <option value="{{$k->class_id}}">{{$k->class_name}}</option>
+                                @endforeach
+                            </select>
+                            <button type="submit" class="btn btn-primary">Tampilkan</button>
+                        </div>
+                    </div>
+                </form> 
+            @endrole
         </div>
     </div>
     <div class="card card-body border-0 shadow table-wrapper table-responsive">

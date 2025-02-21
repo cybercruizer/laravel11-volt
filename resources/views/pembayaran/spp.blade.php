@@ -6,7 +6,7 @@
             <div class="col-md-6 col-6">
                 <h2 class="mb-4 h5 ml-3">{{$title}}</h2>
             </div>
-            @role('Admin||Keuangan')
+            @role('Admin||Keuangan||Kapro')
                 <form method="post" action="{{route('pembayaran.spp')}}">
                 @csrf
                     <div class="col-md-4 col-4">
@@ -73,9 +73,9 @@
                             <small class="text-danger">{{$val[0]->kategori}}</small>
                     </td>
                     @forelse($val as $bayar)
-                        @if($loop->iteration==$bayar->tahap)
+                    {{--}}    @if($loop->iteration==$bayar->tahap) --}}
                             <td><small>{{ $bayar->jumlah/1000 }}</small></td>
-                        @endif
+                   {{--}}     @endif --}}
                     @empty
                         <td colspan="12">Kosong</td>
                     @endforelse
