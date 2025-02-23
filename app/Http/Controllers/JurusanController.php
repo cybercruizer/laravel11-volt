@@ -7,13 +7,13 @@ use App\Models\Jurusan;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Requests\JurusanRequest;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class JurusanController extends Controller
 {
     function __construct()
     {
-         $this->middleware('permission:jurusan-list|jurusan-create|jurusan-edit|jurusan-delete', ['only' => ['jurusanIndex']]);
-         $this->middleware('permission:jurusan-create', ['only' => ['Store']]);
+         $this->middleware('permission:jurusan-list|jurusan-create|jurusan-edit|jurusan-delete', ['only' => ['index','store']]);
          $this->middleware('permission:jurusan-edit', ['only' => ['update']]);
          $this->middleware('permission:jurusan-delete', ['only' => ['destroy']]);
 

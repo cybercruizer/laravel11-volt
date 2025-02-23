@@ -101,16 +101,13 @@ class PembayaranController extends Controller
             ]);
         }
     }
-    public function lain (Request $request)
+    public function lain(Request $request)
     {
-        //dd(Auth::user()->getRoleNames()[0]);
         if(Auth::user()->hasRole('WaliKelas'))
         {
             $wali = auth()->user()->kelas;
-            $nis=Siswa::aktif()->select('student_number','student_name')->where('class_id',$wali->class_id)->get();
-            //dd($nis);
-            //dd($wali);
-            $kelas=explode('-',$wali->class_code);
+            $nis = Siswa::aktif()->select('student_number', 'student_name')->where('class_id', $wali->class_id)->get();
+            $kelas = explode('-', $wali->class_code);
             switch($kelas[1]) {
                 case 'X' : 
                     $kel = 10; 
@@ -122,7 +119,6 @@ class PembayaranController extends Controller
                     $kel = 12; 
                     break;
             }
-            //dd($kel);
             $tagihan = Tagihan::where([['kelas', $kel], ['tp', '2024/2025']])->whereNot('kode', 'A')->get();
             $data = Pembayaran2425::select('nis', 'jenis', Pembayaran2425::raw('SUM(jumlah) as total'))
                 ->whereIn('nis', $nis->pluck('student_number'))
@@ -137,23 +133,26 @@ class PembayaranController extends Controller
             $data = $nis->pluck('student_number')->mapWithKeys(function ($n) use ($data, $tagihan) {
                 $studentData = $data->get($n, []);
                 foreach ($tagihan->pluck('kode') as $tag) {
-                $studentData[$tag] = $studentData[$tag] ?? 0;
+                    $studentData[$tag] = $studentData[$tag] ?? 0;
                 }
                 return [$n => $studentData];
             });
-            //dd($data);
-            $title= "Rekap pembayaran kelas ".$wali->class_name;
-            return view('pembayaran.lain', compact('title','nis', 'tagihan', 'data'));
+            $title = "Rekap pembayaran kelas " . $wali->class_name;
+            return view('pembayaran.lain', compact('title', 'nis', 'tagihan', 'data'));
         }
-        
-        if (Auth::user()->hasRole(['Admin','Keuangan']))
+
+        if(Auth::user()->hasRole(['Admin', 'Keuangan','Kapro']))
         {
-            $kelas = Kelas::aktif()->select('class_id','class_code','class_name')->get();
-            $r_kelas = Kelas::find($request->class_id)->class_code ??'-';
-            $nis = Siswa::aktif()->select('student_number','student_name')->where('class_id',$request->class_id)->get();
-            //dd($nis);
-            //dd($kelas);
-            $s_kelas=explode('-',$r_kelas);
+            if(Auth::user()->hasRole('Kapro'))
+            {
+                $kelas = 
+            } else {
+                $kelas = Kelas::aktif()->select('class_id', 'class_code', 'class_name')->get();
+            }
+            $r_kelas = Kelas::find($request->class_id)->class_code ?? '-';
+            $nis = Siswa::aktif()->select('student_number', 'student_name')->where('class_id', $request->class_id)->get();
+            $s_kelas = explode('-', $r_kelas);
+            $kel=10;
             switch($s_kelas[1]) {
                 case 'X' : 
                     $kel = 10; 
@@ -165,51 +164,6 @@ class PembayaranController extends Controller
                     $kel = 12; 
                     break;
             }
-            dd($s_kelas);
-            $tagihan = Tagihan::where([['kelas', $kel], ['tp', '2024/2025']])->whereNot('kode', 'A')->get();
-            
-            $data = Pembayaran2425::select('nis', 'jenis', Pembayaran2425::raw('SUM(jumlah) as total'))
-                ->whereIn('nis', $nis->pluck('student_number'))
-                ->whereIn('jenis', $tagihan->pluck('kode'))
-                ->groupBy('nis', 'jenis')
-                ->get()
-                ->groupBy('nis')
-                ->map(function ($item) {
-                    return $item->pluck('total', 'jenis');
-                });
-
-            $data = $nis->pluck('student_number')->mapWithKeys(function ($n) use ($data, $tagihan) {
-                $studentData = $data->get($n, []);
-                foreach ($tagihan->pluck('kode') as $tag) {
-                $studentData[$tag] = $studentData[$tag] ?? 0;
-                }
-                return [$n => $studentData];
-            });
-            //dd($data);
-            $title= "Rekap pembayaran kelas ".$r_kelas;
-            return view('pembayaran.lain', compact('title','nis', 'tagihan', 'data','kelas'));
-        }
-        
-        if (Auth::user()->hasRole(['Kapro']))
-        {
-            $kelas = Auth::user()->jurusan->kelas()->aktif()->get();
-            $r_kelas = Kelas::find($request->class_id)->class_name ??'-';
-            $nis = Siswa::aktif()->select('student_number','student_name')->where('class_id',$request->class_id)->get();
-            //dd($nis);
-            //dd($r_kelas);
-            $kelas=explode('-',$r_kelas);
-            switch($kelas[1]) {
-                case 'X' : 
-                    $kel = 10; 
-                    break;
-                case 'XI' : 
-                    $kel = 11; 
-                    break;
-                case 'XII' : 
-                    $kel = 12; 
-                    break;
-            }
-            //dd($kel);
             $tagihan = Tagihan::where([['kelas', $kel], ['tp', '2024/2025']])->whereNot('kode', 'A')->get();
             $data = Pembayaran2425::select('nis', 'jenis', Pembayaran2425::raw('SUM(jumlah) as total'))
                 ->whereIn('nis', $nis->pluck('student_number'))
@@ -224,13 +178,12 @@ class PembayaranController extends Controller
             $data = $nis->pluck('student_number')->mapWithKeys(function ($n) use ($data, $tagihan) {
                 $studentData = $data->get($n, []);
                 foreach ($tagihan->pluck('kode') as $tag) {
-                $studentData[$tag] = $studentData[$tag] ?? 0;
+                    $studentData[$tag] = $studentData[$tag] ?? 0;
                 }
                 return [$n => $studentData];
             });
-            //dd($data);
-            $title= "Rekap pembayaran kelas ".$r_kelas;
-            return view('pembayaran.lain', compact('title','nis', 'tagihan', 'data','kelas'));
+            $title = "Rekap pembayaran kelas " . $r_kelas;
+            return view('pembayaran.lain', compact('title', 'nis', 'tagihan', 'data', 'kelas'));
         }
     }
     public function sync() {

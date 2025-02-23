@@ -57,7 +57,7 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($nis as $student)
+                @forelse($nis as $student)
                     <tr>
                         <td>{{ $student->student_number }}</td>
                         <td>{{ $student->student_name }}</td>
@@ -73,7 +73,11 @@
                         
                         {{--<td>{{ number_format($studentTotal, 0, ',', '.') }}</td>--}}
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="{{ count($tagihan) + 2 }}" class="text-center">Data tidak ditemukan</td>
+                    </tr>
+                @endforelse
             </tbody>
             {{--<tfoot>
                 <tr>
