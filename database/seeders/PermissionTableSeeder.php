@@ -61,6 +61,9 @@ class PermissionTableSeeder extends Seeder
            'jurusan-list',
            'jurusan-edit',
            'jurusan-delete',
+           'kelas-list',
+           'kelas-edit',
+           'kelas-delete',
         ];
 
         foreach ($permissions as $permission) {

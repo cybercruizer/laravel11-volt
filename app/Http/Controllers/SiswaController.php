@@ -17,38 +17,41 @@ class SiswaController extends Controller
 {
     function __construct()
     {
-         $this->middleware('permission:siswa-list|siswa-create|siswa-edit|siswa-delete|siswa-keuangan', ['only' => ['index','show','getSiswas']]);
-         $this->middleware('permission:siswa-create', ['only' => ['create','store']]);
-         $this->middleware('permission:siswa-edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:siswa-delete', ['only' => ['destroy']]);
-         $this->middleware('permission:siswa-keuangan', ['only' => ['keuangan']]);
+        $this->middleware('permission:siswa-list|siswa-create|siswa-edit|siswa-delete|siswa-keuangan', ['only' => ['index', 'show', 'getSiswas']]);
+        $this->middleware('permission:siswa-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:siswa-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:siswa-delete', ['only' => ['destroy']]);
+        $this->middleware('permission:siswa-keuangan', ['only' => ['keuangan']]);
     }
-    public function index(Request $request) {
+    public function index(Request $request)
+    {
         if ($request->ajax()) {
-            if (Auth::user()->hasRole(['Admin','Bk','Guru'])) {
+            if (Auth::user()->hasRole(['Admin', 'BK', 'Guru'])) {
                 $siswas = Siswa::where([
                     ['is_deleted', 0],
-                    ['student_status','A']
-                    ])->get();
-            } elseif (Auth::user()->hasRole('WaliKelas')){
-                $kelas=Auth::user()->kelas->class_id;
+                    ['student_status', 'A']
+                ])->get();
+            } elseif (Auth::user()->hasRole('WaliKelas')) {
+                $kelas = Auth::user()->kelas->class_id;
                 $siswas = Siswa::aktif()->where('class_id', $kelas)->get();
-            } elseif(Auth::user()->hasRole('Kapro')) {
+            } elseif (Auth::user()->hasRole('Kapro')) {
                 $kelas = Auth::user()->jurusan->kelas;
-                $siswas = Siswa::aktif()->whereIn('class_id',$kelas->select('class_id'))->get();
+                $siswas = Siswa::aktif()->whereIn('class_id', $kelas->select('class_id'))->get();
             }
             return datatables()->of($siswas)
-                ->addColumn('nama_kelas',
-                function($siswa) {
-                    return $siswa->kelas->class_name;
-                })
+                ->addColumn(
+                    'nama_kelas',
+                    function ($siswa) {
+                        return $siswa->kelas->class_name;
+                    }
+                )
                 ->addColumn('aksi', function ($siswa) {
                     return $siswa->student_id;
                 })
                 ->make(true);
         }
-        $kelas=Kelas::get();
-        return view('siswas.index',[
+        $kelas = Kelas::get();
+        return view('siswas.index', [
             'title' => 'Data Siswa',
             'kelas' => $kelas,
         ]);
@@ -57,10 +60,11 @@ class SiswaController extends Controller
     {
         $siswa = Siswa::find($id);
         $title = 'Detail Siswa';
-        return view('siswas.show',compact('siswa','title'));
+        return view('siswas.show', compact('siswa', 'title'));
     }
-    public function store(Request $request) {
-        $validator= Validator::make($request->all(), [
+    public function store(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
             'student_number' => 'required|unique:spa_students,student_number',
             'student_name' => 'required',
             'class_id' => 'required',
@@ -78,8 +82,8 @@ class SiswaController extends Controller
 
         $siswa = Siswa::create($request->all());
         //redirect if $siswa success
-        if($siswa){
-            alert()->success('Sukses', 'Data siswa '.$request->student_name.' berhasil disimpan.');
+        if ($siswa) {
+            alert()->success('Sukses', 'Data siswa ' . $request->student_name . ' berhasil disimpan.');
             return redirect()->route('siswas.index');
         }
     }
@@ -94,29 +98,30 @@ class SiswaController extends Controller
             </a>
         ";
     }
-    public function getSiswas(Request $request){
+    public function getSiswas(Request $request)
+    {
         $search = $request->cari;
 
-        if($search == ''){
-           $siswas = Siswa::orderby('student_name','asc')->select('student_id','student_name')->limit(10)->get();
-        }else{
-           $siswas = Siswa::orderby('student_name','asc')->select('student_id','student_name')->where('student_name', 'like', '%' .$search . '%')->limit(10)->get();
+        if ($search == '') {
+            $siswas = Siswa::orderby('student_name', 'asc')->select('student_id', 'student_name')->limit(10)->get();
+        } else {
+            $siswas = Siswa::orderby('student_name', 'asc')->select('student_id', 'student_name')->where('student_name', 'like', '%' . $search . '%')->limit(10)->get();
         }
 
         $response = array();
-        foreach($siswas as $siswa){
-           $response[] = array(
-                "id"=>$siswa->student_id,
-                "text"=>$siswa->student_name
-           );
+        foreach ($siswas as $siswa) {
+            $response[] = array(
+                "id" => $siswa->student_id,
+                "text" => $siswa->student_name
+            );
         }
         return response()->json($response);
-     }
-     public function edit(Siswa $siswa)
+    }
+    public function edit(Siswa $siswa)
     {
         $classes = Kelas::where('is_deleted', 0)->get();
         $provinces = Wilayah::provinces()->get();
-        return view('siswas.edit', compact('siswa', 'classes','provinces'));
+        return view('siswas.edit', compact('siswa', 'classes', 'provinces'));
     }
 
     /**
@@ -157,7 +162,7 @@ class SiswaController extends Controller
             //Log::error('Validation failed:', [
             //    'errors' => $validator->errors()->toArray()
             //]);
-            
+
             return redirect()
                 ->route('siswas.edit', $siswa->student_id)
                 ->withErrors($validator)
@@ -215,18 +220,17 @@ class SiswaController extends Controller
 
             DB::commit();
             Alert::success('Siswa berhasil diupdate', 'Success');
-            
+
             return redirect()
                 ->route('siswas.index')
                 ->with('success', 'Student data has been successfully updated.');
-
         } catch (\Exception $e) {
             DB::rollBack();
             //Log::error('Exception during update:', [
             //    'message' => $e->getMessage(),
             //    'trace' => $e->getTraceAsString()
             //]);
-            
+
             Alert::error('Siswa gagal diupdate', 'Failed');
             return redirect()
                 ->route('siswas.edit', $siswa->student_id)

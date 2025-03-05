@@ -25,4 +25,10 @@ class KelasController extends Controller
         }
         return response()->json($response);
      }
+     public function index() {
+         $kelas = Kelas::all()->groupBy('class_year');
+         //dd($kelas);
+         return view('kelas.index', compact('kelas'));
+      
+     }
 }

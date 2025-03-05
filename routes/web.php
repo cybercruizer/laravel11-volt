@@ -34,6 +34,9 @@ Route::group(['middleware' => ['auth']], function() {
     Route::put('walikelas/{id}', [\App\Http\Controllers\WalikelasController::class, 'update'])->name('walikelas.update');
     Route::resource('walikelas', \App\Http\Controllers\WalikelasController::class);
     Route::resource('woroworo', \App\Http\Controllers\WoroworoController::class);
+
+    Route::get('kelas', [\App\Http\Controllers\KelasController::class, 'index'])->name('kelas.index');
+    Route::put('kelas/{id}', [\App\Http\Controllers\KelasController::class, 'update'])->name('kelas.update');
     //Route::get('pelanggaran/create', [\App\Http\Controllers\BkController::class,'create'])->name('pelanggaran.create');
     //Route::post('pelanggaran', [\App\Http\Controllers\BkController::class,'store'])->name('pelanggaran.store');
     //Route::get('pelanggaran/search', [\App\Http\Controllers\BkController::class,'search'])->name('siswa.search');
@@ -51,7 +54,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::post('store', 'store')->name('siswas.store');
         Route::get('edit/{siswa}', 'edit')->name('siswas.edit');
         Route::patch('{siswa}', 'update')->name('siswas.update');
-        Route::get('ajax', 'getSiswas')->name('siswas.getSiswas');
+        Route::post('ajax', 'getSiswas')->name('siswas.getSiswas');
     });
     //Route::get('siswas', [\App\Http\Controllers\SiswaController::class, 'index'])->name('siswas.index');
     //Route::get('siswas/{id}', [\App\Http\Controllers\SiswaController::class, 'show'])->name('siswas.show');

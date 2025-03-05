@@ -94,15 +94,16 @@ class HomeController extends Controller
             ->orderBy('total', 'desc')
             ->limit(10)->get();
         } else {
-            $nom_alphas = Presensi::with('siswa')->select(['student_id', DB::raw('count(*) as total')])
-            ->where('keterangan','A')
+            $nom_alphas = Presensi::with('siswa')->select('student_id', DB::raw('count(*) as total'))
+            ->where('keterangan', 'A')
             ->groupBy('student_id')
-            ->orderBy('total', 'desc')
-            ->limit(10)->get();
+            ->orderByDesc('total')
+            ->limit(10)
+            ->get();
             $nom_terlambat = Presensi::with('siswa')->select(['student_id', DB::raw('count(*) as total')])
             ->where('keterangan','T')
             ->groupBy('student_id')
-            ->orderBy('total', 'desc')
+            ->orderByDesc('total')
             ->limit(10)->get();
         }
         

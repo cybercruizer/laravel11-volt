@@ -145,7 +145,7 @@ class PembayaranController extends Controller
         {
             if(Auth::user()->hasRole('Kapro'))
             {
-                $kelas = Auth::user()->kelas;
+                $kelas = Auth::user()->jurusan->kelas(fn($q) => $q->aktif())->get();
             } else {
                 $kelas = Kelas::aktif()->select('class_id', 'class_code', 'class_name')->get();
             }
