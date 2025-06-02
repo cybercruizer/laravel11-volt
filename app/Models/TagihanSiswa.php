@@ -22,7 +22,7 @@ class TagihanSiswa extends Model
         $total = 0;
         foreach ($this->getAttributes() as $key => $value) {
             if (str_starts_with($key, 'tang_')) {
-                $total += $value;
+                $total += (int) $value;
             }
         }
         return $total;
