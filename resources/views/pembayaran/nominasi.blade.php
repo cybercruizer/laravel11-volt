@@ -7,7 +7,7 @@
                 <h2 class="mb-4 h5 ml-3">{{$title}}</h2>
             </div>
             @role('Admin||Keuangan||Kapro')
-                <form method="post" action="{{route('pembayaran.lain')}}">
+                <form method="post" action="{{route('pembayaran.nominasi')}}">
                 @csrf
                     <div class="col-md-4 col-4">
                         <div class="input-group">
@@ -15,6 +15,12 @@
                                 <option value="">--Pilih Kelas--</option>
                                 @foreach ($kelas as $k )
                                     <option value="{{$k->class_id}}">{{$k->class_name}}</option>
+                                @endforeach
+                            </select>
+                            <select name="tagihan_id" id="tagihan_id" class="form-select">
+                                <option value="">--Pilih Tagihan--</option>
+                                @foreach ($tagihan as $t )
+                                    <option value="{{$t->no}}">{{$t->nama}}</option>
                                 @endforeach
                             </select>
                             <button type="submit" class="btn btn-primary">Tampilkan</button>
@@ -53,30 +59,25 @@
                     @foreach($tagihan as $bill)
                         <th>{{ $bill->nama }}</th>
                     @endforeach
-                    <th>Terbayar / Total Tgh</th>
-                    <th>Persentase</th>
+                    {{--<th>Total</th>--}}
                 </tr>
             </thead>
             <tbody>
                 @forelse($nis as $student)
                     <tr>
                         <td>{{ $student->student_number }}</td>
-                        <td>
-                            {{ $student->student_name }}
-                        </td>
+                        <td>{{ $student->student_name }}</td>
                         
                         @php $studentTotal = 0; @endphp
                         @foreach($tagihan as $bill)
                             @php 
                                 $amount = $data[$student->student_number][$bill->kode] ?? 0;
-                                $studentTotal += $amount;
+                                //$studentTotal += $amount;
                             @endphp
                             <td>{{ number_format($amount, 0, ',', '.') }}</td>
                         @endforeach
                         
-                        <td>{{ number_format($studentTotal, 0, ',', '.') }}/{{number_format($student->tagihan->total_tagihan, 0, ',', '.') }}</td>
-                            @php $persentase = $studentTotal/$student->tagihan->total_tagihan * 100; @endphp
-                        <td>{{number_format($persentase, 0, ',', '.')}} %</td>
+                        {{--<td>{{ number_format($studentTotal, 0, ',', '.') }}</td>--}}
                     </tr>
                 @empty
                     <tr>

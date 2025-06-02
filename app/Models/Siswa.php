@@ -5,8 +5,10 @@ namespace App\Models;
 use App\Models\Tagihan;
 use App\Models\Presensi;
 use App\Models\Pelanggaran;
+use App\Models\TagihanSiswa;
 use App\Models\Pembayaran2425;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -79,9 +81,14 @@ class Siswa extends Model
      *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
-    public function tagihans(): HasMany
+    /**
+     * Get the tagihan associated with the Siswa
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function tagihan(): HasOne
     {
-        return $this->hasMany(Tagihan::class, 'siswa_id');
+        return $this->hasOne(TagihanSiswa::class, 'nis', 'student_number');
     }
     public function pembayarans () : HasMany
     {

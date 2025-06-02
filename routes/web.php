@@ -98,6 +98,7 @@ Route::group(['middleware' => ['auth']], function() {
         Route::any('spp', 'spp')->name('pembayaran.spp');
         Route::any('lain', 'lain')->name('pembayaran.lain'); 
         Route::get('sync', 'sync')->name('pembayaran.sync');
+        Route::any('nominasi', 'nominasi')->name('pembayaran.nominasi');
     });
 
     Route::controller(\App\Http\Controllers\WilayahController::class)->prefix('wilayah')->group(function(){

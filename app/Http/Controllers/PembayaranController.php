@@ -109,7 +109,9 @@ class PembayaranController extends Controller
             $nis = Siswa::aktif()->select('student_number', 'student_name')->where('class_id', $wali->class_id)->get();
             $kelas = explode('-', $wali->class_code);
             switch($kelas[1]) {
-                case 'X' : 
+                case 'X' : $tahunajaran = Tahunajaran::where('status', 1)->first();
+                $kelas = Kelas::aktif()->get();
+                return view('pembayaran.nominasi', compact('tahunajaran', 'kelas'));
                     $kel = 10; 
                     break;
                 case 'XI' : 
@@ -150,6 +152,73 @@ class PembayaranController extends Controller
                 $kelas = Kelas::aktif()->select('class_id', 'class_code', 'class_name')->get();
             }
             $r_kelas = Kelas::find($request->class_id)->class_code ?? '-';
+            $nis = Siswa::with('tagihan')->aktif()->select('student_number', 'student_name')->where('class_id', $request->class_id)->get();
+            $s_kelas = explode('-', $r_kelas);
+            $kel=10;
+            switch($s_kelas[1]) {
+                case 'X' : 
+                    $kel = 10; 
+                    break;
+                case 'XI' : 
+                    $kel = 11; 
+                    break;
+                case 'XII' : 
+                    $kel = 12; 
+                    break;
+            }
+            $tagihan = Tagihan::where([
+                ['kelas', $kel], 
+                ['tp', '2024/2025']
+                ])->whereNot('kode', 'A')->get();
+            $data = Pembayaran2425::select('nis', 'jenis', Pembayaran2425::raw('SUM(jumlah) as total'))
+                ->whereIn('nis', $nis->pluck('student_number'))
+                ->whereIn('jenis', $tagihan->pluck('kode'))
+                ->groupBy('nis', 'jenis')
+                ->get()
+                ->groupBy('nis')
+                ->map(function ($item) {
+                    return $item->pluck('total', 'jenis');
+                });
+
+            $data = $nis->pluck('student_number')->mapWithKeys(function ($n) use ($data, $tagihan) {
+                $studentData = $data->get($n, []);
+                foreach ($tagihan->pluck('kode') as $tag) {
+                    $studentData[$tag] = $studentData[$tag] ?? 0;
+                }
+                return [$n => $studentData];
+            });
+            
+            // get total_tagihan from model : TagihanSiswa->total_tagihan for each student based on $nis->student_number
+/*            $total_tagihan = [];
+            foreach ($nis as $siswa) {
+                $tagihanSiswa = \App\Models\TagihanSiswa::where('nis', $siswa->student_number)->first();
+                $total_tagihan[$siswa->student_number] = $tagihanSiswa ? $tagihanSiswa->total_tagihan : 0;
+            }
+            dd($total_tagihan);
+*/
+
+
+            $title = "Rekap pembayaran kelas " . $r_kelas;
+            return view('pembayaran.lain', compact('title', 'nis', 'tagihan', 'data', 'kelas'));
+        }
+    }
+    public function sync() {
+        $pembayaranOl=Pembayaran2425Ol::all();
+        foreach ($pembayaranOl as $pem) {
+            Pembayaran2425::updateOrCreate(
+                ['no'=>$pem->no],
+                $pem->toArray()
+            );
+        }
+        alert()->success('Sukses', 'Pembayaran berhasil tersinkronisasi');
+        return redirect()->back();
+    }
+
+    public function nominasi(Request $request) {
+        if(Auth::user()->hasRole(['Admin', 'Keuangan','Kapro']))
+        {
+            $kelas = Kelas::aktif()->select('class_id', 'class_code', 'class_name')->get();
+            $r_kelas = Kelas::find($request->class_id)->class_code ?? '-';
             $nis = Siswa::aktif()->select('student_number', 'student_name')->where('class_id', $request->class_id)->get();
             $s_kelas = explode('-', $r_kelas);
             $kel=10;
@@ -183,19 +252,8 @@ class PembayaranController extends Controller
                 return [$n => $studentData];
             });
             $title = "Rekap pembayaran kelas " . $r_kelas;
-            return view('pembayaran.lain', compact('title', 'nis', 'tagihan', 'data', 'kelas'));
+            return view('pembayaran.nominasi', compact('title', 'nis', 'tagihan', 'data', 'kelas'));
         }
-    }
-    public function sync() {
-        $pembayaranOl=Pembayaran2425Ol::all();
-        foreach ($pembayaranOl as $pem) {
-            Pembayaran2425::updateOrCreate(
-                ['no'=>$pem->no],
-                $pem->toArray()
-            );
-        }
-        alert()->success('Sukses', 'Pembayaran berhasil tersinkronisasi');
-        return redirect()->back();
     }
 
     /**

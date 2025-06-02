@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Kelas;
 use App\Models\Tagihan;
 use App\Models\Pembayaran;
+use App\Models\Pembayaran2425;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -44,6 +45,6 @@ class Tahunajaran extends Model
      */
     public function pembayarans(): HasMany
     {
-        return $this->hasMany(Pembayaran::class, 'ta_id');
+        return $this->hasMany(Pembayaran2425::class, 'ta_id');
     }
 }
