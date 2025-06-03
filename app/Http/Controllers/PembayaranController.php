@@ -109,9 +109,7 @@ class PembayaranController extends Controller
             $nis = Siswa::aktif()->select('student_number', 'student_name')->where('class_id', $wali->class_id)->get();
             $kelas = explode('-', $wali->class_code);
             switch($kelas[1]) {
-                case 'X' : $tahunajaran = Tahunajaran::where('status', 1)->first();
-                $kelas = Kelas::aktif()->get();
-                return view('pembayaran.nominasi', compact('tahunajaran', 'kelas'));
+                case 'X' :
                     $kel = 10; 
                     break;
                 case 'XI' : 
