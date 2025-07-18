@@ -14,7 +14,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
-Route::group(['middleware' => ['auth']], function() {
+Route::group(['middleware' => ['auth']], function () {
     Route::resource('roles', \App\Http\Controllers\RoleController::class);
     //Route::get('users/cekrole', [\App\Http\Controllers\UserController::class, 'cekrole'])->name('cekrole');
     Route::resource('users', \App\Http\Controllers\UserController::class);
@@ -35,20 +35,39 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('walikelas', \App\Http\Controllers\WalikelasController::class);
     Route::resource('woroworo', \App\Http\Controllers\WoroworoController::class);
 
-    Route::get('kelas', [\App\Http\Controllers\KelasController::class, 'index'])->name('kelas.index');
-    Route::put('kelas/{id}', [\App\Http\Controllers\KelasController::class, 'update'])->name('kelas.update');
+    Route::controller(\App\Http\Controllers\KelasController::class)->prefix('kelas')->group(function () {
+        Route::get('/', 'index')->name('kelas.index');
+        Route::put('{id}', 'update')->name('kelas.update');
+        Route::get('naik', 'naikKelasIndex')->name('kelas.naik.index');
+        Route::post('naik', 'naikKelas')->name('kelas.naik');
+        
+        Route::get('step1', 'step1')->name('kelas.step1');
+        Route::post('step1', 'step1Submit');
+
+        Route::get('step2', 'step2')->name('kelas.step2');
+        Route::post('step2', 'step2Submit');
+
+        Route::get('step3', 'step3')->name('kelas.step3');
+        Route::post('step3', 'step3Submit');
+
+        Route::get('step4', 'step4')->name('kelas.step4');
+        Route::post('step4', 'step4Submit');
+
+        Route::get('step5', 'step5')->name('kelas.step5');
+    });
     //Route::get('pelanggaran/create', [\App\Http\Controllers\BkController::class,'create'])->name('pelanggaran.create');
     //Route::post('pelanggaran', [\App\Http\Controllers\BkController::class,'store'])->name('pelanggaran.store');
     //Route::get('pelanggaran/search', [\App\Http\Controllers\BkController::class,'search'])->name('siswa.search');
-    Route::controller(\App\Http\Controllers\EventController::class)->group(function(){
+    Route::controller(\App\Http\Controllers\EventController::class)->group(function () {
         Route::get('kalender', 'index')->name('kalender.index');
         Route::get('kalender/show', 'show')->name('kalender.show');
         Route::post('kalender-ajax', 'ajax');
     });
+
     Route::view('about', 'about')->name('about');
     Route::get('users', [\App\Http\Controllers\UserController::class, 'index'])->name('users.index');
 
-    Route::controller(\App\Http\Controllers\SiswaController::class)->prefix('siswas')->group(function(){
+    Route::controller(\App\Http\Controllers\SiswaController::class)->prefix('siswas')->group(function () {
         Route::get('/', 'index')->name('siswas.index');
         Route::get('{id}', 'show')->name('siswas.show');
         Route::post('store', 'store')->name('siswas.store');
@@ -66,9 +85,9 @@ Route::group(['middleware' => ['auth']], function() {
 
     Route::get('profile', [\App\Http\Controllers\ProfileController::class, 'show'])->name('profile.show');
     Route::put('profile', [\App\Http\Controllers\ProfileController::class, 'update'])->name('profile.update');
-    Route::get('alpha/{tanggal}',[\App\Http\Controllers\DetailController::class,'alpha'])->name('detail.alpha');
-    Route::get('terlambat/{tanggal}',[\App\Http\Controllers\DetailController::class,'terlambat'])->name('terlambat.show');
-    Route::controller(\App\Http\Controllers\PelanggaranController::class)->group(function(){
+    Route::get('alpha/{tanggal}', [\App\Http\Controllers\DetailController::class, 'alpha'])->name('detail.alpha');
+    Route::get('terlambat/{tanggal}', [\App\Http\Controllers\DetailController::class, 'terlambat'])->name('terlambat.show');
+    Route::controller(\App\Http\Controllers\PelanggaranController::class)->group(function () {
         Route::get('jenispelanggaran', 'jenispelanggaranIndex')->name('jenispelanggaran.index');
         Route::post('jenispelanggaran/store', 'jenispelanggaranStore')->name('jenispelanggaran.store');
         Route::get('jenispelanggaran/edit/{id}', 'jenispelanggaranEdit')->name('jenispelanggaran.edit');
@@ -83,47 +102,47 @@ Route::group(['middleware' => ['auth']], function() {
         Route::any('pelanggaran/cari', 'pelanggaranCari')->name('pelanggaran.cari');
     });
 
-    Route::controller(\App\Http\Controllers\PenangananController::class)->prefix('penanganan')-> group(function() {
+    Route::controller(\App\Http\Controllers\PenangananController::class)->prefix('penanganan')->group(function () {
         Route::get('/', 'index')->name('penanganan.index');
         Route::get('create', 'create')->name('penanganan.create');
         Route::get('getPelanggaran/{studentId}', 'getPelanggaran')->name('penanganan.getPelanggaran');
-        Route::post('store','store')->name('penanganan.store');
+        Route::post('store', 'store')->name('penanganan.store');
     });
     Route::resource('jurusan', JurusanController::class);
     Route::get('administrasi', [AdministrasiController::class, 'index'])->name('administrasi.index');
-    
+
     Route::resource('tagihan', \App\Http\Controllers\TagihanController::class);
 
-    Route::controller(\App\Http\Controllers\PembayaranController::class)->prefix('pembayaran')->group(function(){
+    Route::controller(\App\Http\Controllers\PembayaranController::class)->prefix('pembayaran')->group(function () {
         Route::any('spp', 'spp')->name('pembayaran.spp');
-        Route::any('lain', 'lain')->name('pembayaran.lain'); 
+        Route::any('lain', 'lain')->name('pembayaran.lain');
         Route::get('sync', 'sync')->name('pembayaran.sync');
         Route::any('nominasi', 'nominasi')->name('pembayaran.nominasi');
     });
 
-    Route::controller(\App\Http\Controllers\WilayahController::class)->prefix('wilayah')->group(function(){
+    Route::controller(\App\Http\Controllers\WilayahController::class)->prefix('wilayah')->group(function () {
         Route::get('provinces', 'getProvinces');
         Route::get('regencies/{provinceCode}', 'getRegencies');
         Route::get('districts/{regencyCode}', 'getDistricts');
         Route::get('villages/{districtCode}', 'getVillages');
-        Route::get('test/{code}', function($code) {
-            $results = \App\Models\Wilayah::where(function($query) use ($code) {
+        Route::get('test/{code}', function ($code) {
+            $results = \App\Models\Wilayah::where(function ($query) use ($code) {
                 $query->whereRaw('LEFT(code, 2) = ?', [$code])
-                      ->whereRaw('LENGTH(REPLACE(code, ".", "")) = 4')
-                      ->whereRaw('code LIKE "__.__"');
+                    ->whereRaw('LENGTH(REPLACE(code, ".", "")) = 4')
+                    ->whereRaw('code LIKE "__.__"');
             })->get(['code', 'name']);
-        
+
             return response()->json([
                 'code' => $code,
                 'sql' => \App\Models\Wilayah::whereRaw('LEFT(code, 2) = ?', [$code])
-                        ->whereRaw('LENGTH(REPLACE(code, ".", "")) = 4')
-                        ->whereRaw('code LIKE "__.__"')
-                        ->toSql(),
+                    ->whereRaw('LENGTH(REPLACE(code, ".", "")) = 4')
+                    ->whereRaw('code LIKE "__.__"')
+                    ->toSql(),
                 'results' => $results,
                 'count' => $results->count()
             ]);
         });
-        Route::get('raw', function() {
+        Route::get('raw', function () {
             return response()->json([
                 'all_data' => \App\Models\Wilayah::all(['code', 'name']),
                 'sample_regency' => \App\Models\Wilayah::whereRaw('code LIKE "__.__"')->first(),

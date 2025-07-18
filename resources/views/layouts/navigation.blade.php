@@ -83,6 +83,33 @@
             </a>
         </li>
     @endcan
+    @can('kelas-list')
+        {{-- Kelas --}}
+        <li class="nav-item {{ request()->routeIs('kelas.index') ? 'active' : '' }}">
+            <a href="{{ route('kelas.index') }}" class="nav-link">
+                <span class="sidebar-icon me-3">
+                    <i class="fas fa-chalkboard-teacher"></i>
+                </span>
+                <span class="sidebar-text">Kelas</span>
+            </a>
+        </li>
+        {{-- <li class="nav-item {{ request()->routeIs('kelas.naik') ? 'active' : '' }}">
+            <a href="{{ route('kelas.naik') }}" class="nav-link">
+                <span class="sidebar-icon me-3">
+                    <i class="fas fa-arrow-up"></i>
+                </span>
+                <span class="sidebar-text">Naik Kelas</span>
+            </a>
+        </li> --}}
+        <li class="nav-item {{ request()->routeIs('kelas.step1') ? 'active' : '' }}">
+            <a href="{{ route('kelas.step1') }}" class="nav-link">
+                <span class="sidebar-icon me-3">
+                    <i class="fas fa-list"></i>
+                </span>
+                <span class="sidebar-text">Proses Naik Kelas</span>
+            </a>
+        </li>
+    @endcan
     @can('presensi-list')
         @role('WaliKelas')
             <li class="nav-item {{ request()->routeIs('administrasi.index') ? 'active' : '' }}">

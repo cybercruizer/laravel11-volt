@@ -34,7 +34,7 @@
                     <th class="col-1">No</th>
                     <th>Nama Kelas</th>
                     <th>Kode Kelas</th>
-                    @can('kelas-edit')
+                    @can('kelas-create')
                         <th>Action</th>
                     @endcan
 
