@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Kelas;
 use App\Models\Siswa;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Session;
 
 class KelasController extends Controller
@@ -59,7 +60,11 @@ class KelasController extends Controller
    }
    public function step1()
     {
-        $classes = Kelas::with('tahunajaran')->get();
+        if(Auth::user()->hasRole('WaliKelas')) {
+            $classes = Kelas::where('class_id',Auth::user()->kelas->class_id)->get();
+        } else {
+            $classes = Kelas::with('tahunajaran')->get();
+        }
         return view('kelas.step1', compact('classes'));
     }
 
@@ -95,7 +100,7 @@ class KelasController extends Controller
 
     public function step3()
     {
-        $classes = Kelas::with('tahunajaran')->get();
+        $classes = Kelas::aktif()->with('tahunajaran')->get();
         return view('kelas.step3', compact('classes'));
     }
 
