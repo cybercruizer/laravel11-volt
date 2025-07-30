@@ -65,25 +65,32 @@
                 
             </thead>
 
-            @forelse ($pembayaran as $s => $val)
+            @forelse ($siswa as $index => $s)
                 <tr>
-                    <td>{{ $loop->iteration }}</td>
-                    <td>{{ $s }}</td>
-                    <td>{{ $val[0]->nama }}<br>
-                            <small class="text-danger">{{$val[0]->kategori}}</small>
+                    <td>{{ $index + 1 }}</td>
+                    <td>{{ $s->student_number }}</td>
+                    <td>{{ $s->student_name }}
+                        @php
+                            $pembayaranSiswa = $pembayaran[$s->student_number] ?? [];
+                            $tahapBayar = collect($pembayaranSiswa)->keyBy('tahap');
+                            $kategori = count($pembayaranSiswa) > 0 ? $pembayaranSiswa[0]->kategori ?? '' : '';
+                        @endphp
+                        <br><small style="color: red">{{ $kategori }}</small>
                     </td>
-                    @forelse($val as $bayar)
-                    {{--}}    @if($loop->iteration==$bayar->tahap) --}}
-                            <td><small>{{ $bayar->jumlah/1000 }}</small></td>
-                   {{--}}     @endif --}}
-                    @empty
-                        <td colspan="12">Kosong</td>
-                    @endforelse
                     
+                    @for ($i = 1; $i <= 12; $i++)
+                        <td>
+                            @if ($tahapBayar->has($i))
+                                <small>{{ $tahapBayar[$i]->jumlah / 1000 }}</small>
+                            @else
+                                -
+                            @endif
+                        </td>
+                    @endfor
                 </tr>
             @empty
                 <tr>
-                    <td colspan="5" style="text-align: center"><strong>~ Tidak ada data ~</strong></td>
+                    <td colspan="6" style="text-align: center"><strong>~ Tidak ada data ~</strong></td>
                 </tr>
             @endforelse
         </table>
