@@ -119,7 +119,8 @@ class PembayaranController extends Controller
                     $kel = 12; 
                     break;
             }
-            $tagihan = Tagihan::where([['kelas', $kel], ['tp', '2024/2025']])->whereNot('kode', 'A')->get();
+            $tahunajaran = Tahunajaran::aktif()->select('year_id', 'year_code')->first();
+            $tagihan = Tagihan::where([['kelas', $kel], ['tp', $tahunajaran->year_code]])->whereNot('kode', 'A')->get();
             $data = Pembayaran::select('nis', 'jenis', Pembayaran::raw('SUM(jumlah) as total'))
                 ->whereIn('nis', $nis->pluck('student_number'))
                 ->whereIn('jenis', $tagihan->pluck('kode'))
