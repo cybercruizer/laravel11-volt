@@ -14,7 +14,7 @@ class Pembayaran2425 extends Model
 {
     use HasFactory;
     protected $connection = 'keuangan_db';
-    protected $table='db_transaksi2425';
+    protected $table='db_transaksi2526';
     protected $guarded = [];
     protected $appends = ['pem_id'];
     public $timestamps=false;

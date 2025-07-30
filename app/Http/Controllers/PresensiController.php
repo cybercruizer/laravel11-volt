@@ -354,7 +354,7 @@ class PresensiController extends Controller
             'sampai' => $sampai->format('d-m-Y'),
         ]);
     }
-    public function apiPresensi($nis, $jam) {
+    public function apiPresensi($dev, $nis, $jam) {
         $siswa = Siswa::where('student_number', $nis)->first();
         if(!$siswa) {
             return response()->json([
@@ -371,6 +371,7 @@ class PresensiController extends Controller
             ['kelas_id', $kelas->class_id],
             ['tanggal', $tanggal],
         ])->first();
+        
         $keterangan='';
         if ($jam <= '07:00:00') {
             $keterangan = 'H';

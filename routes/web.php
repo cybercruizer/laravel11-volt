@@ -13,6 +13,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/api/presensi/{dev}/{nis}/{jam}', [\App\Http\Controllers\PresensiController::class, 'apiPresensi']);
 
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('roles', \App\Http\Controllers\RoleController::class);
@@ -26,9 +27,8 @@ Route::group(['middleware' => ['auth']], function () {
     Route::any('/presensi/reset', [\App\Http\Controllers\PresensiController::class, 'reset'])->name('presensi.reset');
     Route::get('/presensi/rekap', [\App\Http\Controllers\PresensiController::class, 'rekapIndex'])->name('presensi.rekap.index');
     Route::post('/presensi/rekapShow', [\App\Http\Controllers\PresensiController::class, 'rekapShow'])->name('presensi.rekap.show');
-    Route::get('/api/presensi/{nis}/{jam}', [\App\Http\Controllers\PresensiController::class, 'apiPresensi']);
+    
     Route::resource('presensi', \App\Http\Controllers\PresensiController::class)->except('edit');
-
     Route::get('walikelas/guruajax', [\App\Http\Controllers\WalikelasController::class, 'guruAjax'])->name('walikelas.guru.ajax');
     Route::get('walikelas/kelasajax', [\App\Http\Controllers\WalikelasController::class, 'kelasAjax'])->name('walikelas.kelas.ajax');
     Route::put('walikelas/{id}', [\App\Http\Controllers\WalikelasController::class, 'update'])->name('walikelas.update');

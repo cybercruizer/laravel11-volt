@@ -7,7 +7,7 @@ use App\Models\Siswa;
 use App\Models\Tagihan;
 use App\Models\Tahunajaran;
 use Illuminate\Http\Request;
-use App\Models\Pembayaran2425;
+use App\Models\Pembayaran2425 as Pembayaran;
 use App\Models\Pembayaran2425Ol;
 use Illuminate\Support\Facades\Auth;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -42,7 +42,7 @@ class PembayaranController extends Controller
             $nis=Siswa::aktif()->select('student_number')->where('class_id',$wali->class_id)->pluck('student_number');
             //dd($nis);
 
-            $pembayaran = Pembayaran2425::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah','kategori')
+            $pembayaran = Pembayaran::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah','kategori')
                 ->whereIn('nis',$nis)
                 ->where('jenis','A')
                 ->get()
@@ -63,7 +63,7 @@ class PembayaranController extends Controller
             $kelas = Kelas::aktif()->select('class_id','class_code','class_name')->get();
             $r_kelas = Kelas::find($request->class_id)->class_name ??'-';
             $nis = Siswa::aktif()->select('student_number')->where('class_id',$request->class_id)->pluck('student_number');
-            $pembayaran=Pembayaran2425::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah','kategori')
+            $pembayaran=Pembayaran::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah','kategori')
                 ->whereIn('nis',$nis)
                 ->where('jenis','A')
                 ->get()
@@ -85,7 +85,7 @@ class PembayaranController extends Controller
             $kelas = Auth::user()->jurusan->kelas()->aktif()->get();
             $r_kelas = Kelas::find($request->class_id)->class_name ??'-';
             $nis = Siswa::aktif()->select('student_number')->where('class_id',$request->class_id)->pluck('student_number');
-            $pembayaran=Pembayaran2425::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah','kategori')
+            $pembayaran=Pembayaran::select('nis','nama','jenis','jenjang','paralel','tahap','jumlah','kategori')
                 ->whereIn('nis',$nis)
                 ->where('jenis','A')
                 ->get()
@@ -120,7 +120,7 @@ class PembayaranController extends Controller
                     break;
             }
             $tagihan = Tagihan::where([['kelas', $kel], ['tp', '2024/2025']])->whereNot('kode', 'A')->get();
-            $data = Pembayaran2425::select('nis', 'jenis', Pembayaran2425::raw('SUM(jumlah) as total'))
+            $data = Pembayaran::select('nis', 'jenis', Pembayaran::raw('SUM(jumlah) as total'))
                 ->whereIn('nis', $nis->pluck('student_number'))
                 ->whereIn('jenis', $tagihan->pluck('kode'))
                 ->groupBy('nis', 'jenis')
@@ -168,7 +168,7 @@ class PembayaranController extends Controller
                 ['kelas', $kel], 
                 ['tp', '2024/2025']
                 ])->whereNot('kode', 'A')->get();
-            $data = Pembayaran2425::select('nis', 'jenis', Pembayaran2425::raw('SUM(jumlah) as total'))
+            $data = Pembayaran::select('nis', 'jenis', Pembayaran::raw('SUM(jumlah) as total'))
                 ->whereIn('nis', $nis->pluck('student_number'))
                 ->whereIn('jenis', $tagihan->pluck('kode'))
                 ->groupBy('nis', 'jenis')
@@ -203,7 +203,7 @@ class PembayaranController extends Controller
     public function sync() {
         $pembayaranOl=Pembayaran2425Ol::all();
         foreach ($pembayaranOl as $pem) {
-            Pembayaran2425::updateOrCreate(
+            Pembayaran::updateOrCreate(
                 ['no'=>$pem->no],
                 $pem->toArray()
             );
@@ -232,7 +232,7 @@ class PembayaranController extends Controller
                     break;
             }
             $tagihan = Tagihan::where([['kelas', $kel], ['tp', '2024/2025']])->whereNot('kode', 'A')->get();
-            $data = Pembayaran2425::select('nis', 'jenis', Pembayaran2425::raw('SUM(jumlah) as total'))
+            $data = Pembayaran::select('nis', 'jenis', Pembayaran::raw('SUM(jumlah) as total'))
                 ->whereIn('nis', $nis->pluck('student_number'))
                 ->whereIn('jenis', $tagihan->pluck('kode'))
                 ->groupBy('nis', 'jenis')
