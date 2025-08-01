@@ -51,7 +51,7 @@
                     <th>NIS</th>
                     <th>Nama Siswa</th>
                     @foreach($tagihan as $bill)
-                        <th>{{ $bill->nama }}</th>
+                        <th>{{ Illuminate\Support\Str::limit($bill->nama,12) }}</th>
                     @endforeach
                     <th>Terbayar / Total Tgh</th>
                     <th>Persentase</th>
