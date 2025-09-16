@@ -53,8 +53,8 @@
                     @foreach($tagihan as $bill)
                         <th>{{ Illuminate\Support\Str::limit($bill->nama,12) }}</th>
                     @endforeach
-                    <th>Terbayar / Total Tgh</th>
-                    <th>Persentase</th>
+                    <th>Terbayar</th>
+                    {{-- <th>Persentase</th> --}}
                 </tr>
             </thead>
             <tbody>
@@ -74,7 +74,9 @@
                             <td>{{ number_format($amount, 0, ',', '.') }}</td>
                         @endforeach
                         
-                        <td>{{ number_format($studentTotal, 0, ',', '.') }}/{{number_format($bill->total_tagihan, 0, ',', '.') }}</td>
+                        <td>{{ number_format($studentTotal, 0, ',', '.') }}
+                            {{-- /{{number_format($bill->total_tagihan, 0, ',', '.') }} --}}
+                        </td>
                             {{-- @php $persentase = $studentTotal/$bill->total_tagihan * 100; @endphp
                         <td>{{number_format($persentase, 0, ',', '.')}} %</td> --}}
                     </tr>
