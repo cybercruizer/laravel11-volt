@@ -127,8 +127,9 @@ class PembayaranController extends Controller
     {
         if (Auth::user()->hasRole('WaliKelas')) {
             $wali = auth()->user()->kelas;
-            $nis = Siswa::aktif()->select('student_number', 'student_name')->where('class_id', $wali->class_id)->get();
+            $nis = Siswa::aktif()->with('tagihan')->select('student_number', 'student_name')->where('class_id', $wali->class_id)->get();
             $kelas = explode('-', $wali->class_code);
+            //dd($kelas);
             switch ($kelas[1]) {
                 case 'X':
                     $kel = 10;
@@ -140,9 +141,15 @@ class PembayaranController extends Controller
                     $kel = 12;
                     break;
             }
+            //dd($kel);
             $tahunajaran = Tahunajaran::aktif()->select('year_id', 'year_code')->first();
             //dd($tahunajaran->year_code);
-            $tagihan = Tagihan::where([['kelas', $kel], ['tp', $tahunajaran->year_code]])->whereNot('kode', 'A')->get();
+            $tagihan = Tagihan::where([
+                ['kelas', $kel], 
+                ['tp', $tahunajaran->year_code]])
+                ->whereNot('kode', 'A')
+                ->get();
+            //dd($tagihan);
             $data = Pembayaran::select('nis', 'jenis', Pembayaran::raw('SUM(jumlah) as total'))
                 ->whereIn('nis', $nis->pluck('student_number'))
                 ->whereIn('jenis', $tagihan->pluck('kode'))
@@ -152,7 +159,7 @@ class PembayaranController extends Controller
                 ->map(function ($item) {
                     return $item->pluck('total', 'jenis');
                 });
-
+            //dd($data);
             $data = $nis->pluck('student_number')->mapWithKeys(function ($n) use ($data, $tagihan) {
                 $studentData = $data->get($n, []);
                 foreach ($tagihan->pluck('kode') as $tag) {
@@ -160,6 +167,7 @@ class PembayaranController extends Controller
                 }
                 return [$n => $studentData];
             });
+            //dd($data);
             $title = "Rekap pembayaran kelas " . $wali->class_name;
             return view('pembayaran.lain', compact('title', 'nis', 'tagihan', 'data'));
         }

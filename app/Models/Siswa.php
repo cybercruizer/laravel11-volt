@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Tagihan;
 use App\Models\Presensi;
 use App\Models\Pelanggaran;
 use App\Models\TagihanSiswa;

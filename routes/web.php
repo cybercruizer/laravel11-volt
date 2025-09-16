@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\User;
+use App\Models\Siswa;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\JurusanController;
@@ -14,6 +15,11 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/api/presensi/{dev}/{nis}/{jam}', [\App\Http\Controllers\PresensiController::class, 'apiPresensi']);
+Route::get('/testagihan',function() {
+    $user = Siswa::where('student_number',13899)->with('tagihan')->first();
+    dd($user->tagihan->total_tagihan);
+    //return $user->tagihan ? $user->tagihan->total_tagihan : 'No tagihan found';
+});
 
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('roles', \App\Http\Controllers\RoleController::class);

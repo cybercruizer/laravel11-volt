@@ -74,9 +74,9 @@
                             <td>{{ number_format($amount, 0, ',', '.') }}</td>
                         @endforeach
                         
-                        <td>{{ number_format($studentTotal, 0, ',', '.') }}/{{number_format($student->tagihan->total_tagihan, 0, ',', '.') }}</td>
-                            @php $persentase = $studentTotal/$student->tagihan->total_tagihan * 100; @endphp
-                        <td>{{number_format($persentase, 0, ',', '.')}} %</td>
+                        <td>{{ number_format($studentTotal, 0, ',', '.') }}/{{number_format($bill->total_tagihan, 0, ',', '.') }}</td>
+                            {{-- @php $persentase = $studentTotal/$bill->total_tagihan * 100; @endphp
+                        <td>{{number_format($persentase, 0, ',', '.')}} %</td> --}}
                     </tr>
                 @empty
                     <tr>
