@@ -65,6 +65,7 @@ class PembayaranController extends Controller
             $siswa = [];
             if ($class_id) {
                 $siswa = \App\Models\Siswa::aktif()
+                    ->with('tagihan')
                     ->select('student_number', 'student_name', 'class_id')
                     ->where('class_id', $class_id)
                     ->get();
@@ -84,6 +85,7 @@ class PembayaranController extends Controller
             $kelas = Kelas::aktif()->select('class_id', 'class_code', 'class_name')->get();
             $r_kelas = Kelas::find($request->class_id)->class_name ?? '-';
             $nis = Siswa::aktif()->select('student_number')->where('class_id', $request->class_id)->pluck('student_number');
+            $siswa = Siswa::aktif()->select('student_number', 'student_name')->where('class_id', $request->class_id)->get();
             $pembayaran = Pembayaran::select('nis', 'nama', 'jenis', 'jenjang', 'paralel', 'tahap', 'jumlah', 'kategori')
                 ->whereIn('nis', $nis)
                 ->where('jenis', 'A')
@@ -100,6 +102,7 @@ class PembayaranController extends Controller
                 'title' => 'Daftar Pembayaran SPP kelas ' . $r_kelas,
                 'pembayaran' => $pembayaran,
                 'kelas' => $kelas,
+                'siswa' => $siswa,
             ]);
         }
         if (Auth::user()->hasRole(['Kapro'])) {

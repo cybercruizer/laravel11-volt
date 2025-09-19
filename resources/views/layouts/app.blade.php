@@ -13,17 +13,13 @@
 
     <!-- Scripts -->
     @vite('resources/js/app.js')
+    <script src="https://code.jquery.com/jquery-3.6.1.min.js"></script>
+
+    <link href="https://cdn.datatables.net/2.0.8/css/dataTables.bootstrap5.css" rel="stylesheet">
     
-    <script src="{{asset('jquery.min.js')}}"></script>
-
-    <link href="{{asset('vendor/datatables-2.0.8/dataTables.bootstrap5.css')}}" rel="stylesheet">
-
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"> -->
-    <script src="{{asset('vendor/datatables-2.0.8/dataTables.js')}}"></script>
-    <script src="{{asset('vendor/datatables-2.0.8/dataTables.bootstrap5.js')}}"></script>
-    @stack('js-header')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-    
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.js"></script>
+    <script src="https://cdn.datatables.net/2.0.8/js/dataTables.bootstrap5.js"></script>
     <link rel="stylesheet"
         href="https://cdn.jsdelivr.net/npm/select2-bootstrap-5-theme@1.3.0/dist/select2-bootstrap-5-theme.min.css" />
     <style>
@@ -37,38 +33,22 @@
             line-height: inherit;
             padding: 0.5rem 1rem;
         }
-
-        @media print {
-            body {
-                margin: 0 !important;
-                /* Remove margin */
-            }
-            div {
-                margin: 0 !important;
-            }
-            .content {
-                margin: 0 !important;
-            }
-        }
     </style>
-    @stack('styles')
 </head>
 
 <body>
     @include('layouts.nav')
     @include('layouts.sidenav')
     <main class="content">
-        @include('sweetalert::alert')
         {{-- TopBar --}}
         @include('layouts.topbar')
-        <div class="main py-2">
-            <div class="card">
+        <div class="main py-4">
                 @yield('content')
-            </div>
         </div>
         {{-- Footer --}}
         @include('layouts.footer')
     </main>
+
     @yield('scripts')
 </body>
 
