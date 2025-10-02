@@ -403,9 +403,15 @@ class PresensiController extends Controller
     public function storeFromRFID(Request $request)
     {
         $uid = $request->query('uid');
-        $timestamp = $request->query('timestamp');
+        $timestamp = $request->query('time');
+        $decodedTimestamp = urldecode($timestamp);
+        // $carbonTime = Carbon::parse($decodedTimestamp)->toDateTimeString();
         $device_id = $request->query('device_id');
-
+        // return response()->json([
+        //     'uid' => $uid,
+        //     'timestamp' => $decodedTimestamp,
+        //     'device_id' => $device_id,
+        // ]);
         if (!$uid || !$timestamp) {
             return response()->json([
                 'success' => false,
@@ -414,7 +420,7 @@ class PresensiController extends Controller
         }
 
         $siswa = Siswa::where('rfid_uid', $uid)->first();
-
+        //dd($siswa);
         if (!$siswa) {
             return response()->json([
                 'success' => false,
@@ -422,14 +428,14 @@ class PresensiController extends Controller
             ], 404);
         }
 
-        $waktu = Carbon::parse($timestamp);
+        $waktu = Carbon::parse($decodedTimestamp);
         $jamMasuk = $waktu->format('H:i:s');
         $tanggal = $waktu->format('Y-m-d');
 
         $keterangan = $waktu->lt(Carbon::createFromTime(7, 0, 0)) ? 'H' : 'T';
 
         // Cek apakah sudah presensi hari ini
-        $sudahPresensi = Presensi::where('student_id', $siswa->id)
+        $sudahPresensi = Presensi::where('student_id', $siswa->student_id)
             ->whereDate('tanggal', $tanggal)
             ->exists();
 
@@ -441,7 +447,7 @@ class PresensiController extends Controller
         }
 
         $presensi = Presensi::create([
-            'student_id' => $siswa->id,
+            'student_id' => $siswa->student_id,
             'user_id' => 1,
             'kelas_id' => $siswa->kelas->class_id,
             'keterangan' => $keterangan,
