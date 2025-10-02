@@ -400,5 +400,60 @@ class PresensiController extends Controller
             'nis' => $siswa->student_number,
         ]);
     }
+    public function storeFromRFID(Request $request)
+    {
+        $uid = $request->query('uid');
+        $timestamp = $request->query('timestamp');
+        $device_id = $request->query('device_id');
+
+        if (!$uid || !$timestamp) {
+            return response()->json([
+                'success' => false,
+                'message' => 'UID atau timestamp tidak ditemukan'
+            ], 400);
+        }
+
+        $siswa = Siswa::where('rfid_uid', $uid)->first();
+
+        if (!$siswa) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Siswa tidak ditemukan'
+            ], 404);
+        }
+
+        $waktu = Carbon::parse($timestamp);
+        $jamMasuk = $waktu->format('H:i:s');
+        $tanggal = $waktu->format('Y-m-d');
+
+        $keterangan = $waktu->lt(Carbon::createFromTime(7, 0, 0)) ? 'H' : 'T';
+
+        // Cek apakah sudah presensi hari ini
+        $sudahPresensi = Presensi::where('student_id', $siswa->id)
+            ->whereDate('tanggal', $tanggal)
+            ->exists();
+
+        if ($sudahPresensi) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Presensi sudah tercatat hari ini'
+            ], 200);
+        }
+
+        $presensi = Presensi::create([
+            'student_id' => $siswa->id,
+            'user_id' => 1,
+            'kelas_id' => $siswa->kelas->class_id,
+            'keterangan' => $keterangan,
+            'tanggal' => $tanggal,
+            'jam_masuk' => $jamMasuk,
+        ]);
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Presensi berhasil dicatat',
+            'data' => $presensi
+        ]);
+    }
 }
 

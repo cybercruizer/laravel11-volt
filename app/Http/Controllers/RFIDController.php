@@ -123,7 +123,7 @@ class RFIDController extends Controller
             RFIDLog::create([
                 'device_id' => $deviceId,
                 'rfid_uid' => $uid,
-                'user_id' => $userId,
+                'student_id' => $userId,
                 'scanned_at' => $timestamp,
                 'success' => $success,
                 'message' => $message,
