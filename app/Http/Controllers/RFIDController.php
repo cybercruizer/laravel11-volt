@@ -79,7 +79,7 @@ class RFIDController extends Controller
 
         // Check if user is active
         if (!$user->aktif()) {
-            $this->logAccess($deviceId, $uid, $timestamp, false, 'Siswa tidak aktif', $user->id);
+            $this->logAccess($deviceId, $uid, $timestamp, false, 'Siswa tidak aktif', $user->student_id);
             
             return response()->json([
                 'success' => false,
@@ -88,7 +88,7 @@ class RFIDController extends Controller
         }
 
         // Check for duplicate scan (within 5 minutes)
-        $recentScan = RFIDLog::where('user_id', $user->id)
+        $recentScan = RFIDLog::where('user_id', $user->student_id)
             ->where('device_id', $deviceId)
             ->where('created_at', '>', Carbon::now()->subMinutes(5))
             ->first();
@@ -106,7 +106,7 @@ class RFIDController extends Controller
         // Return success response
         return response()->json([
             'success' => true,
-            'message' => 'Sukses ' . $user->name,
+            'message' => 'Sukses ' . $user->student_name,
             'data' => [
                 'student_id' => $user->student_number,
                 'name' => $user->student_name,
