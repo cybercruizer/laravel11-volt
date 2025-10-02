@@ -88,7 +88,7 @@ class RFIDController extends Controller
         }
 
         // Check for duplicate scan (within 5 minutes)
-        $recentScan = RFIDLog::where('user_id', $user->student_id)
+        $recentScan = RFIDLog::where('student_id', $user->student_id)
             ->where('device_id', $deviceId)
             ->where('created_at', '>', Carbon::now()->subMinutes(5))
             ->first();
