@@ -403,8 +403,8 @@ class PresensiController extends Controller
     public function storeFromRFID(Request $request)
     {
         $uid = $request->query('uid');
-        $timestamp = $request->query('time');
-        $decodedTimestamp = urldecode($timestamp);
+        //$timestamp = $request->query('time');
+        //$decodedTimestamp = urldecode($timestamp);
         // $carbonTime = Carbon::parse($decodedTimestamp)->toDateTimeString();
         $device_id = $request->query('device_id');
         // return response()->json([
@@ -412,7 +412,7 @@ class PresensiController extends Controller
         //     'timestamp' => $decodedTimestamp,
         //     'device_id' => $device_id,
         // ]);
-        if (!$uid || !$timestamp) {
+        if (!$uid) {
             return response()->json([
                 'success' => false,
                 'message' => 'UID atau timestamp tidak ditemukan'
@@ -428,7 +428,7 @@ class PresensiController extends Controller
             ], 404);
         }
 
-        $waktu = Carbon::parse($decodedTimestamp);
+        $waktu = Carbon::now();
         $jamMasuk = $waktu->format('H:i:s');
         $tanggal = $waktu->format('Y-m-d');
 
@@ -457,8 +457,8 @@ class PresensiController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Presensi berhasil dicatat',
-            'data' => $presensi
+            'message' => $siswa->student_name,
+            'status' => $keterangan,
         ]);
     }
 }
