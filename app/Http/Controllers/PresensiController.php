@@ -14,11 +14,11 @@ class PresensiController extends Controller
 {
     function __construct()
     {
-         $this->middleware('permission:presensi-list|presensi-create|presensi-edit|presensi-delete', ['only' => ['index','show','laporan']]);
-         $this->middleware('permission:presensi-create', ['only' => ['create','store']]);
-         $this->middleware('permission:presensi-edit', ['only' => ['edit','update']]);
-         $this->middleware('permission:presensi-delete', ['only' => ['destroy','reset']]);
-         $this->middleware('permission:presensi-admin', ['only' => ['admin']]);
+        $this->middleware('permission:presensi-list|presensi-create|presensi-edit|presensi-delete', ['only' => ['index', 'show', 'laporan']]);
+        $this->middleware('permission:presensi-create', ['only' => ['create', 'store']]);
+        $this->middleware('permission:presensi-edit', ['only' => ['edit', 'update']]);
+        $this->middleware('permission:presensi-delete', ['only' => ['destroy', 'reset']]);
+        $this->middleware('permission:presensi-admin', ['only' => ['admin']]);
     }
 
     public function index(Request $request)
@@ -26,19 +26,19 @@ class PresensiController extends Controller
 
         if (Auth::user()->hasRole('WaliKelas')) {
             $kelas = Auth::user()->kelas;
-            $siswas=Siswa::aktif()->select('student_id','student_name','student_number')
-                ->where([['class_id',$kelas->class_id],
+            $siswas = Siswa::aktif()->select('student_id', 'student_name', 'student_number')
+                ->where([
+                    ['class_id', $kelas->class_id],
                 ])->get();
             //dd($siswas);u
         } else {
-            $kelas=Kelas::get();
-            $siswas=Siswa::select('student_id','student_name','student_number')->get();
-
+            $kelas = Kelas::get();
+            $siswas = Siswa::select('student_id', 'student_name', 'student_number')->get();
         }
-        return view('presensi.index',[
-            'students'=>$siswas,
-            'title'=>'Input Presensi Siswa',
-            'kelas' =>$kelas,
+        return view('presensi.index', [
+            'students' => $siswas,
+            'title' => 'Input Presensi Siswa',
+            'kelas' => $kelas,
         ]);
     }
 
@@ -49,17 +49,17 @@ class PresensiController extends Controller
     {
         if ($request->has('kelas')) {
             $kelas = $request->kelas;
-            $siswas =Siswa::where('kelas_id',$kelas);
+            $siswas = Siswa::where('kelas_id', $kelas);
         } else {
-            $ta = Tahunajaran::where('is_active',1);
-            $kelas = Kelas::where('year_id',$ta)->get();
-            $siswas =null;
+            $ta = Tahunajaran::where('is_active', 1);
+            $kelas = Kelas::where('year_id', $ta)->get();
+            $siswas = null;
         }
-        return view('presensi.create',[
-            'students'=>$siswas,
-            'title'=>'Input Presensi Siswa',
-            'kelas' =>$kelas,
-            'tanggal' =>$tanggal,
+        return view('presensi.create', [
+            'students' => $siswas,
+            'title' => 'Input Presensi Siswa',
+            'kelas' => $kelas,
+            'tanggal' => $tanggal,
         ]);
     }
 
@@ -84,7 +84,7 @@ class PresensiController extends Controller
                 //cek duplikasi data presensi
                 $cek = Presensi::where('student_id', $student_id)->where('tanggal', $tanggal)->first();
                 if ($cek) {
-                    alert()->error('Kesalahan', 'Data kehadiran tanggal '.$tanggal->format('Y-m-d').' sudah ada.');
+                    alert()->error('Kesalahan', 'Data kehadiran tanggal ' . $tanggal->format('Y-m-d') . ' sudah ada.');
                     return redirect()->route('presensi.index')->withInput();
                 }
                 $keterangan = $keterangans[$index];
@@ -99,10 +99,11 @@ class PresensiController extends Controller
                 ]);
             }
         }
-        alert()->success('Sukses', 'Data kehadiran tanggal '.$tanggal->format('Y-m-d').' berhasil disimpan.');
+        alert()->success('Sukses', 'Data kehadiran tanggal ' . $tanggal->format('Y-m-d') . ' berhasil disimpan.');
         return redirect()->route('presensi.index');
     }
-    public function store1(Request $request) {
+    public function store1(Request $request)
+    {
         $request->validate([
             'student_id' => 'required',
             'keterangan' => 'required',
@@ -120,7 +121,7 @@ class PresensiController extends Controller
             'tanggal' => $tanggal->format('Y-m-d'),
             'alasan' => $alasan,
         ]);
-        alert()->success('Sukses', 'Data kehadiran tanggal '.$tanggal->format('Y-m-d').' berhasil disimpan.');
+        alert()->success('Sukses', 'Data kehadiran tanggal ' . $tanggal->format('Y-m-d') . ' berhasil disimpan.');
         return redirect()->route('presensi.index');
         //dd($tanggal);
     }
@@ -145,21 +146,21 @@ class PresensiController extends Controller
             $kelas = Auth::user()->kelas;
             //dd(Auth::user()->siswas()->get());
             //dd($kelas);
-            if($request->has('tanggal')){
-                $tanggal= Carbon::parse($request->tanggal)->format('Y-m-d');
+            if ($request->has('tanggal')) {
+                $tanggal = Carbon::parse($request->tanggal)->format('Y-m-d');
             } else {
                 $tanggal = date("Y-m-d");
             }
             $presensis = $kelas->presensis()->where([
-                ['tanggal','=',$tanggal ]
+                ['tanggal', '=', $tanggal]
             ])->get();
             //dd($presensis);
 
-            return view('presensi.edit',[
-                'tanggal'=>$tanggal,
+            return view('presensi.edit', [
+                'tanggal' => $tanggal,
                 'kelas' => $kelas,
-                'presensis'=>$presensis,
-                'title'=>'Edit Presensi Siswa',
+                'presensis' => $presensis,
+                'title' => 'Edit Presensi Siswa',
             ]);
         }
         //dd('bukan wali');
@@ -173,8 +174,8 @@ class PresensiController extends Controller
         $tanggal = $request->input('tanggal');
         $kelas = $request->input('kelas');
         $user_id = Auth::user()->id;
-        $attendance=Presensi::where('kelas_id',$kelas)->where('tanggal',$tanggal);
-        $validatedData= $request->validate([
+        $attendance = Presensi::where('kelas_id', $kelas)->where('tanggal', $tanggal);
+        $validatedData = $request->validate([
             'siswa.*.id' => 'required',
             'siswa.*.keterangan' => 'required|in:H,S,I,A,T,N',
             'siswa.*.alasan' => 'nullable',
@@ -192,9 +193,9 @@ class PresensiController extends Controller
                 ]
             );
         }
-        alert()->success('Sukses', 'Data kehadiran tanggal '.$tanggal.' berhasil disimpan.');
+        alert()->success('Sukses', 'Data kehadiran tanggal ' . $tanggal . ' berhasil disimpan.');
         // Redirect kembali ke halaman presensi
-        return redirect()->route('presensi.edit',$tanggal);
+        return redirect()->route('presensi.edit', $tanggal);
     }
 
     /**
@@ -211,10 +212,10 @@ class PresensiController extends Controller
             $tahun = $request->input('tahun') ?? now()->format('Y');
             $kelas = Auth::user()->kelas;
             $students = Siswa::where([
-                ['class_id',$kelas->class_id],
-                ['student_status','A']
-                ])->select('student_id','student_name','student_number')->get();
-            $jumlahHari = Carbon::create($tahun,$bulan)->daysInMonth;
+                ['class_id', $kelas->class_id],
+                ['student_status', 'A']
+            ])->select('student_id', 'student_name', 'student_number')->get();
+            $jumlahHari = Carbon::create($tahun, $bulan)->daysInMonth;
             //dd($students);
             $presensiData = [];
 
@@ -229,7 +230,7 @@ class PresensiController extends Controller
                 foreach (range(1, $jumlahHari) as $day) {
                     $date = Carbon::create($tahun, $bulan, $day)->format('Y-m-d');
                     $presensiStatus = $presensiRecords->get($student->student_id)
-                        ? optional($presensiRecords->get($student->student_id)->firstWhere('tanggal', $date))->keterangan ?? '-' 
+                        ? optional($presensiRecords->get($student->student_id)->firstWhere('tanggal', $date))->keterangan ?? '-'
                         : '-';
                     $presensiData[$student->student_id][$day] = $presensiStatus;
                 }
@@ -242,7 +243,7 @@ class PresensiController extends Controller
                 'bulan' => $bulan,
                 'tahun' => $tahun,
                 'presensiData' => $presensiData,
-                'title' => 'Laporan Presensi Siswa bulan '.$bulan .' Tahun '.$tahun ,
+                'title' => 'Laporan Presensi Siswa bulan ' . $bulan . ' Tahun ' . $tahun,
             ]);
         } elseif (Auth::user()->hasRole('Guru')) {
             return view('presensi.laporan', [
@@ -251,7 +252,8 @@ class PresensiController extends Controller
             ]);
         }
     }
-    public function admin(Request $request) {
+    public function admin(Request $request)
+    {
         $bulan = $request->input('bulan') ?? now()->format('m');
         $tahun = $request->input('tahun') ?? now()->format('Y');
         $ta = Tahunajaran::where('is_deleted', 0)->where('is_active', 1)->first();
@@ -269,8 +271,8 @@ class PresensiController extends Controller
         foreach ($kelas as $kel) {
             $kelasdata[$kel->class_id] = [];
             foreach (range(1, $jumlahHari) as $day) {
-            $date = Carbon::create($tahun, $bulan, $day)->format('Y-m-d');
-            $kelasdata[$kel->class_id][$day] = isset($presensiRecords[$kel->class_id]) && $presensiRecords[$kel->class_id]->contains('tanggal', $date) ? 'v' : '-';
+                $date = Carbon::create($tahun, $bulan, $day)->format('Y-m-d');
+                $kelasdata[$kel->class_id][$day] = isset($presensiRecords[$kel->class_id]) && $presensiRecords[$kel->class_id]->contains('tanggal', $date) ? 'v' : '-';
             }
         }
         //dd($kelasdata);
@@ -280,73 +282,76 @@ class PresensiController extends Controller
             'tahun' => $tahun,
             'jumlahHari' => $jumlahHari,
             'kelasdata' => $kelasdata,
-            'title' => 'Laporan Presensi Siswa bulan '.$bulan .' Tahun '.$tahun ,
+            'title' => 'Laporan Presensi Siswa bulan ' . $bulan . ' Tahun ' . $tahun,
         ]);
     }
-    public function reset(Request $request) {
-        if($request->has('kelas') && $request->has('tanggal')) {
+    public function reset(Request $request)
+    {
+        if ($request->has('kelas') && $request->has('tanggal')) {
             $kelas = $request->input('kelas');
             $tanggal = $request->input('tanggal');
             Presensi::where([
                 ['kelas_id', $kelas],
                 ['tanggal', $tanggal]
             ])->delete();
-            return redirect()->route('presensi.reset')->with('success', 'Data kehadiran tanggal '.$tanggal.' pada kelas '.$kelas.' berhasil direset.');
+            return redirect()->route('presensi.reset')->with('success', 'Data kehadiran tanggal ' . $tanggal . ' pada kelas ' . $kelas . ' berhasil direset.');
         } else {
             $kelas = Kelas::aktif()->get();
-            return view ('presensi.reset', [
+            return view('presensi.reset', [
                 'kelas' => $kelas,
             ]);
         };
     }
-    public function rekapIndex() {
+    public function rekapIndex()
+    {
         if (Auth::user()->hasRole('Kapro')) {
             $kelas = Auth::user()->jurusan->kelas;
             //dd($kelas);
         } else {
-            $kelas=Kelas::aktif()->select('class_id','class_name')->get();
+            $kelas = Kelas::aktif()->select('class_id', 'class_name')->get();
         }
-        return view ('presensi.rekap_index', [
+        return view('presensi.rekap_index', [
             'title' => 'Rekap Presensi Siswa',
             'kelas' => $kelas,
         ]);
     }
-    public function rekapShow(Request $request) {
-        $dari=Carbon::parse($request->input('dari'));
-        $sampai=Carbon::parse($request->input('sampai'));
+    public function rekapShow(Request $request)
+    {
+        $dari = Carbon::parse($request->input('dari'));
+        $sampai = Carbon::parse($request->input('sampai'));
 
-        if(Auth::user()->hasRole('WaliKelas')) {
+        if (Auth::user()->hasRole('WaliKelas')) {
             $kelas = Auth::user()->kelas;
             $siswas = Siswa::aktif()->where('class_id', $kelas->class_id);
-        } elseif(Auth::user()->hasRole('Kapro')) {
+        } elseif (Auth::user()->hasRole('Kapro')) {
             $kelas = Auth::user()->jurusan->kelas;
             $siswas = Siswa::aktif()->where('class_id', $request->input('kelas'));
             //dd($siswas);
         } else {
-            $kelas = Kelas::aktif()->select('class_id','class_name')->get();
-            if($request->input('kelas')==0) {
+            $kelas = Kelas::aktif()->select('class_id', 'class_name')->get();
+            if ($request->input('kelas') == 0) {
                 $siswas = Siswa::aktif();
             } else {
                 $siswas = Siswa::aktif()->where('class_id', $request->input('kelas'));
             }
         }
         //$siswas = Siswa::aktif();
-        $siswa=$siswas->withCount([
-            'presensis as totalS'=>function($query) use ($dari, $sampai) {
-            $query->whereBetween('tanggal',[$dari,$sampai])->where('keterangan','S');
+        $siswa = $siswas->withCount([
+            'presensis as totalS' => function ($query) use ($dari, $sampai) {
+                $query->whereBetween('tanggal', [$dari, $sampai])->where('keterangan', 'S');
             },
-            'presensis as totalI'=>function($query) use ($dari, $sampai) {
-                $query->whereBetween('tanggal',[$dari,$sampai])->where('keterangan','I');
+            'presensis as totalI' => function ($query) use ($dari, $sampai) {
+                $query->whereBetween('tanggal', [$dari, $sampai])->where('keterangan', 'I');
             },
-            'presensis as totalA'=>function($query) use ($dari, $sampai) {
-                $query->whereBetween('tanggal',[$dari,$sampai])->where('keterangan','A');
+            'presensis as totalA' => function ($query) use ($dari, $sampai) {
+                $query->whereBetween('tanggal', [$dari, $sampai])->where('keterangan', 'A');
             },
         ])->orderBy('class_id')
-        ->orderBy('student_number')
-        ->get();
+            ->orderBy('student_number')
+            ->get();
         //$s=$siswa->find(900)->totalA;
         //dd($s); 
-        return view ('presensi.rekap_show', [
+        return view('presensi.rekap_show', [
             'title' => 'Rekap Presensi Siswa',
             'siswa' => $siswa,
             'kelas' => $kelas,
@@ -354,9 +359,10 @@ class PresensiController extends Controller
             'sampai' => $sampai->format('d-m-Y'),
         ]);
     }
-    public function apiPresensi($dev, $nis, $jam) {
+    public function apiPresensi($dev, $nis, $jam)
+    {
         $siswa = Siswa::where('student_number', $nis)->first();
-        if(!$siswa) {
+        if (!$siswa) {
             return response()->json([
                 'status' => 'error',
                 'nama' => '-',
@@ -371,11 +377,11 @@ class PresensiController extends Controller
             ['kelas_id', $kelas->class_id],
             ['tanggal', $tanggal],
         ])->first();
-        
-        $keterangan='';
+
+        $keterangan = '';
         if ($jam <= '07:00:00') {
             $keterangan = 'H';
-            $keteranganJ= 'Tepat Waktu';
+            $keteranganJ = 'Tepat Waktu';
         } else {
             $keterangan = 'T';
             $keteranganJ = 'Terlambat';
@@ -400,13 +406,13 @@ class PresensiController extends Controller
             'nis' => $siswa->student_number,
         ]);
     }
-    public function storeFromRFID(Request $request)
+    public function storeFromRFID($uid, $device_id)
     {
-        $uid = $request->query('uid');
+        //$uid =
         //$timestamp = $request->query('time');
         //$decodedTimestamp = urldecode($timestamp);
         // $carbonTime = Carbon::parse($decodedTimestamp)->toDateTimeString();
-        $device_id = $request->query('device_id');
+        //$device_id = $request->query('device_id');
         // return response()->json([
         //     'uid' => $uid,
         //     'timestamp' => $decodedTimestamp,
@@ -415,7 +421,7 @@ class PresensiController extends Controller
         if (!$uid) {
             return response()->json([
                 'success' => false,
-                'message' => 'UID atau timestamp tidak ditemukan'
+                'message' => 'UID tidak ditemukan'
             ], 400);
         }
 
@@ -433,6 +439,11 @@ class PresensiController extends Controller
         $tanggal = $waktu->format('Y-m-d');
 
         $keterangan = $waktu->lt(Carbon::createFromTime(7, 0, 0)) ? 'H' : 'T';
+        if ($keterangan == 'H') {
+            $keteranganText = 'Hadir';
+        } else {
+            $keteranganText = 'Terlambat';
+        }
 
         // Cek apakah sudah presensi hari ini
         $sudahPresensi = Presensi::where('student_id', $siswa->student_id)
@@ -454,12 +465,17 @@ class PresensiController extends Controller
             'tanggal' => $tanggal,
             'jam_masuk' => $jamMasuk,
         ]);
-
-        return response()->json([
-            'success' => true,
-            'message' => $siswa->student_name,
-            'status' => $keterangan,
-        ]);
+        if ($presensi) {
+            return response()->json([
+                'success' => true,
+                'message' => $siswa->student_name,
+                'status' => $keteranganText,
+            ]);
+        } else {
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyimpan presensi'
+            ], 500);
+        }
     }
 }
-
