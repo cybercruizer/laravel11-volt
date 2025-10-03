@@ -15,7 +15,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/api/presensi/{dev}/{nis}/{jam}', [\App\Http\Controllers\PresensiController::class, 'apiPresensi']);
-Route::get('/presensi-rfid/{uid}/{device_id}', [\App\Http\Controllers\PresensiController::class, 'storeFromRFID']);
+Route::get('/presensi-rfid/{uid}/{device_id}', [\App\Http\Controllers\RfidController::class, 'storeFromRFID']);
 Route::get('/testagihan',function() {
     $user = Siswa::where('student_number',13899)->with('tagihan')->first();
     dd($user->tagihan->total_tagihan);
