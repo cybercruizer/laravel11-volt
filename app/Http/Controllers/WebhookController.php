@@ -49,8 +49,8 @@ class WebhookController extends Controller
         $sender  = $data['sender'] ?? null;
         $message = trim($data['message'] ?? '');
 
-        // Default reply
-        $reply = ["message" => "Sorry, I don't understand."];
+        // // Default reply
+        // $reply = ["message" => "Sorry, I don't understand."];
 
         // Parsing pesan: ambil kata pertama sebagai command, sisanya sebagai parameter
         $parts   = explode(' ', $message, 2);
@@ -66,11 +66,12 @@ class WebhookController extends Controller
                 "message" => $message,
             ];
         }
-
         // Kirim balasan ke Fonnte
-        $this->sendFonnte($sender, $reply);
-
-        return response()->json(['status' => 'ok']);
+        if($reply) {
+            $this->sendFonnte($sender, $reply);
+            return response()->json(['status' => 'ok']);
+        }
+        
     }
 
     private function sendFonnte($target, $data)
