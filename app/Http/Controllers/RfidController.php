@@ -24,7 +24,7 @@ class RfidController extends Controller
         if (!$uid) {
             return response()->json([
                 'success' => false,
-                'message' => 'UID tidak ditemukan'
+                'message' => 'UID tdk ditemukan'
             ], 400);
         }
 
@@ -33,7 +33,7 @@ class RfidController extends Controller
         if (!$siswa) {
             return response()->json([
                 'success' => false,
-                'message' => 'Siswa tidak ditemukan'
+                'message' => 'Siswa tdk ditemukan'
             ], 404);
         }
 
