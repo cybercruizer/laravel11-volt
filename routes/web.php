@@ -22,7 +22,7 @@ Route::get('/presensi-rfid/{uid}/{device_id}', [\App\Http\Controllers\RfidContro
 //     dd($user->tagihan->total_tagihan);
 //     //return $user->tagihan ? $user->tagihan->total_tagihan : 'No tagihan found';
 // });
-Route::post('/webhook/fonnte', [WebhookController::class, 'handle']);
+Route::any('/webhook/fonnte', [WebhookController::class, 'handle']);
 
 Route::group(['middleware' => ['auth']], function () {
     Route::resource('roles', \App\Http\Controllers\RoleController::class);
